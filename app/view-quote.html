@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Devis - Devis App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F97316;
+      --orange-dark: #EA6C0A;
+      --orange-light: #FEF3E7;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --green: #10B981;
+      --green-light: #D1FAE5;
+      --blue: #3B82F6;
+      --blue-light: #EFF6FF;
+      --red: #EF4444;
+      --red-light: #FFF1F1;
+      --yellow: #F59E0B;
+      --yellow-light: #FFFBEB;
+      --white: #FFFFFF;
+      --whatsapp: #25D366;
+    }
+
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); min-height: 100vh; display: flex; }
+
+    /* ── Sidebar ── */
+    .sidebar { width: 260px; min-width: 260px; background: var(--gray-900); display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+    .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; gap: 10px; }
+    .sidebar-logo-icon { width: 36px; height: 36px; background: var(--orange); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-logo span { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+    .nav-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 12px 12px 6px; }
+    .nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; color: rgba(255,255,255,0.55); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+    .nav-link.active { background: rgba(249,115,22,0.15); color: var(--orange); }
+    .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .user-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; background: rgba(255,255,255,0.05); }
+    .user-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: white; flex-shrink: 0; }
+    .user-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .btn-logout { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px; border-radius: 10px; background: rgba(239,68,68,0.1); color: #F87171; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border: 1px solid rgba(239,68,68,0.2); cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
+
+    /* ── Main ── */
+    .main { flex: 1; overflow-y: auto; padding: 32px 36px; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--gray-500); text-decoration: none; transition: color 0.2s; margin-bottom: 14px; }
+    .back-link:hover { color: var(--orange); }
+
+    /* ── Barre d'actions ── */
+    .actions-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+    }
+    .actions-left { display: flex; align-items: center; gap: 12px; }
+    .actions-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .quote-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--gray-800); }
+    .quote-meta { font-size: 13px; color: var(--gray-400); margin-top: 3px; }
+
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; }
+    .badge-draft    { background: var(--gray-100);    color: var(--gray-600); }
+    .badge-sent     { background: var(--blue-light);  color: var(--blue); }
+    .badge-accepted { background: var(--green-light); color: var(--green); }
+    .badge-rejected { background: var(--red-light);   color: var(--red); }
+    .badge-expired  { background: var(--yellow-light);color: var(--yellow); }
+
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 10px; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap; text-decoration: none;
+    }
+    .btn-print    { background: var(--gray-100); color: var(--gray-700); border: 1.5px solid var(--gray-200); }
+    .btn-print:hover { background: var(--gray-200); }
+    .btn-pdf      { background: #FFF1F1; color: #E11D48; }
+    .btn-pdf:hover { background: #FFE4E6; }
+    .btn-email    { background: var(--blue-light); color: var(--blue); }
+    .btn-email:hover { background: #DBEAFE; }
+    .btn-whatsapp { background: #F0FDF4; color: var(--whatsapp); }
+    .btn-whatsapp:hover { background: #DCFCE7; }
+    .btn-status   { background: var(--orange-light); color: var(--orange); }
+    .btn-status:hover { background: #FDE9D0; }
+    .btn-delete   { background: var(--red-light); color: var(--red); }
+    .btn-delete:hover { background: var(--red); color: white; }
+    .btn-edit     { background: var(--blue-light); color: var(--blue); }
+    .btn-edit:hover { background: #DBEAFE; }
+
+    /* ── Document devis ── */
+    .quote-doc {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06);
+      overflow: hidden;
+      animation: slideUp 0.35s ease;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* En-tête du document */
+    .doc-header {
+      padding: 40px 48px 32px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 2px solid var(--gray-100);
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+    }
+    .doc-company-name {
+      font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+      color: var(--gray-800); margin-bottom: 6px;
+    }
+    .doc-company-info { font-size: 13px; color: var(--gray-500); line-height: 1.7; }
+
+    .doc-quote-info { text-align: right; }
+    .doc-quote-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gray-400); margin-bottom: 6px;
+    }
+    .doc-quote-number {
+      font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+      color: var(--orange); margin-bottom: 10px;
+    }
+    .doc-quote-dates { font-size: 13px; color: var(--gray-500); line-height: 1.7; }
+    .doc-quote-dates strong { color: var(--gray-700); }
+
+    /* Section client */
+    .doc-body { padding: 36px 48px; }
+
+    .doc-section-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gray-400);
+      margin-bottom: 10px;
+    }
+    .doc-client-box {
+      background: var(--gray-50); border-radius: 12px;
+      padding: 18px 22px; margin-bottom: 32px;
+      border-left: 3px solid var(--orange);
+    }
+    .doc-client-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+    .doc-client-info { font-size: 13px; color: var(--gray-500); line-height: 1.8; }
+
+    /* Table lignes */
+    .doc-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+    .doc-table thead tr { background: var(--gray-800); }
+    .doc-table thead th {
+      padding: 12px 16px; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7); text-align: left;
+    }
+    .doc-table thead th.right { text-align: right; }
+    .doc-table tbody tr { border-bottom: 1px solid var(--gray-100); }
+    .doc-table tbody tr:hover { background: var(--gray-50); }
+    .doc-table tbody td { padding: 14px 16px; font-size: 14px; color: var(--gray-700); }
+    .doc-table tbody td.right { text-align: right; font-weight: 600; color: var(--gray-800); }
+    .doc-table tbody td.desc { font-weight: 500; color: var(--gray-800); }
+    .doc-table tfoot tr { border-top: 2px solid var(--gray-200); }
+    .doc-table tfoot td { padding: 10px 16px; font-size: 14px; }
+    .doc-table tfoot .label { color: var(--gray-500); text-align: right; }
+    .doc-table tfoot .value { text-align: right; font-weight: 700; color: var(--gray-800); }
+    .doc-table tfoot .total-row td { padding-top: 14px; }
+    .doc-table tfoot .total-label { color: var(--gray-800); font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; text-align: right; }
+    .doc-table tfoot .total-value { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--orange); text-align: right; }
+
+    /* Notes */
+    .doc-notes {
+      background: var(--gray-50); border-radius: 10px;
+      padding: 16px 20px; margin-top: 8px;
+    }
+    .doc-notes p { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+    /* Footer document */
+    .doc-footer {
+      padding: 20px 48px;
+      border-top: 2px solid var(--gray-100);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--gray-50);
+    }
+    .doc-footer-text { font-size: 12px; color: var(--gray-400); }
+    .doc-footer-brand { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--orange); }
+
+    /* Skeleton */
+    .skeleton { background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
+    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+    /* Modal statut */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--white); border-radius: 16px; padding: 28px; max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: slideUp 0.25s ease; }
+    .modal-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .modal-icon.orange { background: var(--orange-light); color: var(--orange); }
+    .modal-icon.red { background: var(--red-light); color: var(--red); }
+    .modal h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; }
+    .modal p { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.5; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+    .btn-modal-cancel { padding: 9px 18px; border-radius: 10px; border: 1.5px solid var(--gray-200); background: var(--gray-100); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-modal-cancel:hover { background: var(--gray-200); }
+    .btn-modal-confirm-red { padding: 9px 18px; border-radius: 10px; border: none; background: var(--red); color: white; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+    .btn-modal-confirm-red:hover { filter: brightness(1.1); }
+    .status-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .status-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--gray-200); cursor: pointer; transition: all 0.2s; background: var(--white); width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--gray-700); }
+    .status-option:hover { border-color: var(--orange); background: var(--orange-light); }
+    .status-option.selected { border-color: var(--orange); background: var(--orange-light); color: var(--orange); font-weight: 700; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 28px; right: 28px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; }
+    .toast.success { background: var(--green); color: white; }
+    .toast.error   { background: var(--red);   color: white; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── MODE PDF — couleurs forcees plus foncees et contrastées pour meilleur rendu ── */
+    .pdf-mode .doc-company-name   { color: #000000 !important; }
+    .pdf-mode .doc-company-info   { color: #000000 !important; }
+    .pdf-mode .doc-quote-label    { color: #000000 !important; }
+    .pdf-mode .doc-quote-number   { color: #EA6C0A !important; }
+    .pdf-mode .doc-quote-dates    { color: #000000 !important; }
+    .pdf-mode .doc-quote-dates strong { color: #000000 !important; }
+    .pdf-mode .doc-section-title  { color: #000000 !important; }
+    .pdf-mode .doc-client-box     { background: #DDDDDD !important; border-left-color: #EA6C0A !important; }
+    .pdf-mode .doc-client-name    { color: #000000 !important; }
+    .pdf-mode .doc-client-info    { color: #000000 !important; }
+    .pdf-mode .doc-table thead tr { background: #000000 !important; }
+    .pdf-mode .doc-table thead th { color: #FFFFFF !important; }
+    .pdf-mode .doc-table tbody td { color: #000000 !important; }
+    .pdf-mode .doc-table tbody td.desc  { color: #000000 !important; font-weight: 600 !important; }
+    .pdf-mode .doc-table tbody td.right { color: #000000 !important; }
+    .pdf-mode .doc-table tbody tr { border-bottom: 1px solid #000000 !important; }
+    .pdf-mode .doc-table tfoot .label { color: #000000 !important; }
+    .pdf-mode .doc-table tfoot .value { color: #000000 !important; }
+    .pdf-mode .doc-table tfoot .total-label { color: #000000 !important; }
+    .pdf-mode .doc-table tfoot .total-value { color: #EA6C0A !important; }
+    .pdf-mode .doc-notes   { background: #DDDDDD !important; }
+    .pdf-mode .doc-notes p { color: #000000 !important; }
+    .pdf-mode .doc-header  { background: #FFFFFF !important; border-bottom: 2px solid #000000 !important; }
+    .pdf-mode .doc-footer  { background: #DDDDDD !important; border-top: 2px solid #000000 !important; }
+    .pdf-mode .doc-footer-text  { color: #000000 !important; }
+    .pdf-mode .doc-footer-brand { color: #EA6C0A !important; }
+
+    /* ── IMPRESSION ── */
+    @media print {
+      body { background: white; display: block; }
+      .sidebar, .back-link, .actions-bar, .modal-overlay, .toast { display: none !important; }
+      .main { padding: 0; }
+      .quote-doc { box-shadow: none; border-radius: 0; }
+      .doc-header { padding: 32px; }
+      .doc-body { padding: 28px 32px; }
+      .doc-footer { padding: 16px 32px; }
+      .doc-table tbody tr:hover { background: none; }
+    }
+
+    @media (max-width: 900px) { .sidebar { display: none; } .main { padding: 20px 16px; } .doc-header { flex-direction: column; gap: 20px; padding: 24px; } .doc-quote-info { text-align: left; } .doc-body { padding: 24px; } .doc-footer { padding: 16px 24px; flex-direction: column; gap: 6px; } }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <span>Devis App</span>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Menu</span>
+      <a href="dashboard.html" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="quotes.html" class="nav-link active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Devis
+      </a>
+      <a href="clients.html" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Clients
+      </a>
+      <span class="nav-section-label" style="margin-top:8px;">Compte</span>
+      <a href="settings.html" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Paramètres
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div>
+          <div class="user-name" id="sidebarName">Chargement...</div>
+          <div class="user-role" id="sidebarCompany">—</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <a href="quotes.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour aux devis
+    </a>
+
+    <!-- Barre d'actions -->
+    <div class="actions-bar">
+      <div class="actions-left">
+        <div>
+          <div class="quote-title" id="pageQuoteNumber">Devis —</div>
+          <div class="quote-meta" id="pageQuoteMeta">Chargement...</div>
+        </div>
+        <span id="pageBadge"></span>
+      </div>
+      <div class="actions-right">
+        <button class="btn-action btn-edit" id="btnEdit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Modifier
+        </button>
+        <button class="btn-action btn-print" id="btnPrint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer
+        </button>
+        <button class="btn-action btn-pdf" id="btnPdf">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Télécharger PDF
+        </button>
+        <button class="btn-action btn-email" id="btnEmail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email
+        </button>
+        <button class="btn-action btn-whatsapp" id="btnWhatsapp">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          WhatsApp
+        </button>
+        <button class="btn-action btn-status" id="btnStatus">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Statut
+        </button>
+        <button class="btn-action btn-delete" id="btnDelete">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+
+    <!-- Document -->
+    <div class="quote-doc" id="quoteDoc">
+
+      <!-- En-tête -->
+      <div class="doc-header">
+        <div>
+          <div class="doc-company-name" id="docCompanyName">—</div>
+          <div class="doc-company-info" id="docCompanyInfo">—</div>
+        </div>
+        <div class="doc-quote-info">
+          <div class="doc-quote-label">Devis</div>
+          <div class="doc-quote-number" id="docQuoteNumber">—</div>
+          <div class="doc-quote-dates" id="docQuoteDates">—</div>
+        </div>
+      </div>
+
+      <!-- Corps -->
+      <div class="doc-body">
+
+        <!-- Client -->
+        <div class="doc-section-title">Adressé à</div>
+        <div class="doc-client-box">
+          <div class="doc-client-name" id="docClientName">—</div>
+          <div class="doc-client-info" id="docClientInfo">—</div>
+        </div>
+
+        <!-- Lignes -->
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width:50%">Description</th>
+              <th class="right" style="width:14%">Quantité</th>
+              <th class="right" style="width:18%">Prix unitaire</th>
+              <th class="right" style="width:18%">Total HT</th>
+            </tr>
+          </thead>
+          <tbody id="docItems">
+            <tr><td colspan="4"><div class="skeleton" style="height:40px;width:100%;"></div></td></tr>
+          </tbody>
+          <tfoot id="docTotals"></tfoot>
+        </table>
+
+        <!-- Notes -->
+        <div id="docNotesWrap" style="display:none;">
+          <div class="doc-section-title">Notes et conditions</div>
+          <div class="doc-notes">
+            <p id="docNotes"></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer document -->
+      <div class="doc-footer">
+        <div class="doc-footer-text">Merci de votre confiance.</div>
+        <div class="doc-footer-brand" id="docFooterBrand">Devis App</div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal statut -->
+  <div class="modal-overlay" id="statusModal">
+    <div class="modal">
+      <div class="modal-icon orange">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>Changer le statut</h3>
+      <p>Sélectionnez le nouveau statut pour ce devis.</p>
+      <div class="status-options">
+        <button class="status-option" data-status="draft">📝 Brouillon</button>
+        <button class="status-option" data-status="sent">📤 Envoyé</button>
+        <button class="status-option" data-status="accepted">✅ Accepté</button>
+        <button class="status-option" data-status="rejected">❌ Refusé</button>
+        <button class="status-option" data-status="expired">⏰ Expiré</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="cancelStatus">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal suppression -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-icon red">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+      </div>
+      <h3>Supprimer ce devis ?</h3>
+      <p>Cette action est irréversible. Le devis et toutes ses lignes seront supprimés définitivement.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="cancelDelete">Annuler</button>
+        <button class="btn-modal-confirm-red" id="confirmDelete">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+const supabase = createClient(
+  'https://xeezdzbotsblzclnmnxg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+)
+
+const fmt     = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(n || 0)
+const fmtDate = (d) => d ? new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : '—'
+
+// ── Récupère l'id depuis l'URL ─────────────────────────────────────────────
+const quoteId = new URLSearchParams(window.location.search).get('id')
+let quoteData = null
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  document.querySelector('.toast')?.remove()
+  const t = document.createElement('div')
+  t.className = `toast ${type}`
+  t.innerHTML = type === 'success'
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${msg}`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${msg}`
+  document.body.appendChild(t)
+  setTimeout(() => t.remove(), 3500)
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+async function init() {
+  if (!quoteId) { window.location.href = 'quotes.html'; return }
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) { window.location.href = 'login.html'; return }
+
+  await loadUserProfile(session.user.id)
+  await loadQuote()
+}
+
+// ── Profil sidebar ────────────────────────────────────────────────────────────
+async function loadUserProfile(userId) {
+  const { data } = await supabase.from('profiles')
+    .select('first_name, last_name, company, address, city, country, phone')
+    .eq('id', userId).single()
+  if (data) {
+    const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'U'
+    document.getElementById('userAvatar').textContent = initials
+    document.getElementById('sidebarName').textContent = [data.first_name, data.last_name].filter(Boolean).join(' ') || 'Utilisateur'
+    document.getElementById('sidebarCompany').textContent = data.company || 'Mon entreprise'
+
+    // Infos de l'émetteur dans l'en-tête du document
+    document.getElementById('docCompanyName').textContent = data.company || [data.first_name, data.last_name].filter(Boolean).join(' ')
+    document.getElementById('docFooterBrand').textContent = data.company || 'Devis App'
+
+    const info = [
+      data.address,
+      [data.city].filter(Boolean).join(' '),
+      data.country,
+      data.phone
+    ].filter(Boolean).join('\n')
+    document.getElementById('docCompanyInfo').innerHTML = info.replace(/\n/g, '<br>')
+  }
+}
+
+// ── Chargement du devis ───────────────────────────────────────────────────────
+async function loadQuote() {
+  const { data, error } = await supabase
+    .from('quotes')
+    .select(`
+      *,
+      clients(id, full_name, email, phone, address, city, postal_code, country, company_name),
+      quote_items(*)
+    `)
+    .eq('id', quoteId)
+    .single()
+
+  if (error || !data) {
+    showToast('Devis introuvable.', 'error')
+    setTimeout(() => window.location.href = 'quotes.html', 2000)
+    return
+  }
+
+  quoteData = data
+  renderQuote(data)
+}
+
+// ── Badge statut ──────────────────────────────────────────────────────────────
+function statusBadge(status) {
+  const map = {
+    draft:    ['badge-draft',    'Brouillon'],
+    sent:     ['badge-sent',     'Envoyé'],
+    accepted: ['badge-accepted', 'Accepté'],
+    rejected: ['badge-rejected', 'Refusé'],
+    expired:  ['badge-expired',  'Expiré'],
+  }
+  const [cls, label] = map[status] || map.draft
+  return `<span class="badge ${cls}">${label}</span>`
+}
+
+// ── Rendu du document ─────────────────────────────────────────────────────────
+function renderQuote(q) {
+  const client = q.clients || {}
+  const items  = q.quote_items || []
+
+  // Barre d'actions
+  document.getElementById('pageQuoteNumber').textContent = `Devis N°${q.quote_number || '—'}`
+  document.getElementById('pageQuoteMeta').textContent = `${client.full_name || '—'} · ${fmtDate(q.created_at)}`
+  document.getElementById('pageBadge').innerHTML = statusBadge(q.status)
+
+  // En-tête document
+  document.getElementById('docQuoteNumber').textContent = q.quote_number || '—'
+  document.getElementById('docQuoteDates').innerHTML =
+    `<strong>Date :</strong> ${fmtDate(q.created_at)}`
+
+  // Client
+  document.getElementById('docClientName').textContent = client.full_name || '—'
+  const clientInfo = [
+    client.company_name,
+    client.address,
+    [client.postal_code, client.city].filter(Boolean).join(' '),
+    client.country,
+    client.email,
+    client.phone
+  ].filter(Boolean).join('\n')
+  document.getElementById('docClientInfo').innerHTML = clientInfo.replace(/\n/g, '<br>') || '—'
+
+  // Lignes
+  const tbody = document.getElementById('docItems')
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:20px;">Aucune ligne</td></tr>`
+  } else {
+    tbody.innerHTML = items.map(item => `
+      <tr>
+        <td class="desc">${item.description || '—'}</td>
+        <td class="right">${item.quantity}</td>
+        <td class="right">${fmt(item.unit_price)}</td>
+        <td class="right">${fmt(item.total)}</td>
+      </tr>
+    `).join('')
+  }
+
+  // Totaux
+  document.getElementById('docTotals').innerHTML = `
+    <tr>
+      <td colspan="2"></td>
+      <td class="label">Sous-total HT</td>
+      <td class="value">${fmt(q.subtotal)}</td>
+    </tr>
+    <tr>
+      <td colspan="2"></td>
+      <td class="label">TVA (${q.tax_rate || 0}%)</td>
+      <td class="value">${fmt(q.tax_amount)}</td>
+    </tr>
+    <tr class="total-row">
+      <td colspan="2"></td>
+      <td class="total-label">Total TTC</td>
+      <td class="total-value">${fmt(q.total_amount)}</td>
+    </tr>
+  `
+
+  // Notes
+  if (q.notes) {
+    document.getElementById('docNotesWrap').style.display = 'block'
+    document.getElementById('docNotes').textContent = q.notes
+  }
+}
+
+
+// ── Impression ────────────────────────────────────────────────────────────────
+document.getElementById('btnPrint').addEventListener('click', () => {
+  window.print()
+})
+
+// ── Fonction PDF haute qualite (partagee par Telecharger et WhatsApp) ─────────
+// returnBlob=false -> sauvegarde le fichier directement
+// returnBlob=true  -> retourne un Blob pour Web Share API
+async function generatePdf(returnBlob) {
+  const { jsPDF } = window.jspdf
+  const elem       = document.getElementById('quoteDoc')
+  const actionsBar = document.querySelector('.actions-bar')
+  const backLink   = document.querySelector('.back-link')
+  const filename   = 'Devis-' + (quoteData ? quoteData.quote_number : 'devis') + '.pdf'
+
+  // Masque l'UI et active les couleurs PDF foncees
+  actionsBar.style.visibility = 'hidden'
+  backLink.style.visibility   = 'hidden'
+  elem.classList.add('pdf-mode')
+
+  try {
+    // Attendre que les fonts soient prêtes et appliquer les styles pdf-mode
+    await document.fonts.ready;
+    await new Promise(function(r){ setTimeout(r, 300) })
+
+    // scale=2 pour réduire la taille (résolution moindre mais acceptable)
+    const canvas = await html2canvas(elem, {
+      scale           : 2,
+      useCORS         : true,
+      allowTaint      : false,
+      backgroundColor : '#ffffff',
+      logging         : false,
+      imageTimeout    : 0,
+      removeContainer : true,
+      letterRendering : true,
+      windowWidth     : elem.scrollWidth,
+      windowHeight    : elem.scrollHeight
+    })
+
+    // Utiliser JPEG avec qualité 0.7 pour réduire la taille
+    const imgData = canvas.toDataURL('image/jpeg', 0.7)
+
+    const pdf   = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
+    const pageW = pdf.internal.pageSize.getWidth()   // 210 mm
+    const pageH = pdf.internal.pageSize.getHeight()  // 297 mm
+    const imgH  = (canvas.height / canvas.width) * pageW
+
+    var yOff  = 0
+    var leftH = imgH
+    while (leftH > 0) {
+      // Utiliser JPEG pour l'ajout d'image
+      pdf.addImage(imgData, 'JPEG', 0, yOff, pageW, imgH, '', 'FAST')
+      leftH -= pageH
+      yOff  -= pageH
+      if (leftH > 0) pdf.addPage()
+    }
+
+    if (returnBlob) return pdf.output('blob')
+    pdf.save(filename)
+
+  } finally {
+    elem.classList.remove('pdf-mode')
+    actionsBar.style.visibility = 'visible'
+    backLink.style.visibility   = 'visible'
+  }
+}
+
+// ── Bouton Telecharger PDF ────────────────────────────────────────────────────
+document.getElementById('btnPdf').addEventListener('click', async function() {
+  if (!quoteData) return
+  var btn = document.getElementById('btnPdf')
+  btn.disabled = true
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.7s linear infinite;display:inline-block"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Generation...'
+  showToast('Generation du PDF en cours...', 'success')
+  try {
+    await generatePdf(false)
+    showToast('PDF telecharge !')
+  } catch(e) {
+    showToast('Erreur generation PDF.', 'error')
+  }
+  btn.disabled = false
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Telecharger PDF'
+})
+
+// ── Fonction partagée pour générer et partager le PDF ─────────────────────────
+async function sharePdfWithMessage(button, isEmail = false) {
+  if (!quoteData) return
+
+  const origHtml = button.innerHTML
+  const filename = 'Devis-' + (quoteData.quote_number || 'devis') + '.pdf'
+  const clientName = quoteData.clients ? quoteData.clients.full_name : ''
+  const amount = fmt(quoteData.total_amount)
+  const number = quoteData.quote_number
+
+  const messageText = `Bonjour ${clientName} 👋,\n\nVeuillez trouver ci-joint votre devis N°${number} d'un montant de ${amount} TTC 📄.\n\nN'hésitez pas à me contacter pour toute question 😊.\n\nCordialement`;
+
+  button.disabled = true
+  button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.7s linear infinite;display:inline-block"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Génération PDF...'
+
+  let pdfBlob = null
+  try {
+    pdfBlob = await generatePdf(true)
+  } catch(e) {
+    showToast('Erreur génération PDF.', 'error')
+    button.disabled = false
+    button.innerHTML = origHtml
+    return
+  }
+
+  const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' })
+
+  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.7s linear infinite;display:inline-block"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Partage...'
+    try {
+      await navigator.share({
+        title: `Devis N°${number}`,
+        text: messageText,
+        files: [pdfFile]
+      })
+      updateStatus('sent', false)
+      showToast('Devis partagé avec succès !')
+    } catch(err) {
+      if (err.name !== 'AbortError') showToast('Partage annulé.', 'error')
+    }
+  } else {
+    // Fallback pour desktop ou navigateurs non compatibles
+    const url = URL.createObjectURL(pdfBlob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+
+    if (isEmail) {
+      const email = quoteData.clients ? quoteData.clients.email : ''
+      if (email) {
+        const subject = encodeURIComponent(`Devis N°${number}`)
+        const body = encodeURIComponent(messageText)
+        window.open(`mailto:${email}?subject=${subject}&body=${body}`)
+        showToast('📄 PDF téléchargé — joignez-le dans l\'email.')
+      } else {
+        showToast('Aucun email enregistré pour ce client.', 'error')
+      }
+    } else {
+      const clientPhone = quoteData.clients ? (quoteData.clients.phone || '') : ''
+      const cleanPhone = clientPhone.replace(/[\s\-\(\)]/g, '').replace(/^\+/, '')
+      if (cleanPhone) {
+        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`)
+        showToast('📄 PDF téléchargé — joignez-le dans WhatsApp.')
+      } else {
+        showToast('Aucun numéro WhatsApp enregistré pour ce client.', 'error')
+      }
+    }
+    updateStatus('sent', false)
+  }
+
+  button.disabled = false
+  button.innerHTML = origHtml
+}
+
+// ── Email ─────────────────────────────────────────────────────────────────────
+document.getElementById('btnEmail').addEventListener('click', function() {
+  if (!quoteData.clients || !quoteData.clients.email) {
+    showToast('Aucun email enregistré pour ce client.', 'error')
+    return
+  }
+  sharePdfWithMessage(this, true)
+})
+
+// ── WhatsApp ──────────────────────────────────────────────────────────────────
+document.getElementById('btnWhatsapp').addEventListener('click', function() {
+  if (!quoteData.clients || !quoteData.clients.phone) {
+    showToast('Aucun numéro WhatsApp enregistré pour ce client.', 'error')
+    return
+  }
+  sharePdfWithMessage(this, false)
+})
+
+// ── Changement de statut ──────────────────────────────────────────────────────
+document.getElementById('btnStatus').addEventListener('click', function() {
+  document.querySelectorAll('.status-option').forEach(function(opt) {
+    opt.classList.toggle('selected', opt.dataset.status === (quoteData ? quoteData.status : ''))
+  })
+  document.getElementById('statusModal').classList.add('show')
+})
+
+document.querySelectorAll('.status-option').forEach(function(opt) {
+  opt.addEventListener('click', function() {
+    document.getElementById('statusModal').classList.remove('show')
+    updateStatus(opt.dataset.status)
+  })
+})
+document.getElementById('cancelStatus').addEventListener('click', function() {
+  document.getElementById('statusModal').classList.remove('show')
+})
+
+async function updateStatus(status, showFeedback) {
+  if (showFeedback === undefined) showFeedback = true
+  var result = await supabase.from('quotes').update({ status: status }).eq('id', quoteId)
+  if (result.error) { showToast('Erreur mise a jour statut', 'error'); return }
+  if (quoteData) quoteData.status = status
+  document.getElementById('pageBadge').innerHTML = statusBadge(status)
+  if (showFeedback) showToast('Statut mis a jour !')
+}
+
+// ── Suppression ───────────────────────────────────────────────────────────────
+document.getElementById('btnDelete').addEventListener('click', function() {
+  document.getElementById('deleteModal').classList.add('show')
+})
+document.getElementById('cancelDelete').addEventListener('click', function() {
+  document.getElementById('deleteModal').classList.remove('show')
+})
+document.getElementById('confirmDelete').addEventListener('click', async function() {
+  document.getElementById('deleteModal').classList.remove('show')
+  var result = await supabase.from('quotes').delete().eq('id', quoteId)
+  if (result.error) { showToast('Erreur suppression', 'error'); return }
+  showToast('Devis supprime.')
+  setTimeout(function() { window.location.href = 'quotes.html' }, 1200)
+})
+
+// Fermer modals en cliquant dehors
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('show')
+  })
+})
+
+// ── Modifier ──────────────────────────────────────────────────────────────────
+document.getElementById('btnEdit').addEventListener('click', function() {
+  window.location.href = `edit-quote.html?id=${quoteId}`
+})
+
+// ── Logout ────────────────────────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', async function() {
+  await supabase.auth.signOut()
+  window.location.href = 'login.html'
+})
+
+init()
+</script>
+
+</body>
+</html>

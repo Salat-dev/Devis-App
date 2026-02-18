@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<title>Inscription - Devis App</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #F97316;
+    --orange-dark: #EA6C0A;
+    --orange-light: #FEF3E7;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF;
+    --gray-600: #4B5563;
+    --gray-800: #1F2937;
+    --green: #10B981;
+    --red: #EF4444;
+    --white: #FFFFFF;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-100);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -150px; left: -150px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 40px 44px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.08);
+    position: relative;
+    animation: slideUp 0.4s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--orange-light);
+    color: var(--orange);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--gray-800);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--gray-400);
+    margin-bottom: 28px;
+  }
+
+  /* Stepper */
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    position: relative;
+  }
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: calc(50% + 18px);
+    right: calc(-50% + 18px);
+    height: 2px;
+    background: var(--gray-200);
+    transition: background 0.4s;
+    z-index: 0;
+  }
+  .step-item.done:not(:last-child)::after { background: var(--orange); }
+  .step-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700;
+    border: 2px solid var(--gray-200);
+    background: var(--white);
+    color: var(--gray-400);
+    transition: all 0.3s;
+    position: relative; z-index: 1;
+  }
+  .step-item.active .step-dot {
+    border-color: var(--orange);
+    background: var(--orange);
+    color: var(--white);
+    box-shadow: 0 0 0 4px rgba(249,115,22,0.15);
+  }
+  .step-item.done .step-dot {
+    border-color: var(--orange);
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  .step-label {
+    font-size: 10px; font-weight: 500;
+    color: var(--gray-400);
+    text-align: center;
+    letter-spacing: 0.03em;
+    transition: color 0.3s;
+  }
+  .step-item.active .step-label { color: var(--orange); font-weight: 700; }
+  .step-item.done .step-label { color: var(--orange-dark); }
+
+  /* Steps */
+  .step { display: none; animation: fadeIn 0.3s ease; }
+  .step.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Grille */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .col-2   { grid-column: span 2; }
+
+  /* Champs */
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-group label { font-size: 12px; font-weight: 600; color: var(--gray-600); letter-spacing: 0.02em; }
+  .field-group label span { color: var(--red); margin-left: 2px; }
+
+  input {
+    width: 100%;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+  }
+  input::placeholder { color: var(--gray-400); }
+  input:focus {
+    border-color: var(--orange);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+  }
+  input.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+
+  /* Force mot de passe */
+  .password-strength-wrap {
+    margin-top: 6px;
+    background: var(--gray-200);
+    border-radius: 100px;
+    height: 4px;
+    overflow: hidden;
+  }
+  #passwordStrength {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.4s, background-color 0.4s;
+    width: 0%;
+  }
+  .strength-label {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 4px;
+    min-height: 16px;
+  }
+
+  /* Boutons */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    gap: 12px;
+  }
+  button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    border: none; cursor: pointer;
+    border-radius: 10px;
+    padding: 11px 24px;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-back {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1.5px solid var(--gray-200);
+  }
+  .btn-back:hover { background: var(--gray-200); }
+  .btn-next {
+    background: var(--orange); color: var(--white);
+    margin-left: auto;
+    box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+  }
+  .btn-next:hover { background: var(--orange-dark); transform: translateY(-1px); }
+  .btn-next:active { transform: translateY(0); }
+  .btn-submit {
+    background: var(--green); color: var(--white);
+    margin-left: auto;
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+  }
+  .btn-submit:hover { filter: brightness(1.05); transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .hidden { display: none !important; }
+
+  /* Message */
+  #message {
+    font-size: 13px;
+    text-align: center;
+    margin-top: 16px;
+    min-height: 20px;
+    border-radius: 8px;
+    padding: 8px 12px;
+    line-height: 1.5;
+  }
+  #message:not(:empty) { background: var(--gray-50); }
+  #message.success { color: var(--green); background: #F0FDF4; }
+  #message.error   { color: var(--red);   background: #FFF1F1; }
+
+  /* Écran de succès */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px 0 8px;
+    animation: fadeIn 0.4s ease;
+  }
+  .success-screen.show { display: flex; }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: #F0FDF4;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .success-screen h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 800;
+    color: var(--gray-800);
+    margin-bottom: 10px;
+  }
+  .success-screen p { font-size: 14px; color: var(--gray-400); line-height: 1.6; max-width: 340px; }
+  .email-highlight {
+    display: inline-block;
+    background: var(--orange-light);
+    color: var(--orange);
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  .btn-login-redirect {
+    margin-top: 24px;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--orange); color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 14px;
+    padding: 11px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+    transition: all 0.2s;
+  }
+  .btn-login-redirect:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+  /* Loader */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 28px 20px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .col-2 { grid-column: span 1; }
+    h1 { font-size: 22px; }
+  }
+
+  @media (max-width: 200px) {
+    body { padding: 8px; align-items: flex-start; }
+    body::before, body::after { display: none; }
+    .card { padding: 14px 12px; border-radius: 12px; }
+    .header-badge { font-size: 9px; padding: 3px 8px; margin-bottom: 8px; }
+    h1 { font-size: 14px; margin-bottom: 3px; }
+    .subtitle { font-size: 10px; margin-bottom: 12px; }
+    .grid-2 { grid-template-columns: 1fr; gap: 8px; }
+    .field-group { margin-bottom: 8px; gap: 3px; }
+    .field-group label { font-size: 10px; }
+    input, select { padding: 7px 9px 7px 28px; font-size: 11px; border-radius: 6px; }
+    .input-wrap svg { width: 11px; height: 11px; left: 8px; }
+    .btn-submit { padding: 9px; font-size: 11px; border-radius: 7px; }
+    .footer-text { font-size: 10px; }
+    .steps { gap: 4px; margin-bottom: 14px; }
+    .step-dot { width: 20px; height: 4px; border-radius: 2px; }
+  }
+</style>
+</head>
+
+<body>
+<div class="card">
+
+  <div class="header-badge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Devis App
+  </div>
+  <h1>Créer votre compte</h1>
+  <p class="subtitle">Configurez votre profil pour générer des devis professionnels.</p>
+
+  <!-- Stepper -->
+  <div class="stepper" id="stepperEl">
+    <div class="step-item active" data-step="0">
+      <div class="step-dot">1</div>
+      <span class="step-label">Identité</span>
+    </div>
+    <div class="step-item" data-step="1">
+      <div class="step-dot">2</div>
+      <span class="step-label">Entreprise</span>
+    </div>
+    <div class="step-item" data-step="2">
+      <div class="step-dot">3</div>
+      <span class="step-label">Sécurité</span>
+    </div>
+  </div>
+
+  <!-- Formulaire -->
+  <form id="registerForm" novalidate>
+
+    <!-- STEP 1 : Identité -->
+    <div class="step active" data-index="0">
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Prénom <span>*</span></label>
+          <input id="first_name" type="text" placeholder="Jean" required autocomplete="given-name">
+        </div>
+        <div class="field-group">
+          <label>Nom <span>*</span></label>
+          <input id="last_name" type="text" placeholder="Dupont" required autocomplete="family-name">
+        </div>
+        <div class="field-group col-2">
+          <label>Email <span>*</span></label>
+          <input id="email" type="email" placeholder="jean.dupont@email.com" required autocomplete="email">
+        </div>
+        <div class="field-group col-2">
+          <label>Téléphone</label>
+          <input id="phone" type="tel" placeholder="+33 6 00 00 00 00" autocomplete="tel">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 : Entreprise -->
+    <div class="step" data-index="1">
+      <div class="grid-2">
+        <div class="field-group col-2">
+          <label>Nom de l'entreprise <span>*</span></label>
+          <input id="company" type="text" placeholder="Dupont & Associés" required autocomplete="organization">
+        </div>
+        <div class="field-group col-2">
+          <label>Activité <span>*</span></label>
+          <input id="activite" type="text" placeholder="ex: Électricien, Designer, BTP..." required>
+        </div>
+        <div class="field-group col-2">
+          <label>Adresse</label>
+          <input id="address" type="text" placeholder="12 rue de la Paix" autocomplete="street-address">
+        </div>
+        <div class="field-group">
+          <label>Ville</label>
+          <input id="city" type="text" placeholder="Paris" autocomplete="address-level2">
+        </div>
+        <div class="field-group">
+          <label>Pays</label>
+          <input id="country" type="text" placeholder="France" autocomplete="country-name">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 : Mot de passe -->
+    <div class="step" data-index="2">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="field-group">
+          <label>Mot de passe <span>*</span></label>
+          <input id="password" type="password" placeholder="Min. 8 caractères" required autocomplete="new-password">
+          <div class="password-strength-wrap">
+            <div id="passwordStrength"></div>
+          </div>
+          <span class="strength-label" id="strengthLabel"></span>
+        </div>
+        <div class="field-group">
+          <label>Confirmer le mot de passe <span>*</span></label>
+          <input id="confirm_password" type="password" placeholder="Répétez le mot de passe" required autocomplete="new-password">
+        </div>
+        <p style="font-size:12px;color:var(--gray-400);line-height:1.6;">
+          Min. 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial <code>(@$!%*?&)</code>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Boutons -->
+    <div class="btn-row">
+      <button type="button" id="prevBtn" class="btn-back hidden">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Retour
+      </button>
+      <button type="button" id="nextBtn" class="btn-next">
+        Suivant
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button type="submit" id="submitBtn" class="btn-submit hidden">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        Créer mon compte
+      </button>
+    </div>
+  </form>
+
+  <!-- Écran succès -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <h2>Vérifiez votre email !</h2>
+    <p>Un lien de confirmation a été envoyé à</p>
+    <span class="email-highlight" id="confirmedEmail"></span>
+    <p style="margin-top:14px;">Cliquez sur le lien pour activer votre compte, puis connectez-vous.</p>
+    <a href="login.html" class="btn-login-redirect">
+      Aller à la connexion
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <p id="message"></p>
+
+  <p id="loginLink" style="text-align:center;font-size:13px;color:var(--gray-400);margin-top:20px;">
+    Déjà un compte ? <a href="login.html" style="color:var(--orange);font-weight:600;text-decoration:none;">Se connecter</a>
+  </p>
+
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+// ─── Client Supabase ──────────────────────────────────────────────────────────
+const supabase = createClient(
+  'https://xeezdzbotsblzclnmnxg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+)
+
+// ─── DOM ──────────────────────────────────────────────────────────────────────
+const steps               = document.querySelectorAll(".step")
+const stepItems           = document.querySelectorAll(".step-item")
+const nextBtn             = document.getElementById("nextBtn")
+const prevBtn             = document.getElementById("prevBtn")
+const submitBtn           = document.getElementById("submitBtn")
+const passwordInput       = document.getElementById("password")
+const passwordStrengthBar = document.getElementById("passwordStrength")
+const strengthLabel       = document.getElementById("strengthLabel")
+const messageEl           = document.getElementById("message")
+const registerForm        = document.getElementById("registerForm")
+const successScreen       = document.getElementById("successScreen")
+const stepperEl           = document.getElementById("stepperEl")
+const loginLink           = document.getElementById("loginLink")
+
+let currentStep = 0
+
+// ─── Affichage step ───────────────────────────────────────────────────────────
+function showStep(step) {
+  steps.forEach((s, i) => s.classList.toggle("active", i === step))
+  stepItems.forEach((item, i) => {
+    item.classList.toggle("active", i === step)
+    item.classList.toggle("done", i < step)
+  })
+  prevBtn.classList.toggle("hidden", step === 0)
+  nextBtn.classList.toggle("hidden", step === steps.length - 1)
+  submitBtn.classList.toggle("hidden", step !== steps.length - 1)
+}
+
+// ─── Validation step courant ──────────────────────────────────────────────────
+function validateCurrentStep() {
+  const fields = steps[currentStep].querySelectorAll("input[required]")
+  let isValid = true
+  fields.forEach(field => {
+    field.classList.remove("error")
+    if (!field.value.trim() || !field.checkValidity()) {
+      field.classList.add("error")
+      isValid = false
+    }
+  })
+  if (currentStep === 0) {
+    const emailField = document.getElementById("email")
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim())) {
+      emailField.classList.add("error")
+      isValid = false
+    }
+  }
+  return isValid
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+nextBtn.addEventListener("click", () => {
+  clearMessage()
+  if (!validateCurrentStep()) {
+    showMessage("Veuillez remplir tous les champs obligatoires.", "error")
+    return
+  }
+  currentStep++
+  showStep(currentStep)
+})
+
+prevBtn.addEventListener("click", () => {
+  clearMessage()
+  currentStep--
+  showStep(currentStep)
+})
+
+// ─── Force mot de passe ───────────────────────────────────────────────────────
+passwordInput.addEventListener("input", (e) => {
+  const p = e.target.value
+  if (!p) { passwordStrengthBar.style.width = "0%"; strengthLabel.textContent = ""; return }
+  let score = 0
+  if (p.length >= 8)       score++
+  if (/[A-Z]/.test(p))     score++
+  if (/[a-z]/.test(p))     score++
+  if (/\d/.test(p))        score++
+  if (/[@$!%*?&]/.test(p)) score++
+  if (score <= 2) {
+    passwordStrengthBar.style.width = "33%"
+    passwordStrengthBar.style.backgroundColor = "#EF4444"
+    strengthLabel.style.color = "#EF4444"
+    strengthLabel.textContent = "Faible"
+  } else if (score <= 4) {
+    passwordStrengthBar.style.width = "66%"
+    passwordStrengthBar.style.backgroundColor = "#F97316"
+    strengthLabel.style.color = "#F97316"
+    strengthLabel.textContent = "Moyen"
+  } else {
+    passwordStrengthBar.style.width = "100%"
+    passwordStrengthBar.style.backgroundColor = "#10B981"
+    strengthLabel.style.color = "#10B981"
+    strengthLabel.textContent = "Fort ✓"
+  }
+})
+
+// ─── Validation mot de passe ──────────────────────────────────────────────────
+function validatePassword(pw) {
+  if (pw.length < 8) return "Le mot de passe doit contenir au moins 8 caractères."
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/.test(pw))
+    return "Le mot de passe doit contenir majuscule, minuscule, chiffre et caractère spécial."
+  return null
+}
+
+// ─── Messages UI ──────────────────────────────────────────────────────────────
+function showMessage(text, type = "error") {
+  messageEl.textContent = text
+  messageEl.className = type
+}
+function clearMessage() {
+  messageEl.textContent = ""
+  messageEl.className = ""
+}
+function setSubmitLoading(loading) {
+  submitBtn.disabled = loading
+  submitBtn.innerHTML = loading
+    ? `<span class="spinner"></span> Création en cours...`
+    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Créer mon compte`
+}
+
+// ─── Écran de succès ──────────────────────────────────────────────────────────
+function showSuccessScreen(email) {
+  registerForm.style.display = "none"
+  stepperEl.style.display = "none"
+  loginLink.style.display = "none"
+  clearMessage()
+  document.getElementById("confirmedEmail").textContent = email
+  successScreen.classList.add("show")
+}
+
+// ─── Soumission ───────────────────────────────────────────────────────────────
+registerForm.addEventListener("submit", async (e) => {
+  e.preventDefault()
+  clearMessage()
+
+  const email           = document.getElementById("email").value.trim()
+  const password        = passwordInput.value
+  const confirmPassword = document.getElementById("confirm_password").value
+
+  const passwordError = validatePassword(password)
+  if (passwordError) { showMessage(passwordError); return }
+  if (password !== confirmPassword) { showMessage("Les mots de passe ne correspondent pas."); return }
+
+  setSubmitLoading(true)
+
+  // Collecte des données profil
+  const profileData = {
+    first_name: document.getElementById("first_name").value.trim(),
+    last_name:  document.getElementById("last_name").value.trim(),
+    phone:      document.getElementById("phone").value.trim(),
+    company:    document.getElementById("company").value.trim(),
+    activite:   document.getElementById("activite").value.trim(),
+    address:    document.getElementById("address").value.trim(),
+    city:       document.getElementById("city").value.trim(),
+    country:    document.getElementById("country").value.trim(),
+  }
+
+  // ── signUp avec options.data ──────────────────────────────────────────────
+  // Les données profil sont passées dans raw_user_meta_data.
+  // Cela résout le bug "Database error saving new user" :
+  // Supabase n'essaie plus d'insérer dans une table profiles inexistante/cassée.
+  const { data, error: authError } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: profileData  // ← stocké dans auth.users.raw_user_meta_data
+    }
+  })
+
+  if (authError) {
+    console.error("Auth signUp error:", authError)
+    let msg = authError.message
+    if (authError.message.toLowerCase().includes("already registered") ||
+        authError.message.toLowerCase().includes("user already")) {
+      msg = "Cet email est déjà utilisé. Connectez-vous ou réinitialisez votre mot de passe."
+    }
+    showMessage(msg)
+    setSubmitLoading(false)
+    return
+  }
+
+  // ── Confirmation email requise → pas de session immédiate ─────────────────
+  // On NE fait PAS d'INSERT dans profiles maintenant :
+  // l'utilisateur n'est pas encore confirmé → la FK REFERENCES auth.users rejetterait.
+  // Solution : sauvegarder les données et les insérer dans login.html après connexion.
+  if (!data.session) {
+    try {
+      localStorage.setItem("pending_profile", JSON.stringify({ ...profileData, id: data.user?.id }))
+    } catch (_) {}
+    showSuccessScreen(email)
+    setSubmitLoading(false)
+    return
+  }
+
+  // ── Sans confirmation email (si désactivée dans Supabase) ─────────────────
+  // Session active directement → upsert du profil
+  // (upsert = insert si absent, update si le trigger a déjà créé la ligne)
+  const { error: profileError } = await supabase.from("profiles").upsert({
+    id: data.user.id,
+    ...profileData
+  }, { onConflict: 'id' })
+
+  if (profileError) {
+    console.error("Profile insert error:", profileError)
+    showMessage("Compte créé, mais erreur profil : " + profileError.message, "error")
+    setSubmitLoading(false)
+    return
+  }
+
+  showSuccessScreen(email)
+  setSubmitLoading(false)
+})
+
+showStep(0)
+</script>
+
+</body>
+</html>
