@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <title>Dashboard - Devis App</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -312,6 +312,34 @@
       color: var(--gray-800); margin-bottom: 16px;
       display: flex; align-items: center; gap: 8px;
     }
+
+    /* Recent quotes card format */
+    .recent-quotes-card {
+      background: var(--white); border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+      overflow: hidden; animation: slideUp 0.35s ease;
+    }
+    .recent-quotes-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--gray-100);
+      font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+      color: var(--gray-800); background: var(--gray-50);
+    }
+    .recent-quotes-list { display: flex; flex-direction: column; }
+    .recent-quote-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid var(--gray-100);
+      transition: background 0.2s;
+    }
+    .recent-quote-item:last-child { border-bottom: none; }
+    .recent-quote-item:hover { background: var(--gray-50); }
+    .recent-quote-left { display: flex; flex-direction: column; gap: 2px; }
+    .recent-quote-number { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--orange); }
+    .recent-quote-client { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+    .recent-quote-date { font-size: 11px; color: var(--gray-400); }
+    .recent-quote-right { display: flex; align-items: center; gap: 12px; }
+    .recent-quote-amount { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--gray-800); white-space: nowrap; }
+    .recent-quote-status { font-size: 11px; font-weight: 700; color: var(--gray-500); white-space: nowrap; }
+
     .empty-state {
       background: var(--white); border-radius: 16px;
       padding: 48px 24px; text-align: center;
@@ -411,6 +439,15 @@
       .quick-actions { display: grid; }
 
       .empty-state { padding: 32px 16px; }
+
+      .recent-quotes-card { padding: 0; }
+      .recent-quotes-header { font-size: 15px; padding: 14px 16px; }
+      .recent-quote-item { padding: 14px 16px; }
+      .recent-quote-number { font-size: 13px; }
+      .recent-quote-client { font-size: 12px; }
+      .recent-quote-date { font-size: 10px; }
+      .recent-quote-amount { font-size: 14px; }
+      .recent-quote-status { font-size: 10px; padding: 3px 8px; }
     }
 
     /* ════════════════════════
@@ -419,6 +456,11 @@
     @media (max-width: 380px) {
       .quick-actions  { grid-template-columns: 1fr; }
       .topbar-brand span { display: none; }
+      .stat-card { flex-direction: column; align-items: flex-start; padding: 14px; }
+      .stat-value { font-size: 24px; }
+      .recent-quote-left, .recent-quote-right { gap: 1px; }
+      .recent-quote-number { font-size: 12px; }
+      .recent-quote-amount { font-size: 13px; }
     }
   </style>
 </head>
@@ -640,22 +682,10 @@
       </svg>
       Devis récents
     </div>
-    <div class="empty-state" id="recentQuotes">
-      <div class="empty-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-        </svg>
-      </div>
-      <h3>Aucun devis pour l'instant</h3>
-      <p>Créez votre premier devis pour commencer à suivre votre activité.</p>
-      <a href="create-quote.html" class="btn-primary">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Créer un devis
-      </a>
+    <div id="recentQuotes">
+      <div class="skeleton" style="height:60px; margin-bottom:8px;"></div>
+      <div class="skeleton" style="height:60px; margin-bottom:8px;"></div>
+      <div class="skeleton" style="height:60px;"></div>
     </div>
 
   </main>
@@ -712,6 +742,7 @@ async function checkUser() {
   if (!session) { window.location.href = 'login.html'; return }
   await loadUserProfile(session.user.id)
   await loadStats(session.user.id)
+  await loadRecentQuotes(session.user.id)
 }
 
 async function loadUserProfile(userId) {
@@ -744,6 +775,61 @@ async function loadStats(userId) {
   revenueData?.forEach(q => total += (q.total_amount || 0))
   document.getElementById('totalRevenue').textContent =
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(total)
+}
+
+async function loadRecentQuotes(userId) {
+  const recentQuotesEl = document.getElementById('recentQuotes')
+  recentQuotesEl.innerHTML = `
+    <div class="skeleton" style="height:60px; margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:60px; margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:60px;"></div>
+  `
+  const { data: quotes, error } = await supabase
+    .from('quotes')
+    .select(`quote_number, clients(full_name), created_at, total_amount, status`)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(3)
+  if (error) {
+    recentQuotesEl.innerHTML = `<p style="color: var(--red); text-align: center;">Erreur chargement devis récents</p>`
+    return
+  }
+
+  if (quotes.length === 0) {
+    recentQuotesEl.classList.add('empty-state')
+    recentQuotesEl.innerHTML = `
+      <div class="empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      </div>
+      <h3>Aucun devis pour l'instant</h3>
+      <p>Créez votre premier devis pour commencer à suivre votre activité.</p>
+      <a href="create-quote.html" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Créer un devis
+      </a>
+    `
+  } else {
+    recentQuotesEl.classList.remove('empty-state')
+    recentQuotesEl.innerHTML = `<div class="recent-quotes-list">` + quotes.map(q => `
+      <div class="recent-quote-item">
+        <div class="recent-quote-left">
+          <div class="recent-quote-number">${q.quote_number || '—'}</div>
+          <div class="recent-quote-client">${q.clients?.full_name || '—'}</div>
+          <div class="recent-quote-date">${new Date(q.created_at).toLocaleDateString('fr-FR')}</div>
+        </div>
+        <div class="recent-quote-right">
+          <div class="recent-quote-amount">${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(q.total_amount)}</div>
+          <div class="recent-quote-status">${q.status}</div>
+        </div>
+      </div>
+    `).join('') + `</div>`
+  }
 }
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {

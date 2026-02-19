@@ -56,10 +56,35 @@
     .btn-logout { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px; border-radius: 10px; background: rgba(239,68,68,0.1); color: #F87171; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border: 1px solid rgba(239,68,68,0.2); cursor: pointer; transition: all 0.2s; }
     .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
 
+    /* ── Mobile bottom nav ── */
+    .mobile-nav {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--gray-900);
+      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+      z-index: 50;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .mobile-nav-inner { display: flex; justify-content: space-around; }
+    .mobile-nav-link {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: rgba(255,255,255,0.45); text-decoration: none;
+      font-size: 10px; font-weight: 600; padding: 4px 12px;
+      border-radius: 10px; transition: all 0.2s;
+    }
+    .mobile-nav-link.active { color: var(--orange); }
+
     /* ── Main ── */
     .main { flex: 1; overflow-y: auto; padding: 32px 36px; }
 
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--gray-400);
+      text-decoration: none; transition: color 0.2s; margin-bottom: 10px;
+    }
+    .back-link:hover { color: var(--orange); }
+
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
     .page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--gray-800); }
     .page-subtitle { font-size: 14px; color: var(--gray-400); margin-top: 4px; }
 
@@ -75,33 +100,34 @@
 
     /* ── Filtres ── */
     .filters-bar {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 10px;
       margin-bottom: 20px; flex-wrap: wrap;
     }
-    .search-wrap { position: relative; flex: 1; min-width: 200px; }
+    .search-wrap { position: relative; flex: 1; min-width: 180px; }
     .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
     .search-input { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 10px; padding: 9px 14px 9px 36px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--gray-800); background: var(--white); outline: none; transition: all 0.2s; }
     .search-input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
 
-    .filter-btn { padding: 8px 16px; border-radius: 100px; border: 1.5px solid var(--gray-200); background: var(--white); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .filters-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 14px; border-radius: 100px; border: 1.5px solid var(--gray-200); background: var(--white); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .filter-btn:hover { border-color: var(--orange); color: var(--orange); }
     .filter-btn.active { background: var(--orange); color: white; border-color: var(--orange); }
 
-    /* ── Card table ── */
+    /* ── Card / Desktop table ── */
     .card { background: var(--white); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04); overflow: hidden; animation: slideUp 0.35s ease; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
     thead tr { border-bottom: 2px solid var(--gray-100); }
-    thead th { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 16px; text-align: left; background: var(--gray-50); }
+    thead th { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 16px; text-align: left; background: var(--gray-50); white-space: nowrap; }
     tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: var(--gray-50); }
     tbody td { padding: 14px 16px; font-size: 14px; color: var(--gray-700); vertical-align: middle; }
 
     /* Badges statut */
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; white-space: nowrap; }
     .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; }
     .badge-draft    { background: var(--gray-100);   color: var(--gray-600); }
     .badge-sent     { background: var(--blue-light);  color: var(--blue); }
@@ -112,9 +138,8 @@
     .quote-number { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--orange); }
     .total-amount { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--gray-800); }
 
-    /* Boutons actions */
-    .actions-cell { display: flex; align-items: center; gap: 6px; }
-
+    /* Boutons actions desktop */
+    .actions-cell { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
     .btn-action {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       padding: 7px 12px; border-radius: 8px; border: none;
@@ -124,29 +149,66 @@
     }
     .btn-view   { background: var(--gray-100); color: var(--gray-700); }
     .btn-view:hover { background: var(--gray-200); }
-
     .btn-email  { background: var(--blue-light); color: var(--blue); }
     .btn-email:hover { background: #DBEAFE; }
-
     .btn-whatsapp { background: #F0FDF4; color: var(--whatsapp); }
     .btn-whatsapp:hover { background: #DCFCE7; }
-
     .btn-status { background: var(--orange-light); color: var(--orange); }
     .btn-status:hover { background: #FDE9D0; }
-
-    .btn-delete-sm { background: var(--red-light); color: var(--red); width: 32px; height: 32px; padding: 0; border-radius: 8px; }
+    .btn-delete-sm { background: var(--red-light); color: var(--red); width: 32px; height: 32px; padding: 0; }
     .btn-delete-sm:hover { background: var(--red); color: white; }
 
+    /* ── Mobile quote cards ── */
+    .quote-cards { display: none; flex-direction: column; gap: 12px; padding: 16px; }
+    .quote-card {
+      background: var(--white); border-radius: 14px;
+      border: 1.5px solid var(--gray-200);
+      overflow: hidden; transition: border-color 0.2s;
+    }
+    .quote-card:hover { border-color: var(--orange); }
+    .quote-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 10px;
+    }
+    .quote-card-left { display: flex; flex-direction: column; gap: 3px; }
+    .quote-card-number { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--orange); }
+    .quote-card-client { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+    .quote-card-date { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+    .quote-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .quote-card-amount { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--gray-800); }
+    .quote-card-actions {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; padding: 0 12px 12px;
+    }
+    .quote-card-actions .btn-action-mobile {
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 9px 10px; border-radius: 9px; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .btn-view-m   { background: var(--gray-100); color: var(--gray-700); }
+    .btn-view-m:hover { background: var(--gray-200); }
+    .btn-email-m  { background: var(--blue-light); color: var(--blue); }
+    .btn-email-m:hover { background: #DBEAFE; }
+    .btn-wa-m { background: #F0FDF4; color: var(--whatsapp); }
+    .btn-wa-m:hover { background: #DCFCE7; }
+    .btn-status-m { background: var(--orange-light); color: var(--orange); }
+    .btn-status-m:hover { background: #FDE9D0; }
+    .btn-delete-m { background: var(--red-light); color: var(--red); }
+    .btn-delete-m:hover { background: var(--red); color: white; }
+    /* 5th action spans full width */
+    .quote-card-actions .btn-action-mobile.full { grid-column: span 2; }
+
     /* Empty state */
-    .empty-state { text-align: center; padding: 64px 20px; }
+    .empty-state { text-align: center; padding: 56px 20px; }
     .empty-icon { width: 64px; height: 64px; background: var(--orange-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--orange); }
     .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--gray-700); margin-bottom: 6px; }
     .empty-state p { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
 
     /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.show { display: flex; }
-    .modal { background: var(--white); border-radius: 16px; padding: 28px; max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: slideUp 0.25s ease; }
+    .modal { background: var(--white); border-radius: 16px; padding: 28px; max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: slideUp 0.25s ease; }
     .modal-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
     .modal-icon.red { background: var(--red-light); color: var(--red); }
     .modal-icon.orange { background: var(--orange-light); color: var(--orange); }
@@ -165,7 +227,7 @@
     .status-option.selected { border-color: var(--orange); background: var(--orange-light); color: var(--orange); font-weight: 700; }
 
     /* Toast */
-    .toast { position: fixed; bottom: 28px; right: 28px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; }
+    .toast { position: fixed; bottom: 80px; right: 20px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; max-width: calc(100vw - 40px); }
     .toast.success { background: var(--green); color: white; }
     .toast.error   { background: var(--red);   color: white; }
     @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
@@ -174,9 +236,9 @@
     .skeleton { background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; display: inline-block; }
     @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
-    @media (max-width: 900px) { .sidebar { display: none; } .main { padding: 20px 16px; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── MODE PDF — couleurs forcees plus foncees et contrastées pour meilleur rendu ── */
+    /* ── PDF mode styles ── */
     .pdf-mode .doc-company-name   { color: #000000 !important; }
     .pdf-mode .doc-company-info   { color: #000000 !important; }
     .pdf-mode .doc-quote-label    { color: #000000 !important; }
@@ -203,12 +265,36 @@
     .pdf-mode .doc-footer  { background: #DDDDDD !important; border-top: 2px solid #000000 !important; }
     .pdf-mode .doc-footer-text  { color: #000000 !important; }
     .pdf-mode .doc-footer-brand { color: #EA6C0A !important; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: block; }
+      .main { padding: 20px 0 90px; }
+      .main-inner { padding: 0 16px; }
+      .page-title { font-size: 22px; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .btn-new { width: 100%; justify-content: center; }
+      .filters-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+      .filters-chips { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .filters-chips::-webkit-scrollbar { display: none; }
+      /* Hide desktop table, show cards */
+      .table-wrap { display: none; }
+      .quote-cards { display: flex; }
+      .toast { bottom: 90px; }
+      .back-link { display: inline-flex; margin-bottom: 8px; }
+    }
+    @media (min-width: 901px) {
+      .quote-cards { display: none !important; }
+      .main-inner { padding: 0; }
+      .toast { bottom: 28px; right: 28px; }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Sidebar -->
+  <!-- Sidebar desktop -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
@@ -224,9 +310,9 @@
       </a>
       <a href="quotes.html" class="nav-link active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Devis crées
+     Mes devis
       </a>
-      <a href="clients.html" class="nav-link">
+      <a href="liste-clients.html" class="nav-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         Clients
       </a>
@@ -253,59 +339,100 @@
 
   <!-- Main -->
   <main class="main">
+    <div class="main-inner">
 
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Mes devis</h1>
-        <p class="page-subtitle" id="quotesSubtitle">Chargement...</p>
-      </div>
-      <a href="create-quote.html" class="btn-new">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Nouveau devis
+      <!-- Retour dashboard -->
+      <a href="dashboard.html" class="back-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Dashboard
       </a>
+
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Mes devis</h1>
+          <p class="page-subtitle" id="quotesSubtitle">Chargement...</p>
+        </div>
+        <a href="create-quote.html" class="btn-new">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouveau devis
+        </a>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filters-bar">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par client ou numéro...">
+        </div>
+        <div class="filters-chips">
+          <button class="filter-btn active" data-filter="all">Tous</button>
+          <button class="filter-btn" data-filter="draft">Brouillon</button>
+          <button class="filter-btn" data-filter="sent">Envoyé</button>
+          <button class="filter-btn" data-filter="accepted">Accepté</button>
+          <button class="filter-btn" data-filter="rejected">Refusé</button>
+        </div>
+      </div>
+
+    </div><!-- /.main-inner -->
+
+    <!-- Desktop table card -->
+    <div class="main-inner">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>N° Devis</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Total TTC</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="quotesTable">
+              <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
+              <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
+              <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <!-- Filtres -->
-    <div class="filters-bar">
-      <div class="search-wrap">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par client ou numéro...">
-      </div>
-      <button class="filter-btn active" data-filter="all">Tous</button>
-      <button class="filter-btn" data-filter="draft">Brouillon</button>
-      <button class="filter-btn" data-filter="sent">Envoyé</button>
-      <button class="filter-btn" data-filter="accepted">Accepté</button>
-      <button class="filter-btn" data-filter="rejected">Refusé</button>
-    </div>
-
-    <!-- Table -->
-    <div class="card">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>N° Devis</th>
-              <th>Client</th>
-              <th>Date</th>
-              <th>Statut</th>
-              <th>Total TTC</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="quotesTable">
-            <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
-            <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
-            <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- Mobile cards -->
+    <div class="quote-cards" id="quoteCards">
+      <div class="skeleton" style="height:160px;border-radius:14px;"></div>
+      <div class="skeleton" style="height:160px;border-radius:14px;"></div>
+      <div class="skeleton" style="height:160px;border-radius:14px;"></div>
     </div>
 
   </main>
 
-  <!-- Hidden Quote Doc for PDF Generation -->
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <a href="dashboard.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="quotes.html" class="mobile-nav-link active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Devis
+      </a>
+      <a href="liste-clients.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Clients
+      </a>
+      <a href="settings.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Réglages
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hidden doc for PDF generation -->
   <div id="hiddenQuoteDoc" class="quote-doc" style="display:none; position:absolute; left:-9999px; width:800px;">
-    <!-- En-tête -->
     <div class="doc-header">
       <div>
         <div class="doc-company-name" id="docCompanyName">—</div>
@@ -317,42 +444,27 @@
         <div class="doc-quote-dates" id="docQuoteDates">—</div>
       </div>
     </div>
-
-    <!-- Corps -->
     <div class="doc-body">
-
-      <!-- Client -->
       <div class="doc-section-title">Adressé à</div>
       <div class="doc-client-box">
         <div class="doc-client-name" id="docClientName">—</div>
         <div class="doc-client-info" id="docClientInfo">—</div>
       </div>
-
-      <!-- Lignes -->
       <table class="doc-table">
-        <thead>
-          <tr>
-            <th style="width:50%">Description</th>
-            <th class="right" style="width:14%">Quantité</th>
-            <th class="right" style="width:18%">Prix unitaire</th>
-            <th class="right" style="width:18%">Total HT</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th style="width:50%">Description</th>
+          <th class="right" style="width:14%">Quantité</th>
+          <th class="right" style="width:18%">Prix unitaire</th>
+          <th class="right" style="width:18%">Total HT</th>
+        </tr></thead>
         <tbody id="docItems"></tbody>
         <tfoot id="docTotals"></tfoot>
       </table>
-
-      <!-- Notes -->
       <div id="docNotesWrap" style="display:none;">
         <div class="doc-section-title">Notes et conditions</div>
-        <div class="doc-notes">
-          <p id="docNotes"></p>
-        </div>
+        <div class="doc-notes"><p id="docNotes"></p></div>
       </div>
-
     </div>
-
-    <!-- Footer document -->
     <div class="doc-footer">
       <div class="doc-footer-text">Merci de votre confiance.</div>
       <div class="doc-footer-brand" id="docFooterBrand">Devis App</div>
@@ -409,11 +521,11 @@ const supabase = createClient(
 const fmt = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(n || 0)
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString('fr-FR') : '—'
 
-let currentUserId  = null
-let allQuotes      = []
-let currentFilter  = 'all'
-let quoteToDelete  = null
-let quoteToStatus  = null
+let currentUserId = null
+let allQuotes     = []
+let currentFilter = 'all'
+let quoteToDelete = null
+let quoteToStatus = null
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
 function showToast(msg, type = 'success') {
@@ -436,7 +548,6 @@ async function init() {
   await loadQuotes()
 }
 
-// ── Profil sidebar ────────────────────────────────────────────────────────────
 async function loadUserProfile(userId) {
   const { data } = await supabase.from('profiles').select('first_name, last_name, company').eq('id', userId).single()
   if (data) {
@@ -447,24 +558,20 @@ async function loadUserProfile(userId) {
   }
 }
 
-// ── Chargement devis ──────────────────────────────────────────────────────────
 async function loadQuotes() {
   const { data, error } = await supabase
     .from('quotes')
     .select(`id, quote_number, created_at, status, total_amount, clients(id, full_name, email, phone)`)
     .eq('user_id', currentUserId)
     .order('created_at', { ascending: false })
-
   if (error) { showToast('Erreur chargement devis', 'error'); return }
   allQuotes = data || []
   applyFilters()
 }
 
-// ── Filtre + recherche ────────────────────────────────────────────────────────
 function applyFilters() {
   const q = document.getElementById('searchInput').value.toLowerCase()
   let filtered = allQuotes
-
   if (currentFilter !== 'all') filtered = filtered.filter(d => d.status === currentFilter)
   if (q) filtered = filtered.filter(d =>
     d.clients?.full_name?.toLowerCase().includes(q) ||
@@ -473,7 +580,6 @@ function applyFilters() {
   renderQuotes(filtered)
 }
 
-// ── Badge statut ──────────────────────────────────────────────────────────────
 function statusBadge(status) {
   const map = {
     draft:    ['badge-draft',    'Brouillon'],
@@ -486,29 +592,29 @@ function statusBadge(status) {
   return `<span class="badge ${cls}">${label}</span>`
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
 function renderQuotes(quotes) {
   const tbody = document.getElementById('quotesTable')
+  const cardsEl = document.getElementById('quoteCards')
   const count = allQuotes.length
-
   document.getElementById('quotesSubtitle').textContent =
     `${count} devis au total — ${allQuotes.filter(d => d.status === 'accepted').length} acceptés`
 
   if (!quotes.length) {
-    tbody.innerHTML = `
-      <tr><td colspan="6">
-        <div class="empty-state">
-          <div class="empty-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <h3>Aucun devis trouvé</h3>
-          <p>${currentFilter === 'all' ? 'Créez votre premier devis.' : 'Aucun devis avec ce statut.'}</p>
-          ${currentFilter === 'all' ? `<a href="create-quote.html" class="btn-new" style="margin-top:16px;">+ Nouveau devis</a>` : ''}
+    const empty = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-      </td></tr>`
+        <h3>Aucun devis trouvé</h3>
+        <p>${currentFilter === 'all' ? 'Créez votre premier devis.' : 'Aucun devis avec ce statut.'}</p>
+        ${currentFilter === 'all' ? `<a href="create-quote.html" class="btn-new" style="margin-top:16px;display:inline-flex;">+ Nouveau devis</a>` : ''}
+      </div>`
+    tbody.innerHTML = `<tr><td colspan="6">${empty}</td></tr>`
+    cardsEl.innerHTML = empty
     return
   }
 
+  // ── Desktop table
   tbody.innerHTML = quotes.map(q => `
     <tr data-id="${q.id}">
       <td><span class="quote-number">${q.quote_number || '—'}</span></td>
@@ -522,22 +628,18 @@ function renderQuotes(quotes) {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Voir
           </a>
-          <button class="btn-action btn-email" title="Envoyer par email">
+          <button class="btn-action btn-email" data-id="${q.id}" title="Envoyer par email">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Email
           </button>
-          <button class="btn-action btn-whatsapp" title="Envoyer par WhatsApp">
+          <button class="btn-action btn-whatsapp" data-id="${q.id}" title="Envoyer par WhatsApp">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
             WhatsApp
           </button>
-          <button class="btn-action btn-status"
-            data-id="${q.id}" data-status="${q.status}"
-            title="Changer le statut">
+          <button class="btn-action btn-status" data-id="${q.id}" data-status="${q.status}" title="Changer le statut">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </button>
-          <button class="btn-action btn-delete-sm"
-            data-id="${q.id}" data-number="${q.quote_number || 'ce devis'}"
-            title="Supprimer">
+          <button class="btn-action btn-delete-sm" data-id="${q.id}" data-number="${q.quote_number || 'ce devis'}" title="Supprimer">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
           </button>
         </div>
@@ -545,44 +647,73 @@ function renderQuotes(quotes) {
     </tr>
   `).join('')
 
+  // ── Mobile cards
+  cardsEl.innerHTML = quotes.map(q => `
+    <div class="quote-card">
+      <div class="quote-card-header">
+        <div class="quote-card-left">
+          <div class="quote-card-number">${q.quote_number || '—'}</div>
+          <div class="quote-card-client">${q.clients?.full_name || '—'}</div>
+          <div class="quote-card-date">${fmtDate(q.created_at)}</div>
+        </div>
+        <div class="quote-card-right">
+          <div class="quote-card-amount">${fmt(q.total_amount)}</div>
+          ${statusBadge(q.status)}
+        </div>
+      </div>
+      <div class="quote-card-actions">
+        <a href="view-quote.html?id=${q.id}" class="btn-action-mobile btn-view-m">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Voir
+        </a>
+        <button class="btn-action-mobile btn-status-m" data-id="${q.id}" data-status="${q.status}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Statut
+        </button>
+        <button class="btn-action-mobile btn-email-m" data-id="${q.id}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email
+        </button>
+        <button class="btn-action-mobile btn-wa-m" data-id="${q.id}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          WhatsApp
+        </button>
+        <button class="btn-action-mobile btn-delete-m full" data-id="${q.id}" data-number="${q.quote_number || 'ce devis'}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  `).join('')
+
   attachRowEvents()
 }
 
-// ── Events sur les lignes ─────────────────────────────────────────────────────
 function attachRowEvents() {
-
-  // Email
-  document.querySelectorAll('.btn-email').forEach(btn => {
+  // Email (desktop + mobile)
+  document.querySelectorAll('.btn-email, .btn-email-m').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const row = btn.closest('tr')
-      const id = row.dataset.id
-      await sharePdfWithMessage(btn, true, id)
+      await sharePdfWithMessage(btn, true, btn.dataset.id || btn.closest('tr')?.dataset.id)
     })
   })
-
   // WhatsApp
-  document.querySelectorAll('.btn-whatsapp').forEach(btn => {
+  document.querySelectorAll('.btn-whatsapp, .btn-wa-m').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const row = btn.closest('tr')
-      const id = row.dataset.id
-      await sharePdfWithMessage(btn, false, id)
+      await sharePdfWithMessage(btn, false, btn.dataset.id || btn.closest('tr')?.dataset.id)
     })
   })
-
   // Statut
-  document.querySelectorAll('.btn-status').forEach(btn => {
+  document.querySelectorAll('.btn-status, .btn-status-m').forEach(btn => {
     btn.addEventListener('click', () => {
       quoteToStatus = btn.dataset.id
-      // Highlight le statut actuel
       document.querySelectorAll('.status-option').forEach(opt => {
         opt.classList.toggle('selected', opt.dataset.status === btn.dataset.status)
       })
       document.getElementById('statusModal').classList.add('show')
     })
   })
-
-  // Suppression
-  document.querySelectorAll('.btn-delete-sm').forEach(btn => {
+  // Supprimer
+  document.querySelectorAll('.btn-delete-sm, .btn-delete-m').forEach(btn => {
     btn.addEventListener('click', () => {
       quoteToDelete = btn.dataset.id
       document.getElementById('deleteModalText').textContent =
@@ -592,7 +723,6 @@ function attachRowEvents() {
   })
 }
 
-// ── Mise à jour statut ────────────────────────────────────────────────────────
 async function updateStatus(id, status, showFeedback = true) {
   const { error } = await supabase.from('quotes').update({ status }).eq('id', id)
   if (error) { showToast('Erreur mise à jour statut', 'error'); return }
@@ -600,7 +730,7 @@ async function updateStatus(id, status, showFeedback = true) {
   await loadQuotes()
 }
 
-// ── Events modals ─────────────────────────────────────────────────────────────
+// ── Modal events ──────────────────────────────────────────────────────────────
 document.getElementById('confirmDelete').addEventListener('click', async () => {
   if (!quoteToDelete) return
   document.getElementById('deleteModal').classList.remove('show')
@@ -625,8 +755,6 @@ document.querySelectorAll('.status-option').forEach(opt => {
     quoteToStatus = null
   })
 })
-
-// Fermer modals en cliquant dehors
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', (e) => {
     if (e.target === e.currentTarget) {
@@ -647,154 +775,67 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 })
 document.getElementById('searchInput').addEventListener('input', applyFilters)
 
-// ── Logout ────────────────────────────────────────────────────────────────────
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await supabase.auth.signOut()
-  window.location.href = 'login.html'
-})
-
-// ── Fonction PDF haute qualite (partagee par Telecharger et WhatsApp) ─────────
-// returnBlob=false -> sauvegarde le fichier directement
-// returnBlob=true  -> retourne un Blob pour Web Share API
+// ── PDF generation ────────────────────────────────────────────────────────────
 async function generatePdf(returnBlob, elemId = 'hiddenQuoteDoc') {
   const { jsPDF } = window.jspdf
-  const elem       = document.getElementById(elemId)
-  const filename   = 'Devis-' + (quoteData ? quoteData.quote_number : 'devis') + '.pdf'
-
+  const elem = document.getElementById(elemId)
   elem.classList.add('pdf-mode')
-
   try {
-    await document.fonts.ready;
-    await new Promise(function(r){ setTimeout(r, 300) })
-
+    await document.fonts.ready
+    await new Promise(r => setTimeout(r, 300))
     const canvas = await html2canvas(elem, {
-      scale           : 2,
-      useCORS         : true,
-      allowTaint      : false,
-      backgroundColor : '#ffffff',
-      logging         : false,
-      imageTimeout    : 0,
-      removeContainer : true,
-      letterRendering : true,
-      windowWidth     : elem.scrollWidth,
-      windowHeight    : elem.scrollHeight
+      scale: 2, useCORS: true, allowTaint: false,
+      backgroundColor: '#ffffff', logging: false,
+      imageTimeout: 0, removeContainer: true,
+      letterRendering: true,
+      windowWidth: elem.scrollWidth, windowHeight: elem.scrollHeight
     })
-
     const imgData = canvas.toDataURL('image/jpeg', 0.7)
-
-    const pdf   = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
-    const pageW = pdf.internal.pageSize.getWidth()   // 210 mm
-    const pageH = pdf.internal.pageSize.getHeight()  // 297 mm
-    const imgH  = (canvas.height / canvas.width) * pageW
-
-    var yOff  = 0
-    var leftH = imgH
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
+    const pageW = pdf.internal.pageSize.getWidth()
+    const pageH = pdf.internal.pageSize.getHeight()
+    const imgH = (canvas.height / canvas.width) * pageW
+    let yOff = 0, leftH = imgH
     while (leftH > 0) {
       pdf.addImage(imgData, 'JPEG', 0, yOff, pageW, imgH, '', 'FAST')
-      leftH -= pageH
-      yOff  -= pageH
+      leftH -= pageH; yOff -= pageH
       if (leftH > 0) pdf.addPage()
     }
-
     if (returnBlob) return pdf.output('blob')
-    pdf.save(filename)
-
+    pdf.save('Devis.pdf')
   } finally {
     elem.classList.remove('pdf-mode')
   }
 }
 
-// ── Render Quote for PDF ──────────────────────────────────────────────────────
 async function renderQuoteForPdf(id) {
   const { data: fullQuote, error } = await supabase
-    .from('quotes')
-    .select(`
-      *,
-      clients(*),
-      quote_items(*)
-    `)
-    .eq('id', id)
-    .single()
-
-  if (error || !fullQuote) {
-    showToast('Erreur chargement devis', 'error')
-    return null
-  }
-
+    .from('quotes').select(`*, clients(*), quote_items(*)`).eq('id', id).single()
+  if (error || !fullQuote) { showToast('Erreur chargement devis', 'error'); return null }
   const client = fullQuote.clients || {}
   const items  = fullQuote.quote_items || []
-
-  // Infos entreprise (depuis profil)
   const { data: profile } = await supabase.from('profiles').select('company, address, city, country, phone').eq('id', currentUserId).single()
-  document.getElementById('docCompanyName').textContent = profile.company || 'Mon entreprise'
-  const companyInfo = [
-    profile.address,
-    profile.city,
-    profile.country,
-    profile.phone
-  ].filter(Boolean).join('\n')
+  document.getElementById('docCompanyName').textContent = profile?.company || 'Mon entreprise'
+  const companyInfo = [profile?.address, profile?.city, profile?.country, profile?.phone].filter(Boolean).join('\n')
   document.getElementById('docCompanyInfo').innerHTML = companyInfo.replace(/\n/g, '<br>') || '—'
-
-  // En-tête document
   document.getElementById('docQuoteNumber').textContent = fullQuote.quote_number || '—'
-  document.getElementById('docQuoteDates').innerHTML =
-    `<strong>Date :</strong> ${fmtDate(fullQuote.created_at)}`
-
-  // Client
+  document.getElementById('docQuoteDates').innerHTML = `<strong>Date :</strong> ${fmtDate(fullQuote.created_at)}`
   document.getElementById('docClientName').textContent = client.full_name || '—'
-  const clientInfo = [
-    client.company_name,
-    client.address,
-    [client.postal_code, client.city].filter(Boolean).join(' '),
-    client.country,
-    client.email,
-    client.phone
-  ].filter(Boolean).join('\n')
+  const clientInfo = [client.company_name, client.address, [client.postal_code, client.city].filter(Boolean).join(' '), client.country, client.email, client.phone].filter(Boolean).join('\n')
   document.getElementById('docClientInfo').innerHTML = clientInfo.replace(/\n/g, '<br>') || '—'
-
-  // Lignes
-  const tbody = document.getElementById('docItems')
-  if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:20px;">Aucune ligne</td></tr>`
-  } else {
-    tbody.innerHTML = items.map(item => `
-      <tr>
-        <td class="desc">${item.description || '—'}</td>
-        <td class="right">${item.quantity}</td>
-        <td class="right">${fmt(item.unit_price)}</td>
-        <td class="right">${fmt(item.total)}</td>
-      </tr>
-    `).join('')
-  }
-
-  // Totaux
+  document.getElementById('docItems').innerHTML = items.length
+    ? items.map(item => `<tr><td class="desc">${item.description || '—'}</td><td class="right">${item.quantity}</td><td class="right">${fmt(item.unit_price)}</td><td class="right">${fmt(item.total)}</td></tr>`).join('')
+    : `<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:20px;">Aucune ligne</td></tr>`
   document.getElementById('docTotals').innerHTML = `
-    <tr>
-      <td colspan="2"></td>
-      <td class="label">Sous-total HT</td>
-      <td class="value">${fmt(fullQuote.subtotal)}</td>
-    </tr>
-    <tr>
-      <td colspan="2"></td>
-      <td class="label">TVA (${fullQuote.tax_rate || 0}%)</td>
-      <td class="value">${fmt(fullQuote.tax_amount)}</td>
-    </tr>
-    <tr class="total-row">
-      <td colspan="2"></td>
-      <td class="total-label">Total TTC</td>
-      <td class="total-value">${fmt(fullQuote.total_amount)}</td>
-    </tr>
-  `
-
-  // Notes
+    <tr><td colspan="2"></td><td class="label">Sous-total HT</td><td class="value">${fmt(fullQuote.subtotal)}</td></tr>
+    <tr><td colspan="2"></td><td class="label">TVA (${fullQuote.tax_rate || 0}%)</td><td class="value">${fmt(fullQuote.tax_amount)}</td></tr>
+    <tr class="total-row"><td colspan="2"></td><td class="total-label">Total TTC</td><td class="total-value">${fmt(fullQuote.total_amount)}</td></tr>`
   if (fullQuote.notes) {
     document.getElementById('docNotesWrap').style.display = 'block'
     document.getElementById('docNotes').textContent = fullQuote.notes
   } else {
     document.getElementById('docNotesWrap').style.display = 'none'
   }
-
-  // Retourne les infos pour le message
   return {
     clientName: client.full_name || '',
     clientEmail: client.email || '',
@@ -804,84 +845,47 @@ async function renderQuoteForPdf(id) {
   }
 }
 
-// ── Fonction partagée pour générer et partager le PDF ─────────────────────────
-async function sharePdfWithMessage(button, isEmail = false, quoteId) {
+async function sharePdfWithMessage(button, isEmail, quoteId) {
   button.disabled = true
   const origHtml = button.innerHTML
   button.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.7s linear infinite;display:inline-block"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>'
-
   const quoteInfo = await renderQuoteForPdf(quoteId)
-  if (!quoteInfo) {
-    button.disabled = false
-    button.innerHTML = origHtml
-    return
-  }
-
+  if (!quoteInfo) { button.disabled = false; button.innerHTML = origHtml; return }
   let pdfBlob = null
-  try {
-    pdfBlob = await generatePdf(true)
-  } catch(e) {
-    showToast('Erreur génération PDF.', 'error')
-    button.disabled = false
-    button.innerHTML = origHtml
-    return
-  }
-
+  try { pdfBlob = await generatePdf(true) }
+  catch(e) { showToast('Erreur génération PDF.', 'error'); button.disabled = false; button.innerHTML = origHtml; return }
   const filename = 'Devis-' + quoteInfo.number + '.pdf'
-
-  const messageText = `Bonjour ${quoteInfo.clientName} 👋,\n\nVeuillez trouver ci-joint votre devis N°${quoteInfo.number} d'un montant de ${quoteInfo.amount} TTC 📄.\n\nN'hésitez pas à me contacter pour toute question 😊.\n\nCordialement`;
-
+  const messageText = `Bonjour ${quoteInfo.clientName} 👋,\n\nVeuillez trouver ci-joint votre devis N°${quoteInfo.number} d'un montant de ${quoteInfo.amount} TTC 📄.\n\nN'hésitez pas à me contacter pour toute question 😊.\n\nCordialement`
   const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' })
-
   if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
     try {
-      await navigator.share({
-        title: `Devis N°${quoteInfo.number}`,
-        text: messageText,
-        files: [pdfFile]
-      })
+      await navigator.share({ title: `Devis N°${quoteInfo.number}`, text: messageText, files: [pdfFile] })
       updateStatus(quoteId, 'sent', false)
       showToast('Devis partagé avec succès !')
-    } catch(err) {
-      if (err.name !== 'AbortError') showToast('Partage annulé.', 'error')
-    }
+    } catch(err) { if (err.name !== 'AbortError') showToast('Partage annulé.', 'error') }
   } else {
     const url = URL.createObjectURL(pdfBlob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    a.click()
+    const a = document.createElement('a'); a.href = url; a.download = filename; a.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-
     if (isEmail) {
       if (quoteInfo.clientEmail) {
-        const subject = encodeURIComponent(`Devis N°${quoteInfo.number}`)
-        const body = encodeURIComponent(messageText)
-        window.open(`mailto:${quoteInfo.clientEmail}?subject=${subject}&body=${body}`)
+        window.open(`mailto:${quoteInfo.clientEmail}?subject=${encodeURIComponent(`Devis N°${quoteInfo.number}`)}&body=${encodeURIComponent(messageText)}`)
         showToast('📄 PDF téléchargé — joignez-le dans l\'email.')
-      } else {
-        showToast('Aucun email enregistré pour ce client.', 'error')
-      }
+      } else { showToast('Aucun email enregistré pour ce client.', 'error') }
     } else {
       const cleanPhone = quoteInfo.clientPhone.replace(/[\s\-\(\)]/g, '').replace(/^\+/, '')
       if (cleanPhone) {
         window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`)
         showToast('📄 PDF téléchargé — joignez-le dans WhatsApp.')
-      } else {
-        showToast('Aucun numéro WhatsApp enregistré pour ce client.', 'error')
-      }
+      } else { showToast('Aucun numéro WhatsApp enregistré pour ce client.', 'error') }
     }
     updateStatus(quoteId, 'sent', false)
   }
-
-  button.disabled = false
-  button.innerHTML = origHtml
+  button.disabled = false; button.innerHTML = origHtml
 }
 
-// ── Logout ────────────────────────────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await supabase.auth.signOut()
-  window.location.href = 'login.html'
+  await supabase.auth.signOut(); window.location.href = 'login.html'
 })
 
 init()
