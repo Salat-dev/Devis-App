@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#F97316">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Devis App">
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
   <title>Modifier Devis - Devis App</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --orange: #F97316;
@@ -23,15 +32,11 @@
       --gray-800: #1F2937;
       --gray-900: #111827;
       --green: #10B981;
-      --green-light: #D1FAE5;
       --blue: #3B82F6;
       --blue-light: #EFF6FF;
       --red: #EF4444;
       --red-light: #FFF1F1;
-      --yellow: #F59E0B;
-      --yellow-light: #FFFBEB;
       --white: #FFFFFF;
-      --whatsapp: #25D366;
     }
 
     body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); min-height: 100vh; display: flex; }
@@ -54,59 +59,172 @@
     .btn-logout { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px; border-radius: 10px; background: rgba(239,68,68,0.1); color: #F87171; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border: 1px solid rgba(239,68,68,0.2); cursor: pointer; transition: all 0.2s; }
     .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
 
+    /* ── Mobile nav ── */
+    .mobile-nav {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--gray-900);
+      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+      z-index: 50; border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .mobile-nav-inner { display: flex; justify-content: space-around; }
+    .mobile-nav-link { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.45); text-decoration: none; font-size: 10px; font-weight: 600; padding: 4px 12px; border-radius: 10px; transition: all 0.2s; }
+    .mobile-nav-link.active { color: var(--orange); }
+
     /* ── Main ── */
     .main { flex: 1; overflow-y: auto; padding: 32px 36px; }
 
-    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--gray-500); text-decoration: none; transition: color 0.2s; margin-bottom: 14px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--gray-400); text-decoration: none; transition: color 0.2s; margin-bottom: 10px; }
     .back-link:hover { color: var(--orange); }
 
-    /* ── Form ── */
-    .form-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--gray-800); margin-bottom: 24px; }
-    .form-group { margin-bottom: 20px; }
-    .form-label { font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; display: block; }
-    .form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px; font-size: 14px; color: var(--gray-800); background: var(--white); transition: all 0.2s; }
-    .form-input:focus { border-color: var(--orange); outline: none; }
-    .form-select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px; font-size: 14px; color: var(--gray-800); background: var(--white); transition: all 0.2s; appearance: none; }
-    .form-select:focus { border-color: var(--orange); outline: none; }
-    .form-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px; font-size: 14px; color: var(--gray-800); background: var(--white); transition: all 0.2s; min-height: 100px; resize: vertical; }
-    .form-textarea:focus { border-color: var(--orange); outline: none; }
+    /* ── Page header ── */
+    .page-header { margin-bottom: 24px; }
+    .page-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--gray-800); }
+    .page-subtitle { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
 
-    /* ── Items Table ── */
-    .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    .items-table th { padding: 10px; background: var(--gray-100); text-align: left; font-size: 13px; font-weight: 600; color: var(--gray-700); border-bottom: 1.5px solid var(--gray-200); }
-    .items-table td { padding: 10px; border-bottom: 1px solid var(--gray-100); }
-    .items-table input { width: 100%; padding: 8px; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 14px; }
-    .items-table .right { text-align: right; }
-    .btn-add-item { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 10px; background: var(--orange-light); color: var(--orange); font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; }
-    .btn-add-item:hover { background: var(--orange); color: white; }
-    .btn-remove-item { padding: 6px 10px; border-radius: 6px; background: var(--red-light); color: var(--red); border: none; cursor: pointer; transition: all 0.2s; }
-    .btn-remove-item:hover { background: var(--red); color: white; }
+    /* ── Cards ── */
+    .card {
+      background: var(--white); border-radius: 16px; padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+      margin-bottom: 20px; animation: slideUp 0.35s ease both;
+    }
+    .card:nth-child(2) { animation-delay: 0.06s; }
+    .card:nth-child(3) { animation-delay: 0.12s; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ── Totals ── */
-    .totals { text-align: right; margin-bottom: 20px; }
-    .totals p { font-size: 14px; color: var(--gray-600); margin-bottom: 4px; }
-    .totals .total { font-size: 18px; font-weight: 800; color: var(--orange); }
+    .card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--gray-700); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .card-title svg { color: var(--orange); }
 
-    /* ── Buttons ── */
-    .form-buttons { display: flex; gap: 10px; }
-    .btn-save { padding: 10px 20px; border-radius: 10px; background: var(--orange); color: white; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; }
-    .btn-save:hover { background: var(--orange-dark); }
-    .btn-cancel { padding: 10px 20px; border-radius: 10px; background: var(--gray-100); color: var(--gray-700); font-weight: 600; border: 1.5px solid var(--gray-200); cursor: pointer; transition: all 0.2s; }
-    .btn-cancel:hover { background: var(--gray-200); }
+    /* ── Form fields ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .col-2 { grid-column: span 2; }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group label { font-size: 12px; font-weight: 600; color: var(--gray-600); letter-spacing: 0.02em; }
+    .field-group label span { color: var(--red); margin-left: 2px; }
+
+    input[type="text"], input[type="number"], input[type="date"], input[type="email"],
+    select, textarea {
+      width: 100%; border: 1.5px solid var(--gray-200); border-radius: 10px;
+      padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+      color: var(--gray-800); background: var(--gray-50);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none; appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--orange); background: var(--white); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+
+    /* ── Desktop items table ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 2px solid var(--gray-100); }
+    thead th { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 10px; text-align: left; }
+    thead th.right { text-align: right; }
+    tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
+    tbody tr:hover { background: var(--gray-50); }
+    tbody td { padding: 8px 10px; vertical-align: middle; }
+    tbody td.right { text-align: right; }
+    tbody input { border-radius: 8px; padding: 8px 10px; font-size: 14px; background: var(--white); }
+    tbody input[type="number"] { text-align: right; }
+    .line-total { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--gray-800); white-space: nowrap; }
+
+    .btn-remove-row { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--red-light); color: var(--red); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin: 0 auto; flex-shrink: 0; }
+    .btn-remove-row:hover { background: var(--red); color: white; }
+
+    /* ── Add row button ── */
+    .btn-add-row { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 9px 18px; border-radius: 10px; border: 1.5px dashed var(--gray-300); background: none; color: var(--gray-500); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-add-row:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+
+    .btn-add-row-mobile { display: none; width: 100%; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; padding: 12px; border-radius: 12px; border: 1.5px dashed var(--gray-300); background: none; color: var(--gray-500); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-add-row-mobile:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+
+    /* ── Mobile item cards ── */
+    .mobile-items { display: none; flex-direction: column; gap: 12px; }
+    .mobile-item-card { background: var(--gray-50); border-radius: 12px; border: 1.5px solid var(--gray-200); padding: 14px; }
+    .mobile-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .mobile-item-num { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.06em; text-transform: uppercase; }
+    .mobile-item-total-val { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--orange); }
+    .mobile-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .mobile-field-label { font-size: 11px; font-weight: 600; color: var(--gray-500); margin-bottom: 4px; }
+    .mobile-desc-wrap { grid-column: span 2; }
+
+    /* ── Totaux ── */
+    .totals-wrap { margin-top: 20px; display: flex; justify-content: flex-end; }
+    .totals-box { background: var(--gray-50); border-radius: 12px; padding: 20px 24px; min-width: 280px; display: flex; flex-direction: column; gap: 10px; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--gray-600); }
+    .total-row span:last-child { font-weight: 700; color: var(--gray-800); }
+    .total-row.main { padding-top: 10px; border-top: 2px solid var(--gray-200); font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--gray-800); }
+    .total-row.main span:last-child { color: var(--orange); }
+
+    /* ── Desktop actions ── */
+    .actions-bar { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+    .btn-cancel-link { padding: 11px 24px; border-radius: 10px; border: 1.5px solid var(--gray-200); background: var(--gray-100); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.2s; }
+    .btn-cancel-link:hover { background: var(--gray-200); }
+    .btn-save { padding: 11px 28px; border-radius: 10px; border: none; background: var(--orange); color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(249,115,22,0.3); transition: all 0.2s; }
+    .btn-save:hover { background: var(--orange-dark); transform: translateY(-1px); }
+    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── Mobile sticky save bar ── */
+    .mobile-save-bar {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--white);
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--gray-200);
+      z-index: 49; gap: 10px;
+    }
+    .btn-save-m { flex: 1; padding: 13px; border-radius: 12px; border: none; background: var(--orange); color: white; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(249,115,22,0.3); transition: all 0.2s; }
+    .btn-save-m:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-cancel-m { padding: 13px 18px; border-radius: 12px; border: 1.5px solid var(--gray-200); background: var(--gray-100); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 
     /* ── Toast ── */
-    .toast { position: fixed; bottom: 28px; right: 28px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; }
+    .toast { position: fixed; bottom: 28px; right: 28px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; max-width: calc(100vw - 40px); }
     .toast.success { background: var(--green); color: white; }
     .toast.error   { background: var(--red);   color: white; }
     @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
 
-    @media (max-width: 900px) { .sidebar { display: none; } .main { padding: 20px 16px; } }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: block; }
+      .main { padding: 16px 12px 160px; }
+
+      .page-title { font-size: 20px; }
+      .card { padding: 18px 14px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .col-2 { grid-column: span 1; }
+
+      /* Hide desktop table, show mobile cards */
+      .table-wrap { display: none; }
+      .btn-add-row { display: none; }
+      .mobile-items { display: flex; }
+      .btn-add-row-mobile { display: flex; }
+
+      /* Totals full width */
+      .totals-wrap { justify-content: stretch; }
+      .totals-box { width: 100%; min-width: unset; }
+
+      /* Hide desktop actions, show sticky bar */
+      .actions-bar { display: none; }
+      .mobile-save-bar { display: flex; }
+
+      .back-link { margin-bottom: 6px; }
+      .toast { bottom: 160px; right: 16px; }
+    }
+    @media (min-width: 901px) {
+      .toast { bottom: 28px; right: 28px; }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Sidebar -->
+  <!-- Sidebar desktop -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
@@ -124,7 +242,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Devis
       </a>
-      <a href="clients.html" class="nav-link">
+      <a href="liste-clients.html" class="nav-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         Clients
       </a>
@@ -152,76 +270,142 @@
   <!-- Main -->
   <main class="main">
 
-    <a href="view-quote.html?id=${quoteId}" class="back-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    <a href="#" class="back-link" id="backToQuote">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
       Retour au devis
     </a>
 
-    <h1 class="form-title">Modifier le Devis</h1>
+    <div class="page-header">
+      <h1 class="page-title">Modifier le devis</h1>
+      <p class="page-subtitle" id="pageSubtitle">Chargement...</p>
+    </div>
 
-    <form id="editQuoteForm">
-      <div class="form-group">
-        <label class="form-label" for="quoteNumber">Numéro de devis</label>
-        <input type="text" id="quoteNumber" class="form-input" required>
+    <!-- Infos générales -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Informations générales
+      </div>
+      <div class="form-grid">
+        <div class="field-group">
+          <label>N° de devis <span>*</span></label>
+          <input type="text" id="quoteNumber" placeholder="DEV-2025-001">
+        </div>
+        <div class="field-group">
+          <label>Date <span>*</span></label>
+          <input type="date" id="createdAt">
+        </div>
+        <div class="field-group">
+          <label>Client <span>*</span></label>
+          <select id="clientId">
+            <option value="">Sélectionner un client...</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Taux TVA (%)</label>
+          <input type="number" id="taxRate" value="20" min="0" max="100" step="0.1">
+        </div>
+        <div class="field-group col-2">
+          <label>Notes / Conditions</label>
+          <textarea id="notes" placeholder="Conditions de paiement, délais, remarques..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lignes -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Lignes du devis
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="createdAt">Date</label>
-        <input type="date" id="createdAt" class="form-input" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="clientId">Client</label>
-        <select id="clientId" class="form-select" required>
-          <option value="">Sélectionnez un client</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Lignes</label>
-        <table class="items-table">
+      <!-- Desktop table -->
+      <div class="table-wrap">
+        <table>
           <thead>
             <tr>
-              <th style="width:50%">Description</th>
-              <th style="width:14%">Quantité</th>
-              <th style="width:18%">Prix unitaire</th>
-              <th style="width:18%">Total</th>
-              <th style="width:5%"></th>
+              <th style="width:46%">Description</th>
+              <th style="width:12%" class="right">Quantité</th>
+              <th style="width:20%" class="right">Prix unitaire</th>
+              <th style="width:16%" class="right">Total HT</th>
+              <th style="width:6%"></th>
             </tr>
           </thead>
-          <tbody id="itemsBody">
-            <!-- Rows will be added dynamically -->
-          </tbody>
+          <tbody id="itemsTable"></tbody>
         </table>
-        <button type="button" class="btn-add-item" id="addItemBtn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter une ligne
-        </button>
       </div>
+      <button class="btn-add-row" id="addRowBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Ajouter une ligne
+      </button>
 
-      <div class="form-group">
-        <label class="form-label" for="taxRate">Taux TVA (%)</label>
-        <input type="number" id="taxRate" class="form-input" min="0" step="0.01" required>
-      </div>
+      <!-- Mobile cards -->
+      <div class="mobile-items" id="mobileItems"></div>
+      <button class="btn-add-row-mobile" id="addRowBtnMobile">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Ajouter une ligne
+      </button>
 
-      <div class="totals">
-        <p>Sous-total HT: <span id="subtotal">0 XOF</span></p>
-        <p>TVA: <span id="taxAmount">0 XOF</span></p>
-        <p class="total">Total TTC: <span id="totalAmount">0 XOF</span></p>
+      <!-- Totaux -->
+      <div class="totals-wrap">
+        <div class="totals-box">
+          <div class="total-row">
+            <span>Sous-total HT</span>
+            <span id="subtotal">0 XOF</span>
+          </div>
+          <div class="total-row">
+            <span>TVA (<span id="taxRateDisplay">20</span>%)</span>
+            <span id="taxAmount">0 XOF</span>
+          </div>
+          <div class="total-row main">
+            <span>Total TTC</span>
+            <span id="totalAmount">0 XOF</span>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label class="form-label" for="notes">Notes</label>
-        <textarea id="notes" class="form-textarea"></textarea>
-      </div>
-
-      <div class="form-buttons">
-        <button type="submit" class="btn-save">Enregistrer</button>
-        <button type="button" class="btn-cancel" id="cancelEdit">Annuler</button>
-      </div>
-    </form>
+    <!-- Desktop actions -->
+    <div class="actions-bar">
+      <a href="#" class="btn-cancel-link" id="cancelDesktop">Annuler</a>
+      <button class="btn-save" id="saveBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Enregistrer les modifications
+      </button>
+    </div>
 
   </main>
+
+  <!-- Mobile sticky save bar -->
+  <div class="mobile-save-bar" id="mobileSaveBar">
+    <a href="#" class="btn-cancel-m" id="cancelMobile">Annuler</a>
+    <button class="btn-save-m" id="saveBtnMobile">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Enregistrer
+    </button>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <a href="dashboard.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="quotes.html" class="mobile-nav-link active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Devis
+      </a>
+      <a href="liste-clients.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Clients
+      </a>
+      <a href="settings.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Réglages
+      </a>
+    </div>
+  </nav>
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js'
@@ -232,14 +416,24 @@ const supabase = createClient(
 )
 
 const quoteId = new URLSearchParams(window.location.search).get('id')
-let quoteData = null
-let clients = []
+const viewUrl = `view-quote.html?id=${quoteId}`
+const fmt = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(n || 0)
+
+let rowCounter = 0
+
+// Set back/cancel links dynamically
+document.getElementById('backToQuote').href = viewUrl
+document.getElementById('cancelDesktop').href = viewUrl
+document.getElementById('cancelMobile').href = viewUrl
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
 function showToast(msg, type = 'success') {
+  document.querySelector('.toast')?.remove()
   const t = document.createElement('div')
   t.className = `toast ${type}`
-  t.innerHTML = type === 'success' ? `✅ ${msg}` : `❌ ${msg}`
+  t.innerHTML = type === 'success'
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${msg}`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${msg}`
   document.body.appendChild(t)
   setTimeout(() => t.remove(), 3500)
 }
@@ -247,16 +441,13 @@ function showToast(msg, type = 'success') {
 // ── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
   if (!quoteId) { window.location.href = 'quotes.html'; return }
-
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) { window.location.href = 'login.html'; return }
-
   await loadUserProfile(session.user.id)
-  await loadClients()
+  await loadClients(session.user.id)
   await loadQuote()
 }
 
-// ── Profil sidebar ────────────────────────────────────────────────────────────
 async function loadUserProfile(userId) {
   const { data } = await supabase.from('profiles').select('first_name, last_name, company').eq('id', userId).single()
   if (data) {
@@ -267,141 +458,248 @@ async function loadUserProfile(userId) {
   }
 }
 
-// ── Chargement clients ────────────────────────────────────────────────────────
-async function loadClients() {
-  const { data } = await supabase.from('clients').select('id, full_name')
-  clients = data || []
+async function loadClients(userId) {
+  const { data } = await supabase.from('clients').select('id, full_name').eq('user_id', userId).order('full_name')
   const select = document.getElementById('clientId')
-  clients.forEach(client => {
-    const option = document.createElement('option')
-    option.value = client.id
-    option.textContent = client.full_name
-    select.appendChild(option)
+  ;(data || []).forEach(c => {
+    const opt = document.createElement('option')
+    opt.value = c.id
+    opt.textContent = c.full_name
+    select.appendChild(opt)
   })
 }
 
-// ── Chargement du devis ───────────────────────────────────────────────────────
 async function loadQuote() {
-  const { data } = await supabase.from('quotes').select('*, quote_items(*)').eq('id', quoteId).single()
-  if (!data) {
+  const { data, error } = await supabase
+    .from('quotes')
+    .select('*, quote_items(*)')
+    .eq('id', quoteId).single()
+
+  if (error || !data) {
     showToast('Devis introuvable.', 'error')
     setTimeout(() => window.location.href = 'quotes.html', 2000)
     return
   }
 
-  quoteData = data
   document.getElementById('quoteNumber').value = data.quote_number || ''
   document.getElementById('createdAt').value = data.created_at ? new Date(data.created_at).toISOString().split('T')[0] : ''
   document.getElementById('clientId').value = data.client_id || ''
-  document.getElementById('taxRate').value = data.tax_rate || 0
+  document.getElementById('taxRate').value = data.tax_rate ?? 20
   document.getElementById('notes').value = data.notes || ''
+  document.getElementById('pageSubtitle').textContent = `Devis N°${data.quote_number || '—'}`
 
-  const itemsBody = document.getElementById('itemsBody')
-  itemsBody.innerHTML = ''
-  data.quote_items.forEach(item => addItemRow(item))
-  if (!data.quote_items.length) addItemRow()
+  const items = data.quote_items || []
+  if (items.length) {
+    items.forEach(item => addRow(item))
+  } else {
+    addRow()
+  }
   calculateTotals()
 }
 
-// ── Ajout d'une ligne ─────────────────────────────────────────────────────────
-function addItemRow(item = { description: '', quantity: 1, unit_price: 0 }) {
-  const row = document.createElement('tr')
-  row.innerHTML = `
-    <td><input type="text" class="item-desc" value="${item.description}"></td>
-    <td><input type="number" class="item-qty" value="${item.quantity}" min="1"></td>
-    <td><input type="number" class="item-price" value="${item.unit_price}" min="0" step="0.01"></td>
-    <td class="right item-total">0 XOF</td>
-    <td><button type="button" class="btn-remove-item">X</button></td>
-  `
-  document.getElementById('itemsBody').appendChild(row)
+// ── Add row — syncs desktop table + mobile card ───────────────────────────────
+function addRow(item = { description: '', quantity: 1, unit_price: 0 }) {
+  rowCounter++
+  const rid = `r${rowCounter}`
 
-  row.querySelector('.item-desc').addEventListener('input', calculateTotals)
-  row.querySelector('.item-qty').addEventListener('input', calculateTotals)
-  row.querySelector('.item-price').addEventListener('input', calculateTotals)
-  row.querySelector('.btn-remove-item').addEventListener('click', () => { row.remove(); calculateTotals() })
-}
+  // ── Desktop row
+  const tbody = document.getElementById('itemsTable')
+  const tr = document.createElement('tr')
+  tr.dataset.rid = rid
+  tr.innerHTML = `
+    <td><input type="text" class="desc" value="${item.description || ''}" placeholder="Description..." data-rid="${rid}"></td>
+    <td><input type="number" class="qty" value="${item.quantity || 1}" min="0" step="0.01" data-rid="${rid}"></td>
+    <td><input type="number" class="price" value="${item.unit_price || 0}" min="0" step="0.01" data-rid="${rid}"></td>
+    <td class="right"><span class="line-total" id="lt-${rid}">0 XOF</span></td>
+    <td style="text-align:center">
+      <button class="btn-remove-row" data-rid="${rid}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </td>`
+  tbody.appendChild(tr)
 
-// ── Calcul des totaux ─────────────────────────────────────────────────────────
-function calculateTotals() {
-  let subtotal = 0
-  document.querySelectorAll('#itemsBody tr').forEach(row => {
-    const qty = parseFloat(row.querySelector('.item-qty').value) || 0
-    const price = parseFloat(row.querySelector('.item-price').value) || 0
-    const total = qty * price
-    row.querySelector('.item-total').textContent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(total)
-    subtotal += total
+  // ── Mobile card
+  const mobileItems = document.getElementById('mobileItems')
+  const card = document.createElement('div')
+  card.className = 'mobile-item-card'
+  card.dataset.rid = rid
+  card.innerHTML = `
+    <div class="mobile-item-header">
+      <span class="mobile-item-num">Ligne ${rowCounter}</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="mobile-item-total-val" id="lt-m-${rid}">0 XOF</span>
+        <button class="btn-remove-row" data-rid="${rid}" style="margin:0;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-desc-wrap">
+      <div class="mobile-field-label">Description</div>
+      <input type="text" class="desc-m" value="${item.description || ''}" placeholder="Description de la prestation..." data-rid="${rid}">
+    </div>
+    <div class="mobile-item-grid">
+      <div>
+        <div class="mobile-field-label">Quantité</div>
+        <input type="number" class="qty-m" value="${item.quantity || 1}" min="0" step="0.01" data-rid="${rid}">
+      </div>
+      <div>
+        <div class="mobile-field-label">Prix unitaire</div>
+        <input type="number" class="price-m" value="${item.unit_price || 0}" min="0" step="0.01" data-rid="${rid}">
+      </div>
+    </div>`
+  mobileItems.appendChild(card)
+
+  // Sync desktop → mobile
+  tr.querySelector('.desc').addEventListener('input', e => { const m = card.querySelector('.desc-m'); if (document.activeElement !== m) m.value = e.target.value; calculateTotals() })
+  tr.querySelector('.qty').addEventListener('input', e => { const m = card.querySelector('.qty-m'); if (document.activeElement !== m) m.value = e.target.value; calculateTotals() })
+  tr.querySelector('.price').addEventListener('input', e => { const m = card.querySelector('.price-m'); if (document.activeElement !== m) m.value = e.target.value; calculateTotals() })
+
+  // Sync mobile → desktop
+  card.querySelector('.desc-m').addEventListener('input', e => { tr.querySelector('.desc').value = e.target.value; calculateTotals() })
+  card.querySelector('.qty-m').addEventListener('input', e => { tr.querySelector('.qty').value = e.target.value; calculateTotals() })
+  card.querySelector('.price-m').addEventListener('input', e => { tr.querySelector('.price').value = e.target.value; calculateTotals() })
+
+  // Delete buttons
+  ;[tr.querySelector('.btn-remove-row'), card.querySelector('.btn-remove-row')].forEach(btn => {
+    btn.addEventListener('click', () => { tr.remove(); card.remove(); calculateTotals() })
   })
 
+  calculateTotals()
+}
+
+// ── Calculate totals ──────────────────────────────────────────────────────────
+function calculateTotals() {
+  let subtotal = 0
   const taxRate = parseFloat(document.getElementById('taxRate').value) || 0
+
+  document.querySelectorAll('#itemsTable tr').forEach(row => {
+    const qty = parseFloat(row.querySelector('.qty')?.value) || 0
+    const price = parseFloat(row.querySelector('.price')?.value) || 0
+    const lineTotal = qty * price
+    const rid = row.dataset.rid
+    const ltEl = document.getElementById(`lt-${rid}`)
+    const ltMEl = document.getElementById(`lt-m-${rid}`)
+    if (ltEl) ltEl.textContent = fmt(lineTotal)
+    if (ltMEl) ltMEl.textContent = fmt(lineTotal)
+    subtotal += lineTotal
+  })
+
+  const taxAmount = subtotal * (taxRate / 100)
+  const totalAmount = subtotal + taxAmount
+  document.getElementById('subtotal').textContent = fmt(subtotal)
+  document.getElementById('taxAmount').textContent = fmt(taxAmount)
+  document.getElementById('totalAmount').textContent = fmt(totalAmount)
+  document.getElementById('taxRateDisplay').textContent = taxRate
+}
+
+// ── Collect items ─────────────────────────────────────────────────────────────
+function collectItems() {
+  return Array.from(document.querySelectorAll('#itemsTable tr')).map(row => ({
+    description: row.querySelector('.desc').value.trim(),
+    quantity:    parseFloat(row.querySelector('.qty').value) || 0,
+    unit_price:  parseFloat(row.querySelector('.price').value) || 0,
+    total:       (parseFloat(row.querySelector('.qty').value) || 0) * (parseFloat(row.querySelector('.price').value) || 0)
+  }))
+}
+
+// ── Save ─────────────────────────────────────────────────────────────────────
+async function saveQuote() {
+  const clientId = document.getElementById('clientId').value
+  if (!clientId) { showToast('Veuillez sélectionner un client.', 'error'); return }
+
+  const items = collectItems()
+  if (!items.length) { showToast('Ajoutez au moins une ligne.', 'error'); return }
+  if (items.some(i => !i.description)) { showToast('Chaque ligne doit avoir une description.', 'error'); return }
+
+  const taxRate = parseFloat(document.getElementById('taxRate').value) || 0
+  const subtotal = items.reduce((s, i) => s + i.total, 0)
   const taxAmount = subtotal * (taxRate / 100)
   const totalAmount = subtotal + taxAmount
 
-  document.getElementById('subtotal').textContent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(subtotal)
-  document.getElementById('taxAmount').textContent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(taxAmount)
-  document.getElementById('totalAmount').textContent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(totalAmount)
+  const loadingHtml = `<span class="spinner"></span> Enregistrement...`
+  const saveBtn = document.getElementById('saveBtn')
+  const saveBtnM = document.getElementById('saveBtnMobile')
+  saveBtn.disabled = true; saveBtn.innerHTML = loadingHtml
+  saveBtnM.disabled = true; saveBtnM.innerHTML = loadingHtml
+
+  const { error: quoteErr } = await supabase.from('quotes').update({
+    quote_number: document.getElementById('quoteNumber').value.trim(),
+    created_at:   document.getElementById('createdAt').value,
+    client_id:    clientId,
+    tax_rate:     taxRate,
+    notes:        document.getElementById('notes').value.trim() || null,
+    subtotal, tax_amount: taxAmount, total_amount: totalAmount
+  }).eq('id', quoteId)
+
+  if (quoteErr) {
+    showToast('Erreur mise à jour devis.', 'error')
+    const origD = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Enregistrer les modifications`
+    saveBtn.disabled = false; saveBtn.innerHTML = origD
+    saveBtnM.disabled = false; saveBtnM.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Enregistrer`
+    return
+  }
+
+  // Delete old items then re-insert
+  await supabase.from('quote_items').delete().eq('quote_id', quoteId)
+  const { error: itemsErr } = await supabase.from('quote_items').insert(
+    items.map(i => ({ ...i, quote_id: quoteId }))
+  )
+
+  if (itemsErr) { showToast('Lignes non sauvegardées.', 'error'); return }
+
+  showToast('Devis mis à jour avec succès !')
+  setTimeout(() => window.location.href = viewUrl, 1200)
 }
 
-// ── Événements ────────────────────────────────────────────────────────────────
-document.getElementById('addItemBtn').addEventListener('click', () => addItemRow())
+// ── Events ────────────────────────────────────────────────────────────────────
+document.getElementById('addRowBtn').addEventListener('click', () => addRow())
+document.getElementById('addRowBtnMobile').addEventListener('click', () => addRow())
+document.getElementById('saveBtn').addEventListener('click', saveQuote)
+document.getElementById('saveBtnMobile').addEventListener('click', saveQuote)
 document.getElementById('taxRate').addEventListener('input', calculateTotals)
-
-document.getElementById('editQuoteForm').addEventListener('submit', async function(e) {
-  e.preventDefault()
-
-  const quote = {
-    quote_number: document.getElementById('quoteNumber').value,
-    created_at: document.getElementById('createdAt').value,
-    client_id: document.getElementById('clientId').value,
-    tax_rate: parseFloat(document.getElementById('taxRate').value),
-    notes: document.getElementById('notes').value,
-    subtotal: parseFloat(document.getElementById('subtotal').textContent.replace(/[^0-9.-]+/g,"")) || 0,
-    tax_amount: parseFloat(document.getElementById('taxAmount').textContent.replace(/[^0-9.-]+/g,"")) || 0,
-    total_amount: parseFloat(document.getElementById('totalAmount').textContent.replace(/[^0-9.-]+/g,"")) || 0
-  }
-
-  const { error: quoteError } = await supabase.from('quotes').update(quote).eq('id', quoteId)
-  if (quoteError) { showToast('Erreur mise à jour devis', 'error'); return }
-
-  // Supprimer anciennes lignes
-  await supabase.from('quote_items').delete().eq('quote_id', quoteId)
-
-  // Ajouter nouvelles lignes
-  const items = []
-  document.querySelectorAll('#itemsBody tr').forEach(row => {
-    const qty = parseFloat(row.querySelector('.item-qty').value) || 0
-    const price = parseFloat(row.querySelector('.item-price').value) || 0
-    if (qty > 0 && price > 0) {
-      items.push({
-        quote_id: quoteId,
-        description: row.querySelector('.item-desc').value,
-        quantity: qty,
-        unit_price: price,
-        total: qty * price
-      })
-    }
-  })
-
-  if (items.length) {
-    const { error: itemsError } = await supabase.from('quote_items').insert(items)
-    if (itemsError) { showToast('Erreur mise à jour lignes', 'error'); return }
-  }
-
-  showToast('Devis mis à jour !')
-  setTimeout(() => window.location.href = `view-quote.html?id=${quoteId}`, 1200)
-})
-
-document.getElementById('cancelEdit').addEventListener('click', () => {
-  window.location.href = `view-quote.html?id=${quoteId}`
-})
-
-// ── Logout ────────────────────────────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await supabase.auth.signOut()
-  window.location.href = 'login.html'
+  await supabase.auth.signOut(); window.location.href = 'login.html'
 })
 
 init()
 </script>
 
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          reg.addEventListener('updatefound', () => {
+            const nw = reg.installing
+            nw.addEventListener('statechange', () => {
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                showPWAUpdate()
+              }
+            })
+          })
+        } catch(e) { console.warn('[SW]', e) }
+      })
+    }
+    function showPWAUpdate() {
+      const b = document.createElement('div')
+      b.id = 'pwa-banner'
+      b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1F2937;color:white;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Mise à jour disponible
+        <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#F97316;color:white;border:none;border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
+        <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;">×</button>
+      </div>`
+      document.body.appendChild(b)
+    }
+    let _deferredPrompt = null
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e })
+    window.installPWA = async () => {
+      if (!_deferredPrompt) return
+      _deferredPrompt.prompt()
+      await _deferredPrompt.userChoice
+      _deferredPrompt = null
+    }
+  </script>
 </body>
 </html>

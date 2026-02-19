@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#F97316">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Devis App">
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
   <title>Mes clients - Devis App</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -726,5 +735,42 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 
 init()
 </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          reg.addEventListener('updatefound', () => {
+            const nw = reg.installing
+            nw.addEventListener('statechange', () => {
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                showPWAUpdate()
+              }
+            })
+          })
+        } catch(e) { console.warn('[SW]', e) }
+      })
+    }
+    function showPWAUpdate() {
+      const b = document.createElement('div')
+      b.id = 'pwa-banner'
+      b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1F2937;color:white;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Mise à jour disponible
+        <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#F97316;color:white;border:none;border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
+        <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;">×</button>
+      </div>`
+      document.body.appendChild(b)
+    }
+    let _deferredPrompt = null
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e })
+    window.installPWA = async () => {
+      if (!_deferredPrompt) return
+      _deferredPrompt.prompt()
+      await _deferredPrompt.userChoice
+      _deferredPrompt = null
+    }
+  </script>
 </body>
 </html>
