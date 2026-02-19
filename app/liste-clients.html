@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Mes clients - Devis App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F97316;
+      --orange-dark: #EA6C0A;
+      --orange-light: #FEF3E7;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --green: #10B981;
+      --green-light: #D1FAE5;
+      --red: #EF4444;
+      --red-light: #FFF1F1;
+      --white: #FFFFFF;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gray-100);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 260px; min-width: 260px;
+      background: var(--gray-900);
+      display: flex; flex-direction: column;
+      height: 100vh; position: sticky; top: 0;
+    }
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar-logo-icon {
+      width: 36px; height: 36px; background: var(--orange); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sidebar-logo span { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+    .nav-section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      padding: 12px 12px 6px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      color: rgba(255,255,255,0.55); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: all 0.2s;
+    }
+    .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+    .nav-link.active { background: rgba(249,115,22,0.15); color: var(--orange); }
+    .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .user-card {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      margin-bottom: 8px; background: rgba(255,255,255,0.05);
+    }
+    .user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      color: white; flex-shrink: 0;
+    }
+    .user-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .btn-logout {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 9px; border-radius: 10px;
+      background: rgba(239,68,68,0.1); color: #F87171;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+      border: 1px solid rgba(239,68,68,0.2); cursor: pointer; transition: all 0.2s;
+    }
+    .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
+
+    /* ── Mobile bottom nav ── */
+    .mobile-nav {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--gray-900);
+      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+      z-index: 50;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .mobile-nav-inner { display: flex; justify-content: space-around; }
+    .mobile-nav-link {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: rgba(255,255,255,0.45); text-decoration: none;
+      font-size: 10px; font-weight: 600; padding: 4px 12px;
+      border-radius: 10px; transition: all 0.2s;
+    }
+    .mobile-nav-link.active { color: var(--orange); }
+
+    /* ── Main ── */
+    .main { flex: 1; overflow-y: auto; padding: 32px 36px; }
+
+    /* ── Page header ── */
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+    }
+    .page-header-left { display: flex; flex-direction: column; gap: 4px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--gray-400);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--orange); }
+    .page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--gray-800); }
+
+    .header-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--orange-light); color: var(--orange);
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 100px;
+    }
+    .btn-add-client {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 10px; border: none;
+      background: var(--orange); color: white;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(249,115,22,0.3); transition: all 0.2s;
+    }
+    .btn-add-client:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white); border-radius: 16px; padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+      animation: slideUp 0.35s ease both;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card-title {
+      font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+      color: var(--gray-700);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-title svg { color: var(--orange); }
+
+    /* ── Table toolbar ── */
+    .table-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .search-wrap { position: relative; }
+    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
+    .search-input {
+      border: 1.5px solid var(--gray-200); border-radius: 10px;
+      padding: 9px 14px 9px 36px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      color: var(--gray-800); background: var(--gray-50);
+      outline: none; transition: all 0.2s; width: 240px;
+    }
+    .search-input:focus { border-color: var(--orange); background: var(--white); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+
+    /* ── Desktop table ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 2px solid var(--gray-100); }
+    thead th {
+      font-size: 11px; font-weight: 700; color: var(--gray-500);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 8px 12px; text-align: left; white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
+    tbody tr:hover { background: var(--gray-50); }
+    tbody td { padding: 12px; font-size: 14px; color: var(--gray-700); vertical-align: middle; }
+    .client-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--orange-light); color: var(--orange);
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .client-name-cell { display: flex; align-items: center; gap: 10px; }
+    .client-name { font-weight: 600; color: var(--gray-800); }
+    .client-company { font-size: 12px; color: var(--gray-400); }
+    .badge-gray {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      background: var(--gray-100); color: var(--gray-500);
+    }
+
+    /* Action buttons */
+    .actions-cell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+    .btn-quote {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px; border: none;
+      background: var(--orange-light); color: var(--orange);
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700;
+      cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-quote:hover { background: var(--orange); color: white; }
+    .btn-delete {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 8px;
+      border: none; background: var(--red-light); color: var(--red);
+      cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+    }
+    .btn-delete:hover { background: var(--red); color: white; }
+
+    /* ── Mobile card list ── */
+    .client-cards { display: none; gap: 12px; flex-direction: column; }
+    .client-card {
+      background: var(--gray-50); border-radius: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--gray-200);
+      transition: border-color 0.2s;
+    }
+    .client-card:hover { border-color: var(--orange); }
+    .client-card-top {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+    }
+    .client-card-info { flex: 1; min-width: 0; }
+    .client-card-name { font-weight: 700; color: var(--gray-800); font-size: 15px; }
+    .client-card-company { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+    .client-card-meta {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+    }
+    .client-card-meta-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--gray-500);
+    }
+    .client-card-meta-item svg { flex-shrink: 0; color: var(--gray-400); }
+    .client-card-actions { display: flex; gap: 8px; }
+    .btn-quote-mobile {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 9px 14px; border-radius: 9px; border: none;
+      background: var(--orange); color: white;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-quote-mobile:hover { background: var(--orange-dark); }
+    .btn-delete-mobile {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 9px;
+      border: none; background: var(--red-light); color: var(--red);
+      cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+    }
+    .btn-delete-mobile:hover { background: var(--red); color: white; }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center; padding: 56px 20px;
+    }
+    .empty-icon {
+      width: 64px; height: 64px; background: var(--orange-light);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; color: var(--orange);
+    }
+    .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; }
+    .empty-state p { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
+    .btn-empty-add {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 10px; border: none;
+      background: var(--orange); color: white;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(249,115,22,0.25); transition: all 0.2s;
+    }
+    .btn-empty-add:hover { background: var(--orange-dark); }
+
+    /* ── Skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px;
+    }
+    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
+      z-index: 100; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--white); border-radius: 16px;
+      padding: 28px; max-width: 400px; width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      animation: slideUp 0.25s ease;
+    }
+    .modal-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--red-light); color: var(--red);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+    }
+    .modal h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; }
+    .modal p { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.55; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+    .btn-modal-cancel {
+      padding: 9px 18px; border-radius: 10px;
+      border: 1.5px solid var(--gray-200); background: var(--gray-100);
+      color: var(--gray-600); font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-modal-cancel:hover { background: var(--gray-200); }
+    .btn-modal-confirm {
+      padding: 9px 18px; border-radius: 10px; border: none;
+      background: var(--red); color: white;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-modal-confirm:hover { filter: brightness(1.1); }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 80px; right: 20px;
+      padding: 14px 20px; border-radius: 12px;
+      font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      animation: toastIn 0.3s ease; z-index: 999; max-width: calc(100vw - 40px);
+    }
+    .toast.success { background: var(--green); color: white; }
+    .toast.error   { background: var(--red);   color: white; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: block; }
+      .main { padding: 20px 16px 90px; }
+      .table-wrap { display: none; }
+      .client-cards { display: flex; }
+      .page-title { font-size: 22px; }
+      .card { padding: 18px 16px; }
+      .search-input { width: 100%; }
+      .search-wrap { width: 100%; }
+      .table-toolbar { flex-direction: column; align-items: stretch; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .btn-add-client { width: 100%; justify-content: center; }
+      .toast { bottom: 90px; }
+    }
+    @media (min-width: 901px) {
+      .client-cards { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar desktop -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <span>Devis App</span>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Menu</span>
+      <a href="dashboard.html" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="create-quote.html" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Devis
+      </a>
+      <a href="clients.html" class="nav-link active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Clients
+      </a>
+      <span class="nav-section-label" style="margin-top:8px;">Compte</span>
+      <a href="settings.html" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Paramètres
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div>
+          <div class="user-name" id="sidebarName">Chargement...</div>
+          <div class="user-role" id="sidebarCompany">—</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <div class="page-header">
+      <div class="page-header-left">
+        <a href="clients.html" class="back-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Ajouter un client
+        </a>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px;">
+          <h1 class="page-title">Mes clients</h1>
+          <div class="header-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+            <span id="clientCountBadge">0 client</span>
+          </div>
+        </div>
+      </div>
+      <a href="clients.html" class="btn-add-client">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouveau client
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="table-toolbar">
+        <div class="card-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Liste des clients
+        </div>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un client...">
+        </div>
+      </div>
+
+      <!-- Desktop table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Ville</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="clientsTable">
+            <tr><td colspan="5"><div class="skeleton" style="height:44px;margin:6px 0;"></div></td></tr>
+            <tr><td colspan="5"><div class="skeleton" style="height:44px;margin:6px 0;"></div></td></tr>
+            <tr><td colspan="5"><div class="skeleton" style="height:44px;margin:6px 0;"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile cards -->
+      <div class="client-cards" id="clientCards">
+        <div class="skeleton" style="height:120px;border-radius:12px;"></div>
+        <div class="skeleton" style="height:120px;border-radius:12px;"></div>
+        <div class="skeleton" style="height:120px;border-radius:12px;"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <a href="dashboard.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="create-quote.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Devis
+      </a>
+      <a href="clients.html" class="mobile-nav-link active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Clients
+      </a>
+      <a href="settings.html" class="mobile-nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Réglages
+      </a>
+    </div>
+  </nav>
+
+  <!-- Modal suppression -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </div>
+      <h3>Supprimer ce client ?</h3>
+      <p id="modalDeleteText">Cette action est irréversible.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="cancelDelete">Annuler</button>
+        <button class="btn-modal-confirm" id="confirmDelete">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+const supabase = createClient(
+  'https://xeezdzbotsblzclnmnxg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+)
+
+let currentUserId = null
+let allClients = []
+let clientToDelete = null
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+function showToast(message, type = "success") {
+  const existing = document.querySelector(".toast")
+  if (existing) existing.remove()
+  const toast = document.createElement("div")
+  toast.className = `toast ${type}`
+  toast.innerHTML = type === "success"
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${message}`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${message}`
+  document.body.appendChild(toast)
+  setTimeout(() => toast.remove(), 3500)
+}
+
+// ─── Check URL params (redirect after creation) ───────────────────────────────
+function checkCreatedParam() {
+  const params = new URLSearchParams(window.location.search)
+  const name = params.get("created")
+  if (name) {
+    setTimeout(() => showToast(`${name} créé avec succès !`), 400)
+    window.history.replaceState({}, "", "liste-clients.html")
+  }
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) { window.location.href = "login.html"; return }
+  currentUserId = session.user.id
+  checkCreatedParam()
+  await loadUserProfile(session.user.id)
+  await loadClients()
+}
+
+async function loadUserProfile(userId) {
+  const { data } = await supabase.from("profiles").select("first_name, last_name, company").eq("id", userId).single()
+  if (data) {
+    const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join("").toUpperCase() || "U"
+    document.getElementById("userAvatar").textContent = initials
+    document.getElementById("sidebarName").textContent = [data.first_name, data.last_name].filter(Boolean).join(" ") || "Utilisateur"
+    document.getElementById("sidebarCompany").textContent = data.company || "Mon entreprise"
+  }
+}
+
+async function loadClients() {
+  const { data, error } = await supabase
+    .from("clients")
+    .select("*")
+    .eq("user_id", currentUserId)
+    .order("created_at", { ascending: false })
+
+  if (error) { showToast("Erreur chargement clients", "error"); return }
+  allClients = data || []
+  renderClients(allClients)
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function renderClients(clients) {
+  const tbody = document.getElementById("clientsTable")
+  const cardsEl = document.getElementById("clientCards")
+  const count = clients.length
+  document.getElementById("clientCountBadge").textContent = `${count} client${count > 1 ? "s" : ""}`
+
+  if (!count) {
+    const empty = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <h3>Aucun client pour l'instant</h3>
+        <p>Créez votre premier client pour commencer à gérer vos devis.</p>
+        <a href="clients.html" class="btn-empty-add">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter un client
+        </a>
+      </div>`
+    tbody.innerHTML = `<tr><td colspan="5">${empty}</td></tr>`
+    cardsEl.innerHTML = empty
+    return
+  }
+
+  // Desktop table rows
+  tbody.innerHTML = clients.map(c => {
+    const initials = c.full_name?.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "?"
+    const quoteUrl = `create-quote.html?client_id=${c.id}&client_name=${encodeURIComponent(c.full_name)}`
+    return `
+      <tr>
+        <td>
+          <div class="client-name-cell">
+            <div class="client-avatar">${initials}</div>
+            <div>
+              <div class="client-name">${escHtml(c.full_name)}</div>
+              ${c.company_name ? `<div class="client-company">${escHtml(c.company_name)}</div>` : ""}
+            </div>
+          </div>
+        </td>
+        <td>${c.email ? `<a href="mailto:${c.email}" style="color:var(--orange);text-decoration:none;">${escHtml(c.email)}</a>` : '<span class="badge-gray">—</span>'}</td>
+        <td>${c.phone ? escHtml(c.phone) : '<span class="badge-gray">—</span>'}</td>
+        <td>${c.city ? escHtml(c.city) : '<span class="badge-gray">—</span>'}</td>
+        <td>
+          <div class="actions-cell">
+            <a href="${quoteUrl}" class="btn-quote">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nouveau devis
+            </a>
+            <button class="btn-delete" data-id="${c.id}" data-name="${escAttr(c.full_name)}" title="Supprimer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`
+  }).join("")
+
+  // Mobile cards
+  cardsEl.innerHTML = clients.map(c => {
+    const initials = c.full_name?.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "?"
+    const quoteUrl = `create-quote.html?client_id=${c.id}&client_name=${encodeURIComponent(c.full_name)}`
+    return `
+      <div class="client-card">
+        <div class="client-card-top">
+          <div class="client-avatar">${initials}</div>
+          <div class="client-card-info">
+            <div class="client-card-name">${escHtml(c.full_name)}</div>
+            ${c.company_name ? `<div class="client-card-company">${escHtml(c.company_name)}</div>` : ""}
+          </div>
+        </div>
+        <div class="client-card-meta">
+          ${c.email ? `<div class="client-card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${escHtml(c.email)}</div>` : ""}
+          ${c.phone ? `<div class="client-card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${escHtml(c.phone)}</div>` : ""}
+          ${c.city ? `<div class="client-card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(c.city)}</div>` : ""}
+        </div>
+        <div class="client-card-actions">
+          <a href="${quoteUrl}" class="btn-quote-mobile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+            Nouveau devis
+          </a>
+          <button class="btn-delete-mobile" data-id="${c.id}" data-name="${escAttr(c.full_name)}" title="Supprimer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+      </div>`
+  }).join("")
+
+  // Attach delete listeners
+  document.querySelectorAll(".btn-delete, .btn-delete-mobile").forEach(btn => {
+    btn.addEventListener("click", () => {
+      clientToDelete = { id: btn.dataset.id, name: btn.dataset.name }
+      document.getElementById("modalDeleteText").textContent =
+        `Voulez-vous vraiment supprimer "${clientToDelete.name}" ? Cette action est irréversible.`
+      document.getElementById("deleteModal").classList.add("show")
+    })
+  })
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+}
+function escAttr(str) {
+  return String(str).replace(/"/g,"&quot;")
+}
+
+// ─── Search ───────────────────────────────────────────────────────────────────
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const q = e.target.value.toLowerCase()
+  const filtered = allClients.filter(c =>
+    c.full_name?.toLowerCase().includes(q) ||
+    c.email?.toLowerCase().includes(q) ||
+    c.company_name?.toLowerCase().includes(q) ||
+    c.city?.toLowerCase().includes(q)
+  )
+  renderClients(filtered)
+})
+
+// ─── Delete ───────────────────────────────────────────────────────────────────
+document.getElementById("confirmDelete").addEventListener("click", async () => {
+  if (!clientToDelete) return
+  document.getElementById("deleteModal").classList.remove("show")
+  const { error } = await supabase.from("clients").delete().eq("id", clientToDelete.id)
+  if (error) { showToast("Erreur lors de la suppression.", "error"); return }
+  showToast(`${clientToDelete.name} supprimé.`)
+  clientToDelete = null
+  await loadClients()
+})
+document.getElementById("cancelDelete").addEventListener("click", () => {
+  document.getElementById("deleteModal").classList.remove("show")
+  clientToDelete = null
+})
+document.getElementById("deleteModal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove("show")
+    clientToDelete = null
+  }
+})
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await supabase.auth.signOut()
+  window.location.href = "login.html"
+})
+
+init()
+</script>
+</body>
+</html>
