@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#F97316">
   <meta name="mobile-web-app-capable" content="yes">
@@ -61,21 +60,9 @@
     .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
 
     /* ── Mobile bottom nav ── */
-    .mobile-nav {
-      display: none;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--gray-900);
-      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
-      z-index: 50;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
+    .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--gray-900); padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); z-index: 50; border-top: 1px solid rgba(255,255,255,0.07); }
     .mobile-nav-inner { display: flex; justify-content: space-around; }
-    .mobile-nav-link {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      color: rgba(255,255,255,0.45); text-decoration: none;
-      font-size: 10px; font-weight: 600; padding: 4px 12px;
-      border-radius: 10px; transition: all 0.2s;
-    }
+    .mobile-nav-link { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.45); text-decoration: none; font-size: 10px; font-weight: 600; padding: 4px 12px; border-radius: 10px; transition: all 0.2s; }
     .mobile-nav-link.active { color: var(--orange); }
 
     /* ── Main ── */
@@ -86,36 +73,31 @@
 
     .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
     .page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--gray-800); }
-    .header-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--orange-light); color: var(--orange);
-      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 6px 14px; border-radius: 100px;
-    }
+    .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--orange-light); color: var(--orange); font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; }
 
     /* ── Card ── */
-    .card {
-      background: var(--white); border-radius: 16px; padding: 28px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
-      margin-bottom: 20px;
-      animation: slideUp 0.35s ease both;
-    }
-    .card:nth-child(2) { animation-delay: 0.06s; }
-    .card:nth-child(3) { animation-delay: 0.12s; }
+    .card { background: var(--white); border-radius: 16px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; animation: slideUp 0.35s ease both; }
+    .card:nth-child(2) { animation-delay: 0.04s; }
+    .card:nth-child(3) { animation-delay: 0.08s; }
+    .card:nth-child(4) { animation-delay: 0.12s; }
+    .card:nth-child(5) { animation-delay: 0.16s; }
+    .card:nth-child(6) { animation-delay: 0.20s; }
+    .card:nth-child(7) { animation-delay: 0.24s; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
     .card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--gray-700); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
     .card-title svg { color: var(--orange); }
 
     /* ── Form fields ── */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
     .col-2 { grid-column: span 2; }
+    .col-3 { grid-column: span 3; }
     .field-group { display: flex; flex-direction: column; gap: 6px; }
     .field-group label { font-size: 12px; font-weight: 600; color: var(--gray-600); letter-spacing: 0.02em; }
     .field-group label span { color: var(--red); margin-left: 2px; }
 
-    select, input[type="number"], input[type="text"], textarea {
+    select, input[type="number"], input[type="text"], input[type="date"], textarea {
       width: 100%; border: 1.5px solid var(--gray-200); border-radius: 10px;
       padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px;
       color: var(--gray-800); background: var(--gray-50);
@@ -137,27 +119,14 @@
     tbody td.right { text-align: right; }
     tbody input { border-radius: 8px; padding: 8px 10px; font-size: 14px; }
     tbody input[type="number"] { text-align: right; }
-
     .line-total { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--gray-800); text-align: right; min-width: 80px; }
-
-    .btn-remove-row {
-      width: 30px; height: 30px; border-radius: 8px; border: none;
-      background: var(--red-light); color: var(--red);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; margin: 0 auto;
-    }
+    .btn-remove-row { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--red-light); color: var(--red); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin: 0 auto; }
     .btn-remove-row:hover { background: var(--red); color: white; }
 
     /* ── Mobile item cards ── */
     .mobile-items { display: none; flex-direction: column; gap: 12px; }
-    .mobile-item-card {
-      background: var(--gray-50); border-radius: 12px;
-      border: 1.5px solid var(--gray-200); padding: 14px;
-    }
-    .mobile-item-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 12px;
-    }
+    .mobile-item-card { background: var(--gray-50); border-radius: 12px; border: 1.5px solid var(--gray-200); padding: 14px; }
+    .mobile-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .mobile-item-label { font-size: 12px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.05em; text-transform: uppercase; }
     .mobile-item-total { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--orange); }
     .mobile-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
@@ -165,92 +134,65 @@
     .mobile-item-desc { grid-column: span 2; }
 
     /* ── Add row button ── */
-    .btn-add-row {
-      display: inline-flex; align-items: center; gap: 8px;
-      margin-top: 16px; padding: 9px 18px; border-radius: 10px;
-      border: 1.5px dashed var(--gray-300); background: none;
-      color: var(--gray-500); font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-    }
+    .btn-add-row { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 9px 18px; border-radius: 10px; border: 1.5px dashed var(--gray-300); background: none; color: var(--gray-500); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .btn-add-row:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
-    .btn-add-row-mobile {
-      display: none; width: 100%; align-items: center; justify-content: center; gap: 8px;
-      margin-top: 12px; padding: 12px; border-radius: 12px;
-      border: 1.5px dashed var(--gray-300); background: none;
-      color: var(--gray-500); font-family: 'DM Sans', sans-serif;
-      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-    }
+    .btn-add-row-mobile { display: none; width: 100%; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; padding: 12px; border-radius: 12px; border: 1.5px dashed var(--gray-300); background: none; color: var(--gray-500); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .btn-add-row-mobile:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
 
     /* ── Totaux ── */
     .totals-wrap { margin-top: 20px; display: flex; justify-content: flex-end; }
-    .totals-box {
-      background: var(--gray-50); border-radius: 12px; padding: 20px 24px;
-      min-width: 280px; display: flex; flex-direction: column; gap: 10px;
-    }
+    .totals-box { background: var(--gray-50); border-radius: 12px; padding: 20px 24px; min-width: 280px; display: flex; flex-direction: column; gap: 10px; }
     .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--gray-600); }
-    .total-row.main { padding-top: 10px; border-top: 2px solid var(--gray-200); font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--gray-800); }
     .total-row span:last-child { font-weight: 700; color: var(--gray-800); }
+    .total-row.sep { padding-top: 8px; border-top: 1px solid var(--gray-200); }
+    .total-row.main { padding-top: 10px; border-top: 2px solid var(--gray-200); font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--gray-800); }
     .total-row.main span:last-child { color: var(--orange); }
+
+    /* ── Info box (mention légale) ── */
+    .info-box { background: var(--orange-light); border: 1.5px solid rgba(249,115,22,0.25); border-radius: 10px; padding: 13px 16px; font-size: 12px; color: var(--orange-dark); font-weight: 500; line-height: 1.6; display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; }
+    .info-box svg { flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Checkbox row ── */
+    .check-label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--gray-700); line-height: 1.5; margin-top: 4px; }
+    .check-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--orange); flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Card inner divider ── */
+    .inner-sep { height: 1px; background: var(--gray-100); margin: 20px 0; }
+    .inner-label { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--gray-500); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .inner-label svg { color: var(--orange); }
+
+    /* ── Signature ── */
+    .sig-zone { border: 1.5px dashed var(--gray-300); border-radius: 10px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: var(--gray-50); cursor: pointer; transition: all 0.2s; }
+    .sig-zone:hover { border-color: var(--orange); background: var(--orange-light); }
+    .sig-zone .sig-hint { font-size: 12px; font-weight: 600; color: var(--gray-400); }
+    #sigCanvas { display: none; width: 100%; border-radius: 8px; border: 1.5px solid var(--gray-200); touch-action: none; background: var(--white); }
+    .sig-btns { display: none; gap: 8px; margin-top: 10px; }
+    .sig-btn { padding: 7px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .sig-btn.ok  { background: var(--green); color: white; }
+    .sig-btn.clr { background: var(--gray-200); color: var(--gray-600); }
+    .sig-btn.clr:hover { background: var(--gray-300); }
+    #sigDone { display: none; font-size: 13px; font-weight: 600; color: var(--green); margin-top: 10px; }
 
     /* ── Desktop actions ── */
     .actions-bar { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
-    .btn-cancel {
-      padding: 11px 24px; border-radius: 10px; border: 1.5px solid var(--gray-200);
-      background: var(--gray-100); color: var(--gray-600);
-      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
-      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.2s;
-    }
+    .btn-cancel { padding: 11px 24px; border-radius: 10px; border: 1.5px solid var(--gray-200); background: var(--gray-100); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.2s; }
     .btn-cancel:hover { background: var(--gray-200); }
-    .btn-save {
-      padding: 11px 28px; border-radius: 10px; border: none;
-      background: var(--green); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-      box-shadow: 0 4px 12px rgba(16,185,129,0.3); transition: all 0.2s;
-    }
+    .btn-save { padding: 11px 28px; border-radius: 10px; border: none; background: var(--green); color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16,185,129,0.3); transition: all 0.2s; }
     .btn-save:hover { filter: brightness(1.05); transform: translateY(-1px); }
     .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* ── Mobile sticky save bar ──
-       CORRECTION : z-index 55 (> nav z-index 50)
-       bottom = hauteur nav (~65px) + safe area, pas 0
-    ── */
-    .mobile-save-bar {
-      display: none;
-      position: fixed;
-      bottom: calc(65px + env(safe-area-inset-bottom));
-      left: 0; right: 0;
-      background: var(--white);
-      padding: 12px 16px;
-      border-top: 2px solid var(--gray-200);
-      z-index: 55;   /* AU-DESSUS de la mobile-nav (z-index 50) */
-      gap: 10px;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-    }
-    .mobile-save-bar .btn-save-m {
-      flex: 1; padding: 14px; border-radius: 12px; border: none;
-      background: var(--green); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-      box-shadow: 0 4px 14px rgba(16,185,129,0.4); transition: all 0.2s;
-    }
+    /* ── Mobile sticky save bar ── */
+    .mobile-save-bar { display: none; position: fixed; bottom: calc(65px + env(safe-area-inset-bottom)); left: 0; right: 0; background: var(--white); padding: 12px 16px; border-top: 2px solid var(--gray-200); z-index: 55; gap: 10px; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+    .mobile-save-bar .btn-save-m { flex: 1; padding: 14px; border-radius: 12px; border: none; background: var(--green); color: white; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.4); transition: all 0.2s; }
     .mobile-save-bar .btn-save-m:active { transform: scale(0.98); }
     .mobile-save-bar .btn-save-m:disabled { opacity: 0.6; cursor: not-allowed; }
-    .mobile-save-bar .btn-cancel-m {
-      padding: 14px 18px; border-radius: 12px;
-      border: 1.5px solid var(--gray-200); background: var(--gray-100);
-      color: var(--gray-600); font-family: 'DM Sans', sans-serif;
-      font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none;
-      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-    }
+    .mobile-save-bar .btn-cancel-m { padding: 14px 18px; border-radius: 12px; border: 1.5px solid var(--gray-200); background: var(--gray-100); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 
     /* ── Toast ── */
     .toast { position: fixed; bottom: 80px; right: 20px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; max-width: calc(100vw - 40px); }
     .toast.success { background: var(--green); color: white; }
     .toast.error   { background: var(--red);   color: white; }
     @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
 
@@ -258,28 +200,22 @@
     @media (max-width: 900px) {
       .sidebar { display: none; }
       .mobile-nav { display: block; }
-
-      /* Espace bas : nav (65px) + save bar (~70px) + marge */
       .main { padding: 16px 12px 200px; }
       .page-title { font-size: 22px; }
       .card { padding: 18px 14px; }
-
-      .form-grid { grid-template-columns: 1fr; }
-      .col-2 { grid-column: span 1; }
-
+      .form-grid  { grid-template-columns: 1fr; }
+      .form-grid3 { grid-template-columns: 1fr; }
+      .col-2, .col-3 { grid-column: span 1; }
       .items-table-wrap { display: none; }
       .btn-add-row { display: none; }
       .mobile-items { display: flex; }
       .btn-add-row-mobile { display: flex; }
-
       .totals-wrap { justify-content: stretch; }
       .totals-box { width: 100%; min-width: unset; }
-
       .actions-bar { display: none; }
-      .mobile-save-bar { display: flex; }  /* ← AFFICHER la barre */
-
+      .mobile-save-bar { display: flex; }
       .back-link { margin-bottom: 6px; }
-      .toast { bottom: 170px; }  /* au-dessus de la save bar */
+      .toast { bottom: 170px; }
     }
     @media (min-width: 901px) {
       .mobile-save-bar { display: none; }
@@ -290,7 +226,7 @@
 
 <body>
 
-  <!-- Sidebar desktop -->
+  <!-- ══ Sidebar desktop ═════════════════════════════════════════════ -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
@@ -304,7 +240,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Dashboard
       </a>
-      <a href="quotes.html" class="nav-link">
+      <a href="quotes.html" class="nav-link active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Devis
       </a>
@@ -333,7 +269,7 @@
     </div>
   </aside>
 
-  <!-- Main -->
+  <!-- ══ Main ════════════════════════════════════════════════════════ -->
   <main class="main">
 
     <a href="quotes.html" class="back-link">
@@ -349,11 +285,64 @@
       </div>
     </div>
 
-    <!-- Infos générales -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 1 — Identité du professionnel                        -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        Identité du professionnel
+      </div>
+      <div class="form-grid">
+        <div class="field-group">
+          <label>Nom / Prénom <span>*</span></label>
+          <input type="text" id="proName" placeholder="Ex : Jean Kamga">
+        </div>
+        <div class="field-group">
+          <label>Raison sociale <span>*</span></label>
+          <input type="text" id="proCompany" placeholder="Ex : Kamga BTP SARL">
+        </div>
+        <div class="field-group col-2">
+          <label>Adresse complète <span>*</span></label>
+          <input type="text" id="proAddress" placeholder="Ex : Rue 1.234, Quartier Bastos, Yaoundé, Cameroun">
+        </div>
+        <div class="field-group">
+          <label>Statut &amp; Forme juridique <span>*</span></label>
+          <select id="proLegalForm">
+            <option value="">Sélectionner...</option>
+            <option>Entreprise Individuelle (EI)</option>
+            <option>SARL</option>
+            <option>SA</option>
+            <option>SAS</option>
+            <option>SNC</option>
+            <option>GIE</option>
+            <option>Auto-entrepreneur</option>
+            <option>Coopérative</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>N° RCCM / Registre du commerce <span>*</span></label>
+          <input type="text" id="proRccm" placeholder="Ex : RC/YAO/2021/B/1234">
+        </div>
+        <div class="field-group">
+          <label>N° Contribuable / NIU</label>
+          <input type="text" id="proNiu" placeholder="Ex : M012300765432N">
+        </div>
+        <div class="field-group">
+          <label>Téléphone professionnel</label>
+          <input type="text" id="proPhone" placeholder="Ex : +237 6 99 00 11 22">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 2 — Coordonnées du client                            -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
     <div class="card">
       <div class="card-title">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Informations générales
+        Coordonnées du client
       </div>
       <div class="form-grid">
         <div class="field-group">
@@ -363,21 +352,68 @@
           </select>
         </div>
         <div class="field-group">
-          <label>Taux TVA (%)</label>
-          <input type="number" id="taxRate" value="20" min="0" max="100" step="0.1">
-        </div>
-        <div class="field-group col-2">
-          <label>Notes / Conditions</label>
-          <textarea id="notes" rows="2" placeholder="Conditions de paiement, délais, remarques..." style="resize:vertical;"></textarea>
+          <label>Adresse / Localité du client</label>
+          <input type="text" id="clientAddress" placeholder="Ex : Douala, Cameroun">
         </div>
       </div>
     </div>
 
-    <!-- Lignes du devis -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 3 — Dates, validité & devise                         -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Dates, validité &amp; devise
+      </div>
+      <div class="form-grid3">
+        <div class="field-group">
+          <label>Date de création du devis <span>*</span></label>
+          <input type="date" id="quoteDate">
+        </div>
+        <div class="field-group">
+          <label>Date de début de la prestation</label>
+          <input type="date" id="startDate">
+        </div>
+        <div class="field-group">
+          <label>Durée estimée de la prestation</label>
+          <input type="text" id="duration" placeholder="Ex : 5 jours, 2 semaines...">
+        </div>
+        <div class="field-group">
+          <label>Durée de validité de l'offre <span>*</span></label>
+          <select id="validityDays">
+            <option value="15">15 jours</option>
+            <option value="30" selected>30 jours</option>
+            <option value="45">45 jours</option>
+            <option value="60">60 jours</option>
+            <option value="90">90 jours</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Devise <span>*</span></label>
+          <select id="currency">
+            <option value="XAF">XAF — Franc CFA (CEMAC)</option>
+            <option value="XOF">XOF — Franc CFA (UEMOA)</option>
+            <option value="GHS">GHS — Cedi ghanéen</option>
+            <option value="NGN">NGN — Naira nigérian</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="USD">USD — Dollar américain</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Taux TVA (%)</label>
+          <input type="number" id="taxRate" value="19.25" min="0" max="100" step="0.01">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 4 — Détail des prestations                           -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
     <div class="card">
       <div class="card-title">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        Lignes du devis
+        Détail des prestations / produits
       </div>
 
       <!-- Desktop table -->
@@ -385,11 +421,11 @@
         <table>
           <thead>
             <tr>
-              <th style="width:45%">Description</th>
-              <th style="width:12%" class="right">Quantité</th>
-              <th style="width:16%" class="right">Prix unitaire</th>
-              <th style="width:14%" class="right">Total HT</th>
-              <th style="width:8%"></th>
+              <th style="width:44%">Description <span style="color:var(--red)">*</span></th>
+              <th style="width:11%" class="right">Quantité</th>
+              <th style="width:17%" class="right">Prix unitaire HT</th>
+              <th style="width:13%" class="right">Total HT</th>
+              <th style="width:7%"></th>
             </tr>
           </thead>
           <tbody id="itemsTable"></tbody>
@@ -407,26 +443,139 @@
         Ajouter une ligne
       </button>
 
+      <!-- Coûts additionnels -->
+      <div class="inner-sep"></div>
+      <div class="inner-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Coûts additionnels (optionnel)
+      </div>
+      <div class="form-grid">
+        <div class="field-group">
+          <label>Coût de main d'œuvre HT</label>
+          <input type="number" id="laborCost" value="0" min="0" step="0.01" placeholder="0">
+        </div>
+        <div class="field-group">
+          <label>Frais de déplacement HT</label>
+          <input type="number" id="travelCost" value="0" min="0" step="0.01" placeholder="0">
+        </div>
+      </div>
+
       <!-- Totaux -->
       <div class="totals-wrap">
         <div class="totals-box">
           <div class="total-row">
-            <span>Sous-total HT</span>
-            <span id="subtotal">0 XOF</span>
+            <span>Sous-total HT (prestations)</span>
+            <span id="subtotal">0</span>
           </div>
           <div class="total-row">
-            <span>TVA (<span id="taxRateDisplay">20</span>%)</span>
-            <span id="taxAmount">0 XOF</span>
+            <span>Main d'œuvre HT</span>
+            <span id="laborDisplay">0</span>
+          </div>
+          <div class="total-row">
+            <span>Frais de déplacement HT</span>
+            <span id="travelDisplay">0</span>
+          </div>
+          <div class="total-row sep">
+            <span>Montant total HT</span>
+            <span id="totalHT">0</span>
+          </div>
+          <div class="total-row">
+            <span>TVA (<span id="taxRateDisplay">19.25</span>%)</span>
+            <span id="taxAmount">0</span>
           </div>
           <div class="total-row main">
             <span>Total TTC</span>
-            <span id="totalAmount">0 XOF</span>
+            <span id="totalAmount">0</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Desktop actions -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 5 — Conditions & mentions légales                    -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Conditions &amp; mentions légales
+      </div>
+      <div class="form-grid">
+        <div class="field-group">
+          <label>Conditions de paiement</label>
+          <select id="paymentTerms">
+            <option value="À réception de facture">À réception de facture</option>
+            <option value="30% à la commande, solde à la livraison">30% commande — solde à livraison</option>
+            <option value="50% à la commande, 50% à la livraison">50% commande — 50% livraison</option>
+            <option value="Paiement comptant">Paiement comptant</option>
+            <option value="Paiement à 30 jours">Paiement à 30 jours</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Virement bancaire">Virement bancaire</option>
+            <option value="Autre">Autre (préciser dans les notes)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Conditions de livraison</label>
+          <select id="deliveryTerms">
+            <option value="Livraison sur site">Livraison sur site</option>
+            <option value="Retrait en boutique / agence">Retrait en boutique / agence</option>
+            <option value="Livraison à domicile">Livraison à domicile</option>
+            <option value="Prestation sur place">Prestation sur place</option>
+            <option value="À définir">À définir</option>
+          </select>
+        </div>
+        <div class="field-group col-2">
+          <label>Conditions de service après-vente / Garantie</label>
+          <input type="text" id="savTerms" placeholder="Ex : Garantie 3 mois pièces et main d'œuvre, intervention sous 48h...">
+        </div>
+        <div class="field-group col-2">
+          <label>Notes / Conditions particulières</label>
+          <textarea id="notes" rows="3" placeholder="Pénalités de retard, modalités spécifiques, observations..." style="resize:vertical;"></textarea>
+        </div>
+      </div>
+
+      <div class="inner-sep"></div>
+
+      <!-- Mention gros œuvre -->
+      <label class="check-label">
+        <input type="checkbox" id="checkGrosOeuvre">
+        <span>Ce devis concerne des travaux de <strong>gros œuvre ou de second œuvre</strong> — inclure la mention obligatoire <em>"Devis reçu avant l'exécution des travaux"</em></span>
+      </label>
+      <div id="grossOeuvreMention" style="display:none;">
+        <div class="info-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span><strong>Mention légale :</strong> « Devis reçu avant l'exécution des travaux. Bon pour accord, lu et approuvé. » — Cette mention sera automatiquement imprimée sur le document final.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 6 — Signature du client                              -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 14.66V20a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2h5.34"/><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/></svg>
+        Signature du client
+        <span style="font-size:11px;font-weight:500;color:var(--gray-400);margin-left:4px;">— recommandée au-delà de 300 000 XAF</span>
+      </div>
+
+      <div class="field-group" style="margin-bottom:16px;">
+        <label>Nom du signataire</label>
+        <input type="text" id="signerName" placeholder="Nom et prénom du client ou de son représentant légal">
+      </div>
+
+      <div class="sig-zone" id="sigZone">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gray-300)" stroke-width="1.5"><path d="M20 14.66V20a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2h5.34"/><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/></svg>
+        <span class="sig-hint">Toucher ou cliquer ici pour apposer la signature</span>
+      </div>
+      <canvas id="sigCanvas" width="600" height="130"></canvas>
+      <div class="sig-btns" id="sigBtns">
+        <button class="sig-btn ok"  id="sigConfirm">✓ Confirmer la signature</button>
+        <button class="sig-btn clr" id="sigClear">↺ Effacer</button>
+      </div>
+      <p id="sigDone">✓ Signature enregistrée avec succès</p>
+    </div>
+
+    <!-- ── Desktop actions ── -->
     <div class="actions-bar">
       <a href="quotes.html" class="btn-cancel">Annuler</a>
       <button class="btn-save" id="saveBtn">
@@ -437,7 +586,7 @@
 
   </main>
 
-  <!-- ═══ MOBILE STICKY SAVE BAR (au-dessus de la nav) ═══ -->
+  <!-- ══ Mobile save bar ══ -->
   <div class="mobile-save-bar" id="mobileSaveBar">
     <a href="quotes.html" class="btn-cancel-m">Annuler</a>
     <button class="btn-save-m" id="saveBtnMobile">
@@ -446,14 +595,14 @@
     </button>
   </div>
 
-  <!-- Mobile bottom nav -->
+  <!-- ══ Mobile bottom nav ══ -->
   <nav class="mobile-nav">
     <div class="mobile-nav-inner">
       <a href="dashboard.html" class="mobile-nav-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Dashboard
       </a>
-      <a href="quotes.html" class="mobile-nav-link">
+      <a href="quotes.html" class="mobile-nav-link active">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Devis
       </a>
@@ -477,83 +626,104 @@ const supabase = createClient(
 )
 
 let currentUserId = null
-let rowCounter = 0
+let rowCounter    = 0
+let signatureData = null
+let isDrawing = false, lastX = 0, lastY = 0
 
-const fmt = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(n)
+/* ── Format monétaire ──────────────────────────────────────── */
+const fmt = (n) => {
+  const cur = document.getElementById('currency')?.value || 'XAF'
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur }).format(n || 0)
+}
 
-// ── Toast ─────────────────────────────────────────────────────────────────────
-function showToast(message, type = "success") {
-  document.querySelector(".toast")?.remove()
-  const toast = document.createElement("div")
+/* ── Toast ─────────────────────────────────────────────────── */
+function showToast(message, type = 'success') {
+  document.querySelector('.toast')?.remove()
+  const toast = document.createElement('div')
   toast.className = `toast ${type}`
-  toast.innerHTML = type === "success"
+  toast.innerHTML = type === 'success'
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${message}`
     : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${message}`
   document.body.appendChild(toast)
   setTimeout(() => toast.remove(), 3500)
 }
 
-// ── Init ─────────────────────────────────────────────────────────────────────
+/* ── Init dates ────────────────────────────────────────────── */
+function initDates() {
+  const today = new Date().toISOString().split('T')[0]
+  document.getElementById('quoteDate').value = today
+}
+
+/* ── Init ──────────────────────────────────────────────────── */
 async function init() {
   const { data: { session } } = await supabase.auth.getSession()
-  if (!session) { window.location.href = "login.html"; return }
+  if (!session) { window.location.href = 'login.html'; return }
   currentUserId = session.user.id
+  initDates()
   await loadUserProfile(session.user.id)
   await loadClients()
-
-  const params = new URLSearchParams(window.location.search)
-  const clientId = params.get('client_id')
-  if (clientId) {
-    setTimeout(() => {
-      const select = document.getElementById("clientSelect")
-      if (select.querySelector(`option[value="${clientId}"]`)) select.value = clientId
-    }, 100)
-  }
-
+  const clientId = new URLSearchParams(window.location.search).get('client_id')
+  if (clientId) setTimeout(() => {
+    const s = document.getElementById('clientSelect')
+    if (s.querySelector(`option[value="${clientId}"]`)) s.value = clientId
+  }, 100)
   addRow()
+  initSig()
 }
 
+/* ── Profil utilisateur ────────────────────────────────────── */
 async function loadUserProfile(userId) {
-  const { data } = await supabase.from("profiles").select("first_name, last_name, company").eq("id", userId).single()
-  if (data) {
-    const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join("").toUpperCase() || "U"
-    document.getElementById("userAvatar").textContent = initials
-    document.getElementById("sidebarName").textContent = [data.first_name, data.last_name].filter(Boolean).join(" ") || "Utilisateur"
-    document.getElementById("sidebarCompany").textContent = data.company || "Mon entreprise"
-  }
+  const { data } = await supabase.from('profiles')
+    .select('first_name, last_name, company, address, legal_form, rccm, niu, phone')
+    .eq('id', userId).single()
+  if (!data) return
+  const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'U'
+  document.getElementById('userAvatar').textContent     = initials
+  document.getElementById('sidebarName').textContent    = [data.first_name, data.last_name].filter(Boolean).join(' ') || 'Utilisateur'
+  document.getElementById('sidebarCompany').textContent = data.company || 'Mon entreprise'
+  /* Pré-remplissage identité pro */
+  if (data.first_name || data.last_name) document.getElementById('proName').value = [data.first_name, data.last_name].filter(Boolean).join(' ')
+  if (data.company)    document.getElementById('proCompany').value   = data.company
+  if (data.address)    document.getElementById('proAddress').value   = data.address
+  if (data.legal_form) document.getElementById('proLegalForm').value = data.legal_form
+  if (data.rccm)       document.getElementById('proRccm').value      = data.rccm
+  if (data.niu)        document.getElementById('proNiu').value       = data.niu
+  if (data.phone)      document.getElementById('proPhone').value     = data.phone
 }
 
+/* ── Clients ───────────────────────────────────────────────── */
 async function loadClients() {
   const { data, error } = await supabase
-    .from("clients").select("id, full_name")
-    .eq("user_id", currentUserId).order("full_name")
-
-  const select = document.getElementById("clientSelect")
+    .from('clients').select('id, full_name, address')
+    .eq('user_id', currentUserId).order('full_name')
+  const select = document.getElementById('clientSelect')
   if (error || !data?.length) {
     select.innerHTML = `<option value="">Aucun client — créez-en un d'abord</option>`
     return
   }
-  data.forEach(client => {
-    const opt = document.createElement("option")
-    opt.value = client.id
-    opt.textContent = client.full_name
+  data.forEach(c => {
+    const opt = document.createElement('option')
+    opt.value = c.id; opt.textContent = c.full_name; opt.dataset.address = c.address || ''
     select.appendChild(opt)
+  })
+  select.addEventListener('change', () => {
+    const o = select.options[select.selectedIndex]
+    document.getElementById('clientAddress').value = o.dataset.address || ''
   })
 }
 
-// ── Add row ───────────────────────────────────────────────────────────────────
+/* ── Add row ───────────────────────────────────────────────── */
 function addRow() {
   rowCounter++
   const rid = `row-${rowCounter}`
-
-  const tbody = document.getElementById("itemsTable")
-  const tr = document.createElement("tr")
+  const tbody = document.getElementById('itemsTable')
+  const tr = document.createElement('tr')
   tr.dataset.rid = rid
   tr.innerHTML = `
-    <td><input type="text" class="description" placeholder="Description..." data-rid="${rid}"></td>
+    <td><input type="text" class="description" placeholder="Description de la prestation ou du produit..." data-rid="${rid}"></td>
     <td><input type="number" value="1" min="0" step="0.01" class="quantity" data-rid="${rid}"></td>
     <td><input type="number" value="0" min="0" step="0.01" class="unitPrice" data-rid="${rid}"></td>
-    <td class="line-total right" id="lt-${rid}">0 XOF</td>
+    <td class="line-total right" id="lt-${rid}">0</td>
     <td style="text-align:center;">
       <button class="btn-remove-row" data-rid="${rid}" title="Supprimer">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -561,16 +731,15 @@ function addRow() {
     </td>`
   tbody.appendChild(tr)
 
-  const mobileItems = document.getElementById("mobileItems")
-  const card = document.createElement("div")
-  card.className = "mobile-item-card"
-  card.dataset.rid = rid
+  const mobileItems = document.getElementById('mobileItems')
+  const card = document.createElement('div')
+  card.className = 'mobile-item-card'; card.dataset.rid = rid
   card.innerHTML = `
     <div class="mobile-item-header">
       <span class="mobile-item-label">Ligne ${rowCounter}</span>
       <div style="display:flex;align-items:center;gap:10px;">
-        <span class="mobile-item-total" id="lt-m-${rid}">0 XOF</span>
-        <button class="btn-remove-row" data-rid="${rid}" title="Supprimer" style="margin:0;">
+        <span class="mobile-item-total" id="lt-m-${rid}">0</span>
+        <button class="btn-remove-row" data-rid="${rid}" style="margin:0;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
@@ -585,158 +754,242 @@ function addRow() {
         <input type="number" value="1" min="0" step="0.01" class="quantity-m" data-rid="${rid}">
       </div>
       <div>
-        <div class="mobile-field-label">Prix unitaire</div>
+        <div class="mobile-field-label">Prix unitaire HT</div>
         <input type="number" value="0" min="0" step="0.01" class="unitPrice-m" data-rid="${rid}">
       </div>
     </div>`
   mobileItems.appendChild(card)
 
-  tr.querySelector('.description').addEventListener('input', (e) => { const m=card.querySelector('.description-m'); if(document.activeElement!==m) m.value=e.target.value; calculateTotals() })
-  tr.querySelector('.quantity').addEventListener('input',    (e) => { const m=card.querySelector('.quantity-m');    if(document.activeElement!==m) m.value=e.target.value; calculateTotals() })
-  tr.querySelector('.unitPrice').addEventListener('input',   (e) => { const m=card.querySelector('.unitPrice-m');   if(document.activeElement!==m) m.value=e.target.value; calculateTotals() })
-  card.querySelector('.description-m').addEventListener('input', (e) => { tr.querySelector('.description').value=e.target.value; calculateTotals() })
-  card.querySelector('.quantity-m').addEventListener('input',    (e) => { tr.querySelector('.quantity').value=e.target.value; calculateTotals() })
-  card.querySelector('.unitPrice-m').addEventListener('input',   (e) => { tr.querySelector('.unitPrice').value=e.target.value; calculateTotals() })
+  /* Sync desktop ↔ mobile */
+  tr.querySelector('.description').addEventListener('input',  (e) => { const m = card.querySelector('.description-m'); if (document.activeElement !== m) m.value = e.target.value; calculateTotals() })
+  tr.querySelector('.quantity').addEventListener('input',     (e) => { const m = card.querySelector('.quantity-m');    if (document.activeElement !== m) m.value = e.target.value; calculateTotals() })
+  tr.querySelector('.unitPrice').addEventListener('input',    (e) => { const m = card.querySelector('.unitPrice-m');   if (document.activeElement !== m) m.value = e.target.value; calculateTotals() })
+  card.querySelector('.description-m').addEventListener('input', (e) => { tr.querySelector('.description').value = e.target.value; calculateTotals() })
+  card.querySelector('.quantity-m').addEventListener('input',    (e) => { tr.querySelector('.quantity').value    = e.target.value; calculateTotals() })
+  card.querySelector('.unitPrice-m').addEventListener('input',   (e) => { tr.querySelector('.unitPrice').value   = e.target.value; calculateTotals() })
 
-  ;[tr.querySelector('.btn-remove-row'), card.querySelector('.btn-remove-row')].forEach(btn => {
+  ;[tr.querySelector('.btn-remove-row'), card.querySelector('.btn-remove-row')].forEach(btn =>
     btn.addEventListener('click', () => { tr.remove(); card.remove(); calculateTotals() })
-  })
-
+  )
   calculateTotals()
 }
 
-// ── Calculate totals ──────────────────────────────────────────────────────────
+/* ── Calcul totaux ─────────────────────────────────────────── */
 function calculateTotals() {
   let subtotal = 0
-  const taxRate = parseFloat(document.getElementById("taxRate").value) || 0
+  const taxRate = parseFloat(document.getElementById('taxRate').value)   || 0
+  const labor   = parseFloat(document.getElementById('laborCost').value) || 0
+  const travel  = parseFloat(document.getElementById('travelCost').value)|| 0
 
-  document.querySelectorAll("#itemsTable tr").forEach(row => {
-    const qty   = parseFloat(row.querySelector(".quantity")?.value) || 0
-    const price = parseFloat(row.querySelector(".unitPrice")?.value) || 0
-    const lineTotal = qty * price
+  document.querySelectorAll('#itemsTable tr').forEach(row => {
+    const qty = parseFloat(row.querySelector('.quantity')?.value)  || 0
+    const pu  = parseFloat(row.querySelector('.unitPrice')?.value) || 0
+    const lt  = qty * pu
     const rid = row.dataset.rid
-    const ltEl  = document.getElementById(`lt-${rid}`)
-    const ltMEl = document.getElementById(`lt-m-${rid}`)
-    if (ltEl)  ltEl.textContent  = fmt(lineTotal)
-    if (ltMEl) ltMEl.textContent = fmt(lineTotal)
-    subtotal += lineTotal
+    const el  = document.getElementById(`lt-${rid}`),  em = document.getElementById(`lt-m-${rid}`)
+    if (el) el.textContent  = fmt(lt)
+    if (em) em.textContent  = fmt(lt)
+    subtotal += lt
   })
 
-  const taxAmount   = subtotal * (taxRate / 100)
-  const totalAmount = subtotal + taxAmount
-  document.getElementById("subtotal").textContent    = fmt(subtotal)
-  document.getElementById("taxAmount").textContent   = fmt(taxAmount)
-  document.getElementById("totalAmount").textContent = fmt(totalAmount)
-  document.getElementById("taxRateDisplay").textContent = taxRate
+  const totalHT  = subtotal + labor + travel
+  const taxAmt   = totalHT * (taxRate / 100)
+  const totalTTC = totalHT + taxAmt
+
+  document.getElementById('subtotal').textContent      = fmt(subtotal)
+  document.getElementById('laborDisplay').textContent  = fmt(labor)
+  document.getElementById('travelDisplay').textContent = fmt(travel)
+  document.getElementById('totalHT').textContent       = fmt(totalHT)
+  document.getElementById('taxAmount').textContent     = fmt(taxAmt)
+  document.getElementById('totalAmount').textContent   = fmt(totalTTC)
+  document.getElementById('taxRateDisplay').textContent = taxRate
 }
 
-// ── Collect items ─────────────────────────────────────────────────────────────
+/* ── Signature pad ─────────────────────────────────────────── */
+function initSig() {
+  const zone   = document.getElementById('sigZone')
+  const canvas = document.getElementById('sigCanvas')
+  const btns   = document.getElementById('sigBtns')
+  const done   = document.getElementById('sigDone')
+  const ctx    = canvas.getContext('2d')
+
+  zone.addEventListener('click', () => {
+    zone.style.display = 'none'
+    canvas.style.display = 'block'
+    btns.style.display = 'flex'
+    canvas.width = canvas.parentElement.offsetWidth
+  })
+
+  const pos = (e) => {
+    const r = canvas.getBoundingClientRect()
+    const s = e.touches ? e.touches[0] : e
+    return { x: s.clientX - r.left, y: s.clientY - r.top }
+  }
+  const draw = (e) => {
+    if (!isDrawing) return; e.preventDefault()
+    const p = pos(e)
+    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y)
+    ctx.strokeStyle = '#1F2937'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke()
+    lastX = p.x; lastY = p.y
+  }
+  canvas.addEventListener('mousedown',  (e) => { isDrawing = true; const p = pos(e); lastX = p.x; lastY = p.y })
+  canvas.addEventListener('mousemove',  draw)
+  canvas.addEventListener('mouseup',    () => isDrawing = false)
+  canvas.addEventListener('mouseleave', () => isDrawing = false)
+  canvas.addEventListener('touchstart', (e) => { e.preventDefault(); isDrawing = true; const p = pos(e); lastX = p.x; lastY = p.y }, { passive: false })
+  canvas.addEventListener('touchmove',  draw, { passive: false })
+  canvas.addEventListener('touchend',   () => isDrawing = false)
+
+  document.getElementById('sigClear').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); signatureData = null
+  })
+  document.getElementById('sigConfirm').addEventListener('click', () => {
+    signatureData = canvas.toDataURL('image/png')
+    canvas.style.display = 'none'; btns.style.display = 'none'; done.style.display = 'block'
+    showToast('Signature enregistrée')
+  })
+}
+
+/* ── Collect items ─────────────────────────────────────────── */
 function collectItems() {
-  return Array.from(document.querySelectorAll("#itemsTable tr")).map(row => ({
-    description: row.querySelector(".description").value.trim(),
-    quantity:    parseFloat(row.querySelector(".quantity").value) || 0,
-    unit_price:  parseFloat(row.querySelector(".unitPrice").value) || 0,
-    total:       (parseFloat(row.querySelector(".quantity").value)||0) * (parseFloat(row.querySelector(".unitPrice").value)||0)
+  return Array.from(document.querySelectorAll('#itemsTable tr')).map(row => ({
+    description: row.querySelector('.description').value.trim(),
+    quantity:    parseFloat(row.querySelector('.quantity').value)  || 0,
+    unit_price:  parseFloat(row.querySelector('.unitPrice').value) || 0,
+    total:      (parseFloat(row.querySelector('.quantity').value)  || 0) * (parseFloat(row.querySelector('.unitPrice').value) || 0)
   }))
 }
 
-// ── Save quote ────────────────────────────────────────────────────────────────
+/* ── Sauvegarde ────────────────────────────────────────────── */
 async function saveQuote() {
-  const clientId = document.getElementById("clientSelect").value
-  if (!clientId) { showToast("Veuillez sélectionner un client.", "error"); return }
-
+  const clientId = document.getElementById('clientSelect').value
+  if (!clientId) { showToast('Veuillez sélectionner un client.', 'error'); return }
   const items = collectItems()
-  if (!items.length) { showToast("Ajoutez au moins une ligne au devis.", "error"); return }
-  if (items.some(i => !i.description)) { showToast("Chaque ligne doit avoir une description.", "error"); return }
+  if (!items.length)                   { showToast('Ajoutez au moins une ligne au devis.', 'error'); return }
+  if (items.some(i => !i.description)) { showToast('Chaque ligne doit avoir une description.', 'error'); return }
 
-  const saveBtn  = document.getElementById("saveBtn")
-  const saveBtnM = document.getElementById("saveBtnMobile")
-  const loadingHtml = `<span class="spinner"></span> Enregistrement...`
-  saveBtn.disabled = true; saveBtn.innerHTML = loadingHtml
-  saveBtnM.disabled = true; saveBtnM.innerHTML = loadingHtml
+  const saveBtn  = document.getElementById('saveBtn')
+  const saveBtnM = document.getElementById('saveBtnMobile')
+  const loading  = `<span class="spinner"></span> Enregistrement...`
+  saveBtn.disabled  = true; saveBtn.innerHTML  = loading
+  saveBtnM.disabled = true; saveBtnM.innerHTML = loading
 
   const { data: quoteNumber, error: rpcError } = await supabase
-    .rpc("generate_quote_number", { p_user_id: currentUserId })
+    .rpc('generate_quote_number', { p_user_id: currentUserId })
 
-  const taxRate     = parseFloat(document.getElementById("taxRate").value) || 0
-  const subtotal    = items.reduce((s, i) => s + i.total, 0)
-  const taxAmount   = subtotal * (taxRate / 100)
-  const totalAmount = subtotal + taxAmount
+  const taxRate  = parseFloat(document.getElementById('taxRate').value)    || 0
+  const labor    = parseFloat(document.getElementById('laborCost').value)  || 0
+  const travel   = parseFloat(document.getElementById('travelCost').value) || 0
+  const subtotal = items.reduce((s, i) => s + i.total, 0)
+  const totalHT  = subtotal + labor + travel
+  const taxAmt   = totalHT * (taxRate / 100)
+  const totalTTC = totalHT + taxAmt
+  const vDays    = parseInt(document.getElementById('validityDays').value) || 30
+  const baseDate = document.getElementById('quoteDate').value
+  const expiryDate = baseDate
+    ? (() => { const d = new Date(baseDate); d.setDate(d.getDate() + vDays); return d.toISOString().split('T')[0] })()
+    : null
 
-  const { data: quote, error: quoteError } = await supabase
-    .from("quotes").insert({
-      user_id:      currentUserId,
-      client_id:    clientId,
-      quote_number: rpcError ? null : quoteNumber,
-      subtotal, tax_rate: taxRate, tax_amount: taxAmount, total_amount: totalAmount,
-      notes: document.getElementById("notes").value.trim() || null,
-      status: "draft"
-    }).select().single()
+  const { data: quote, error: qErr } = await supabase.from('quotes').insert({
+    user_id:        currentUserId,
+    client_id:      clientId,
+    quote_number:   rpcError ? null : quoteNumber,
+    quote_date:     baseDate || null,
+    start_date:     document.getElementById('startDate').value   || null,
+    duration:       document.getElementById('duration').value.trim() || null,
+    expiry_date:    expiryDate,
+    validity_days:  vDays,
+    currency:       document.getElementById('currency').value,
+    subtotal,
+    labor_cost:     labor,
+    travel_cost:    travel,
+    total_ht:       totalHT,
+    tax_rate:       taxRate,
+    tax_amount:     taxAmt,
+    total_amount:   totalTTC,
+    payment_terms:  document.getElementById('paymentTerms').value,
+    delivery_terms: document.getElementById('deliveryTerms').value,
+    sav_terms:      document.getElementById('savTerms').value.trim() || null,
+    notes:          document.getElementById('notes').value.trim()    || null,
+    gros_oeuvre:    document.getElementById('checkGrosOeuvre').checked,
+    signer_name:    document.getElementById('signerName').value.trim() || null,
+    signature_data: signatureData,
+    pro_name:       document.getElementById('proName').value.trim(),
+    pro_company:    document.getElementById('proCompany').value.trim(),
+    pro_address:    document.getElementById('proAddress').value.trim(),
+    pro_legal_form: document.getElementById('proLegalForm').value,
+    pro_rccm:       document.getElementById('proRccm').value.trim(),
+    pro_niu:        document.getElementById('proNiu').value.trim()   || null,
+    pro_phone:      document.getElementById('proPhone').value.trim() || null,
+    client_address: document.getElementById('clientAddress').value.trim() || null,
+    status: 'draft'
+  }).select().single()
 
-  if (quoteError) {
-    showToast("Erreur : " + quoteError.message, "error")
+  if (qErr) {
+    showToast('Erreur : ' + qErr.message, 'error')
     const ic = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>`
-    saveBtn.disabled=false; saveBtn.innerHTML=`${ic} Enregistrer le devis`
-    saveBtnM.disabled=false; saveBtnM.innerHTML=`${ic} Enregistrer le devis`
+    saveBtn.disabled  = false; saveBtn.innerHTML  = `${ic} Enregistrer le devis`
+    saveBtnM.disabled = false; saveBtnM.innerHTML = `${ic} Enregistrer le devis`
     return
   }
 
-  const { error: itemsError } = await supabase.from("quote_items").insert(
-    items.map(i => ({ ...i, quote_id: quote.id }))
-  )
-
-  if (itemsError) { showToast("Devis créé mais erreur sur les lignes.", "error"); return }
-
-  showToast("Devis enregistré avec succès !")
+  await supabase.from('quote_items').insert(items.map(i => ({ ...i, quote_id: quote.id })))
+  showToast('Devis enregistré avec succès !')
   setTimeout(() => window.location.href = `view-quote.html?id=${quote.id}`, 1500)
 }
 
-// ── Events ────────────────────────────────────────────────────────────────────
-document.getElementById("addRowBtn").addEventListener("click", addRow)
-document.getElementById("addRowBtnMobile").addEventListener("click", addRow)
-document.getElementById("saveBtn").addEventListener("click", saveQuote)
-document.getElementById("saveBtnMobile").addEventListener("click", saveQuote)
-document.getElementById("taxRate").addEventListener("input", calculateTotals)
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await supabase.auth.signOut(); window.location.href = "login.html"
+/* ── Events ────────────────────────────────────────────────── */
+document.getElementById('addRowBtn').addEventListener('click', addRow)
+document.getElementById('addRowBtnMobile').addEventListener('click', addRow)
+document.getElementById('saveBtn').addEventListener('click', saveQuote)
+document.getElementById('saveBtnMobile').addEventListener('click', saveQuote)
+document.getElementById('taxRate').addEventListener('input', calculateTotals)
+document.getElementById('laborCost').addEventListener('input', calculateTotals)
+document.getElementById('travelCost').addEventListener('input', calculateTotals)
+document.getElementById('currency').addEventListener('change', calculateTotals)
+document.getElementById('checkGrosOeuvre').addEventListener('change', (e) => {
+  document.getElementById('grossOeuvreMention').style.display = e.target.checked ? 'block' : 'none'
+})
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await supabase.auth.signOut(); window.location.href = 'login.html'
 })
 
 init()
 </script>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        try {
-          const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
-          reg.addEventListener('updatefound', () => {
-            const nw = reg.installing
-            nw.addEventListener('statechange', () => {
-              if (nw.state === 'installed' && navigator.serviceWorker.controller) showPWAUpdate()
-            })
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) showPWAUpdate()
           })
-        } catch(e) { console.warn('[SW]', e) }
-      })
-    }
-    function showPWAUpdate() {
-      const b = document.createElement('div')
-      b.id = 'pwa-banner'
-      b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1F2937;color:white;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.08);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        Mise à jour disponible
-        <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#F97316;color:white;border:none;border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
-        <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;">×</button>
-      </div>`
-      document.body.appendChild(b)
-    }
-    let _deferredPrompt = null
-    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e })
-    window.installPWA = async () => {
-      if (!_deferredPrompt) return
-      _deferredPrompt.prompt()
-      await _deferredPrompt.userChoice
-      _deferredPrompt = null
-    }
-  </script>
+        })
+      } catch(e) { console.warn('[SW]', e) }
+    })
+  }
+  function showPWAUpdate() {
+    const b = document.createElement('div')
+    b.id = 'pwa-banner'
+    b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1F2937;color:white;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.08);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Mise à jour disponible
+      <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#F97316;color:white;border:none;border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
+      <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;">×</button>
+    </div>`
+    document.body.appendChild(b)
+  }
+  let _deferredPrompt = null
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e })
+  window.installPWA = async () => {
+    if (!_deferredPrompt) return
+    _deferredPrompt.prompt()
+    await _deferredPrompt.userChoice
+    _deferredPrompt = null
+  }
+</script>
 </body>
 </html>
