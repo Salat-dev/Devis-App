@@ -3,939 +3,507 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- PWA -->
-  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#F97316">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Devis App">
-  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
-  <title>Devis - Devis App</title>
+  <title>Mes Devis - Devis App</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --orange: #F97316;
-      --orange-dark: #EA6C0A;
-      --orange-light: #FEF3E7;
-      --gray-50: #F9FAFB;
-      --gray-100: #F3F4F6;
-      --gray-200: #E5E7EB;
-      --gray-300: #D1D5DB;
-      --gray-400: #9CA3AF;
-      --gray-500: #6B7280;
-      --gray-600: #4B5563;
-      --gray-700: #374151;
-      --gray-800: #1F2937;
-      --gray-900: #111827;
-      --green: #10B981;
-      --green-light: #D1FAE5;
-      --blue: #3B82F6;
-      --blue-light: #EFF6FF;
-      --red: #EF4444;
-      --red-light: #FFF1F1;
-      --yellow: #F59E0B;
-      --yellow-light: #FFFBEB;
-      --white: #FFFFFF;
-      --whatsapp: #25D366;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --orange:#F97316;--orange-dark:#EA6C0A;--orange-light:#FEF3E7;
+      --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;
+      --gray-300:#D1D5DB;--gray-400:#9CA3AF;--gray-500:#6B7280;
+      --gray-600:#4B5563;--gray-700:#374151;--gray-800:#1F2937;
+      --gray-900:#111827;--green:#10B981;--green-light:#D1FAE5;
+      --blue:#3B82F6;--blue-light:#EFF6FF;
+      --red:#EF4444;--red-light:#FFF1F1;
+      --yellow:#F59E0B;--yellow-light:#FEF3C7;
+      --purple:#8B5CF6;--purple-light:#F5F3FF;
+      --white:#FFFFFF;
     }
-
-    body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); min-height: 100vh; display: flex; }
+    body{font-family:'DM Sans',sans-serif;background:var(--gray-100);min-height:100vh;display:flex}
 
     /* ── Sidebar ── */
-    .sidebar { width: 260px; min-width: 260px; background: var(--gray-900); display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
-    .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; gap: 10px; }
-    .sidebar-logo-icon { width: 36px; height: 36px; background: var(--orange); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-    .sidebar-logo span { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white; }
-    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
-    .nav-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 12px 12px 6px; }
-    .nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; color: rgba(255,255,255,0.55); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; }
-    .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
-    .nav-link.active { background: rgba(249,115,22,0.15); color: var(--orange); }
-    .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
-    .user-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; background: rgba(255,255,255,0.05); }
-    .user-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: white; flex-shrink: 0; }
-    .user-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .user-role { font-size: 11px; color: rgba(255,255,255,0.4); }
-    .btn-logout { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px; border-radius: 10px; background: rgba(239,68,68,0.1); color: #F87171; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border: 1px solid rgba(239,68,68,0.2); cursor: pointer; transition: all 0.2s; }
-    .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
+    .sidebar{width:260px;min-width:260px;background:var(--gray-900);display:flex;flex-direction:column;height:100vh;position:sticky;top:0}
+    .sidebar-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
+    .sidebar-logo-icon{width:36px;height:36px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .sidebar-logo span{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:white}
+    .sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+    .nav-section-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:12px 12px 6px}
+    .nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,.55);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s}
+    .nav-link:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9)}
+    .nav-link.active{background:rgba(249,115,22,.15);color:var(--orange)}
+    .sidebar-footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.07)}
+    .user-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:8px;background:rgba(255,255,255,.05)}
+    .user-avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+    .user-name{font-size:13px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .user-role{font-size:11px;color:rgba(255,255,255,.4)}
+    .btn-logout{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:10px;background:rgba(239,68,68,.1);color:#F87171;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border:1px solid rgba(239,68,68,.2);cursor:pointer;transition:all .2s}
+    .btn-logout:hover{background:rgba(239,68,68,.2);color:#FCA5A5}
 
-    /* ── Mobile bottom nav ── */
-    .mobile-nav {
+    /* ── Mobile nav ── */
+    .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--gray-900);padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:50;border-top:1px solid rgba(255,255,255,.07)}
+    .mobile-nav-inner{display:flex;justify-content:space-around}
+    .mobile-nav-link{display:flex;flex-direction:column;align-items:center;gap:4px;color:rgba(255,255,255,.45);text-decoration:none;font-size:10px;font-weight:600;padding:4px 12px;border-radius:10px;transition:all .2s}
+    .mobile-nav-link.active{color:var(--orange)}
+
+    /* ── Mobile top bar (back button) ── */
+    .mobile-topbar {
       display: none;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--gray-900);
-      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
-      z-index: 50;
-      border-top: 1px solid rgba(255,255,255,0.07);
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0 16px;
+      margin-bottom: 4px;
     }
-    .mobile-nav-inner { display: flex; justify-content: space-around; }
-    .mobile-nav-link {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      color: rgba(255,255,255,0.45); text-decoration: none;
-      font-size: 10px; font-weight: 600; padding: 4px 12px;
-      border-radius: 10px; transition: all 0.2s;
+    .mobile-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-decoration: none;
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 7px 14px;
+      transition: all .2s;
     }
-    .mobile-nav-link.active { color: var(--orange); }
+    .mobile-back-btn:active {
+      background: var(--gray-100);
+      color: var(--orange);
+      border-color: var(--orange-light);
+    }
+    .mobile-topbar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gray-800);
+    }
+    /* Spacer to balance the back btn on the right side */
+    .mobile-topbar-spacer {
+      width: 80px; /* roughly matches the back btn width */
+    }
 
     /* ── Main ── */
-    .main { flex: 1; overflow-y: auto; padding: 32px 36px; }
+    .main{flex:1;overflow-y:auto;padding:32px 36px}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+    .page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--gray-800)}
+    .btn-new{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;background:var(--orange);color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;cursor:pointer;text-decoration:none;box-shadow:0 4px 14px rgba(249,115,22,.35);transition:all .2s}
+    .btn-new:hover{background:var(--orange-dark);transform:translateY(-1px)}
 
-    .back-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 600; color: var(--gray-400);
-      text-decoration: none; transition: color 0.2s; margin-bottom: 10px;
-    }
-    .back-link:hover { color: var(--orange); }
+    /* ── KPI cards ── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .kpi-card{background:var(--white);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);animation:slideUp .35s ease both; position: relative; overflow: hidden;}
+    .kpi-card:nth-child(2){animation-delay:.05s}.kpi-card:nth-child(3){animation-delay:.1s}.kpi-card:nth-child(4){animation-delay:.15s}
+    @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .kpi-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px}
+    .kpi-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gray-800);margin-bottom:4px}
+    .kpi-sub{font-size:12px;color:var(--gray-400)}
+    .kpi-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;float:right;margin-top:-4px}
 
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    .page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--gray-800); }
-    .page-subtitle { font-size: 14px; color: var(--gray-400); margin-top: 4px; }
+    /* ── Toolbar ── */
+    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .search-wrap{flex:1;min-width:200px;position:relative}
+    .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400);pointer-events:none}
+    .search-input{width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:10px 14px 10px 38px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--gray-800);background:var(--white);outline:none;transition:all .2s}
+    .search-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.1)}
+    .filter-select{border:1.5px solid var(--gray-200);border-radius:10px;padding:10px 32px 10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;outline:none;cursor:pointer;appearance:none;transition:all .2s}
+    .filter-select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.1)}
 
-    .btn-new {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--orange); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
-      padding: 11px 22px; border-radius: 10px; border: none;
-      text-decoration: none; cursor: pointer;
-      box-shadow: 0 4px 12px rgba(249,115,22,0.3); transition: all 0.2s;
-    }
-    .btn-new:hover { background: var(--orange-dark); transform: translateY(-1px); }
+    /* ── Filter pills ── */
+    .filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+    .pill{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-500);transition:all .2s}
+    .pill:hover{border-color:var(--orange);color:var(--orange)}
+    .pill.active{border-color:var(--orange);background:var(--orange-light);color:var(--orange)}
+    .pill .dot{width:6px;height:6px;border-radius:50%}
 
-    /* ── Filtres ── */
-    .filters-bar {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 20px; flex-wrap: wrap;
-    }
-    .search-wrap { position: relative; flex: 1; min-width: 180px; }
-    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
-    .search-input { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 10px; padding: 9px 14px 9px 36px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--gray-800); background: var(--white); outline: none; transition: all 0.2s; }
-    .search-input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+    /* ── QUOTE CARDS GRID ── */
+    .quotes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;animation:slideUp .35s ease .2s both}
+    .quote-card{background:var(--white);border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);border:1px solid var(--gray-100);transition:all .2s;display:flex;flex-direction:column;overflow:hidden;position:relative}
+    .quote-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,.08);border-color:var(--orange-light)}
+    .card-header{padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:flex-start;background:var(--gray-50)}
+    .card-number{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--gray-800);display:block;margin-bottom:4px}
+    .card-client{font-size:13px;color:var(--gray-500);font-weight:500}
+    .card-body{padding:20px;flex:1;display:flex;flex-direction:column;gap:12px}
+    .card-row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+    .card-label{color:var(--gray-400);font-weight:500}
+    .card-value{color:var(--gray-700);font-weight:600;text-align:right}
+    .card-amount{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gray-800);margin-top:8px;display:block;text-align:right}
+    .card-footer{padding:14px 20px;border-top:1px solid var(--gray-100);display:flex;justify-content:flex-end;gap:8px;background:var(--white)}
+    .card-btn{width:34px;height:34px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+    .card-btn.view{background:var(--orange-light);color:var(--orange)}
+    .card-btn.view:hover{background:var(--orange);color:white}
+    .card-btn.del{background:var(--red-light);color:var(--red)}
+    .card-btn.del:hover{background:var(--red);color:white}
 
-    .filters-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 14px; border-radius: 100px; border: 1.5px solid var(--gray-200); background: var(--white); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-    .filter-btn:hover { border-color: var(--orange); color: var(--orange); }
-    .filter-btn.active { background: var(--orange); color: white; border-color: var(--orange); }
+    /* ── Status badge ── */
+    .badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:100px;white-space:nowrap}
+    .b-draft{background:var(--gray-100);color:var(--gray-500)}
+    .b-sent{background:var(--blue-light);color:var(--blue)}
+    .b-accepted{background:var(--green-light);color:var(--green)}
+    .b-refused{background:var(--red-light);color:var(--red)}
+    .b-expired{background:var(--yellow-light);color:var(--yellow)}
 
-    /* ── Card / Desktop table ── */
-    .card { background: var(--white); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04); overflow: hidden; animation: slideUp 0.35s ease; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    /* ── Empty state ── */
+    .empty-state{text-align:center;padding:64px 24px;grid-column:1 / -1}
+    .empty-icon{width:64px;height:64px;background:var(--orange-light);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--orange)}
+    .empty-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gray-700);margin-bottom:8px}
+    .empty-sub{font-size:14px;color:var(--gray-400);margin-bottom:24px}
 
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    thead tr { border-bottom: 2px solid var(--gray-100); }
-    thead th { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 16px; text-align: left; background: var(--gray-50); white-space: nowrap; }
-    tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--gray-50); }
-    tbody td { padding: 14px 16px; font-size: 14px; color: var(--gray-700); vertical-align: middle; }
+    /* ── Skeleton ── */
+    .skeleton{background:linear-gradient(90deg,var(--gray-100) 25%,var(--gray-200) 50%,var(--gray-100) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px}
+    @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
 
-    /* Badges statut */
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; white-space: nowrap; }
-    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; }
-    .badge-draft    { background: var(--gray-100);   color: var(--gray-600); }
-    .badge-sent     { background: var(--blue-light);  color: var(--blue); }
-    .badge-accepted { background: var(--green-light); color: var(--green); }
-    .badge-rejected { background: var(--red-light);   color: var(--red); }
-    .badge-expired  { background: var(--yellow-light);color: var(--yellow); }
+    /* ── Toast ── */
+    .toast{position:fixed;bottom:28px;right:28px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);animation:toastIn .3s ease;z-index:999;max-width:calc(100vw - 40px)}
+    .toast.success{background:var(--green);color:white}
+    .toast.error{background:var(--red);color:white}
+    @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-    .quote-number { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--orange); }
-    .total-amount { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--gray-800); }
+    /* ── Modal ── */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--white);border-radius:16px;padding:28px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideUp .25s ease}
+    .modal-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--gray-800);margin-bottom:8px}
+    .modal-body{font-size:13px;color:var(--gray-500);margin-bottom:22px;line-height:1.6}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end}
+    .modal-btn{padding:9px 18px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+    .modal-btn.cancel{background:var(--gray-100);color:var(--gray-600)}
+    .modal-btn.cancel:hover{background:var(--gray-200)}
+    .modal-btn.danger{background:var(--red);color:white}
 
-    /* Boutons actions desktop */
-    .actions-cell { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
-    .btn-action {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 7px 12px; border-radius: 8px; border: none;
-      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s; white-space: nowrap;
-      text-decoration: none;
-    }
-    .btn-view   { background: var(--gray-100); color: var(--gray-700); }
-    .btn-view:hover { background: var(--gray-200); }
-    .btn-email  { background: var(--blue-light); color: var(--blue); }
-    .btn-email:hover { background: #DBEAFE; }
-    .btn-whatsapp { background: #F0FDF4; color: var(--whatsapp); }
-    .btn-whatsapp:hover { background: #DCFCE7; }
-    .btn-status { background: var(--orange-light); color: var(--orange); }
-    .btn-status:hover { background: #FDE9D0; }
-    .btn-delete-sm { background: var(--red-light); color: var(--red); width: 32px; height: 32px; padding: 0; }
-    .btn-delete-sm:hover { background: var(--red); color: white; }
-
-    /* ── Mobile quote cards ── */
-    .quote-cards { display: none; flex-direction: column; gap: 12px; padding: 16px; }
-    .quote-card {
-      background: var(--white); border-radius: 14px;
-      border: 1.5px solid var(--gray-200);
-      overflow: hidden; transition: border-color 0.2s;
-    }
-    .quote-card:hover { border-color: var(--orange); }
-    .quote-card-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 10px;
-    }
-    .quote-card-left { display: flex; flex-direction: column; gap: 3px; }
-    .quote-card-number { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--orange); }
-    .quote-card-client { font-size: 13px; font-weight: 600; color: var(--gray-800); }
-    .quote-card-date { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
-    .quote-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-    .quote-card-amount { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--gray-800); }
-    .quote-card-actions {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 8px; padding: 0 12px 12px;
-    }
-    .quote-card-actions .btn-action-mobile {
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 9px 10px; border-radius: 9px; border: none;
-      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700;
-      cursor: pointer; transition: all 0.2s; text-decoration: none;
-    }
-    .btn-view-m   { background: var(--gray-100); color: var(--gray-700); }
-    .btn-view-m:hover { background: var(--gray-200); }
-    .btn-email-m  { background: var(--blue-light); color: var(--blue); }
-    .btn-email-m:hover { background: #DBEAFE; }
-    .btn-wa-m { background: #F0FDF4; color: var(--whatsapp); }
-    .btn-wa-m:hover { background: #DCFCE7; }
-    .btn-status-m { background: var(--orange-light); color: var(--orange); }
-    .btn-status-m:hover { background: #FDE9D0; }
-    .btn-delete-m { background: var(--red-light); color: var(--red); }
-    .btn-delete-m:hover { background: var(--red); color: white; }
-    /* 5th action spans full width */
-    .quote-card-actions .btn-action-mobile.full { grid-column: span 2; }
-
-    /* Empty state */
-    .empty-state { text-align: center; padding: 56px 20px; }
-    .empty-icon { width: 64px; height: 64px; background: var(--orange-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--orange); }
-    .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--gray-700); margin-bottom: 6px; }
-    .empty-state p { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
-
-    /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
-    .modal-overlay.show { display: flex; }
-    .modal { background: var(--white); border-radius: 16px; padding: 28px; max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: slideUp 0.25s ease; }
-    .modal-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-    .modal-icon.red { background: var(--red-light); color: var(--red); }
-    .modal-icon.orange { background: var(--orange-light); color: var(--orange); }
-    .modal h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; }
-    .modal p { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.5; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
-    .btn-modal-cancel { padding: 9px 18px; border-radius: 10px; border: 1.5px solid var(--gray-200); background: var(--gray-100); color: var(--gray-600); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .btn-modal-cancel:hover { background: var(--gray-200); }
-    .btn-modal-confirm-red { padding: 9px 18px; border-radius: 10px; border: none; background: var(--red); color: white; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
-    .btn-modal-confirm-red:hover { filter: brightness(1.1); }
-
-    /* Modal statut */
-    .status-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-    .status-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--gray-200); cursor: pointer; transition: all 0.2s; background: var(--white); width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--gray-700); }
-    .status-option:hover { border-color: var(--orange); background: var(--orange-light); }
-    .status-option.selected { border-color: var(--orange); background: var(--orange-light); color: var(--orange); font-weight: 700; }
-
-    /* Toast */
-    .toast { position: fixed; bottom: 80px; right: 20px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: toastIn 0.3s ease; z-index: 999; max-width: calc(100vw - 40px); }
-    .toast.success { background: var(--green); color: white; }
-    .toast.error   { background: var(--red);   color: white; }
-    @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Skeleton */
-    .skeleton { background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; display: inline-block; }
-    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── PDF mode styles ── */
-    .pdf-mode .doc-company-name   { color: #000000 !important; }
-    .pdf-mode .doc-company-info   { color: #000000 !important; }
-    .pdf-mode .doc-quote-label    { color: #000000 !important; }
-    .pdf-mode .doc-quote-number   { color: #EA6C0A !important; }
-    .pdf-mode .doc-quote-dates    { color: #000000 !important; }
-    .pdf-mode .doc-quote-dates strong { color: #000000 !important; }
-    .pdf-mode .doc-section-title  { color: #000000 !important; }
-    .pdf-mode .doc-client-box     { background: #DDDDDD !important; border-left-color: #EA6C0A !important; }
-    .pdf-mode .doc-client-name    { color: #000000 !important; }
-    .pdf-mode .doc-client-info    { color: #000000 !important; }
-    .pdf-mode .doc-table thead tr { background: #000000 !important; }
-    .pdf-mode .doc-table thead th { color: #FFFFFF !important; }
-    .pdf-mode .doc-table tbody td { color: #000000 !important; }
-    .pdf-mode .doc-table tbody td.desc  { color: #000000 !important; font-weight: 600 !important; }
-    .pdf-mode .doc-table tbody td.right { color: #000000 !important; }
-    .pdf-mode .doc-table tbody tr { border-bottom: 1px solid #000000 !important; }
-    .pdf-mode .doc-table tfoot .label { color: #000000 !important; }
-    .pdf-mode .doc-table tfoot .value { color: #000000 !important; }
-    .pdf-mode .doc-table tfoot .total-label { color: #000000 !important; }
-    .pdf-mode .doc-table tfoot .total-value { color: #EA6C0A !important; }
-    .pdf-mode .doc-notes   { background: #DDDDDD !important; }
-    .pdf-mode .doc-notes p { color: #000000 !important; }
-    .pdf-mode .doc-header  { background: #FFFFFF !important; border-bottom: 2px solid #000000 !important; }
-    .pdf-mode .doc-footer  { background: #DDDDDD !important; border-top: 2px solid #000000 !important; }
-    .pdf-mode .doc-footer-text  { color: #000000 !important; }
-    .pdf-mode .doc-footer-brand { color: #EA6C0A !important; }
+    /* ── Mobile FAB ── */
+    .fab{display:none;position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));right:20px;width:52px;height:52px;border-radius:50%;background:var(--orange);color:white;border:none;box-shadow:0 4px 20px rgba(249,115,22,.5);cursor:pointer;align-items:center;justify-content:center;z-index:55;transition:all .2s}
+    .fab:hover{background:var(--orange-dark);transform:scale(1.05)}
 
     /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .sidebar { display: none; }
-      .mobile-nav { display: block; }
-      .main { padding: 20px 0 90px; }
-      .main-inner { padding: 0 16px; }
-      .page-title { font-size: 22px; }
-      .page-header { flex-direction: column; align-items: flex-start; }
-      .btn-new { width: 100%; justify-content: center; }
-      .filters-bar { flex-direction: column; align-items: stretch; gap: 10px; }
-      .filters-chips { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
-      .filters-chips::-webkit-scrollbar { display: none; }
-      /* Hide desktop table, show cards */
-      .table-wrap { display: none; }
-      .quote-cards { display: flex; }
-      .toast { bottom: 90px; }
-      .back-link { display: inline-flex; margin-bottom: 8px; }
+    @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:900px){
+      .sidebar{display:none}
+      .mobile-nav{display:block}
+      .mobile-topbar{display:flex}
+      .main{padding:16px 12px 90px}
+      .page-title{display:none}          /* replaced by mobile-topbar-title */
+      .page-header .btn-new{display:none}
+      .fab{display:flex}
+      .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+      .kpi-card{padding:14px}
+      .kpi-value{font-size:20px}
+      .quotes-grid{grid-template-columns:1fr}
+      .toast{bottom:90px;right:12px}
     }
-    @media (min-width: 901px) {
-      .quote-cards { display: none !important; }
-      .main-inner { padding: 0; }
-      .toast { bottom: 28px; right: 28px; }
+    @media(min-width:901px){
+      .page-header{margin-bottom:28px}
     }
   </style>
 </head>
-
 <body>
 
-  <!-- Sidebar desktop -->
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      </div>
-      <span>Devis App</span>
+<!-- ══ Sidebar ══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
     </div>
-    <nav class="sidebar-nav">
-      <span class="nav-section-label">Menu</span>
-      <a href="dashboard.html" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
-      </a>
-      <a href="quotes.html" class="nav-link active">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-     Mes devis
-      </a>
-      <a href="liste-clients.html" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Clients
-      </a>
-      <span class="nav-section-label" style="margin-top:8px;">Compte</span>
-      <a href="settings.html" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        Paramètres
-      </a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="user-card">
-        <div class="user-avatar" id="userAvatar">?</div>
-        <div>
-          <div class="user-name" id="sidebarName">Chargement...</div>
-          <div class="user-role" id="sidebarCompany">—</div>
-        </div>
-      </div>
-      <button class="btn-logout" id="logoutBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Déconnexion
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main -->
-  <main class="main">
-    <div class="main-inner">
-
-      <!-- Retour dashboard -->
-      <a href="dashboard.html" class="back-link">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        Dashboard
-      </a>
-
-      <div class="page-header">
-        <div class="page-header-left">
-          <h1 class="page-title">Mes devis</h1>
-          <p class="page-subtitle" id="quotesSubtitle">Chargement...</p>
-        </div>
-        <a href="create-quote.html" class="btn-new">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Nouveau devis
-        </a>
-      </div>
-
-      <!-- Filtres -->
-      <div class="filters-bar">
-        <div class="search-wrap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par client ou numéro...">
-        </div>
-        <div class="filters-chips">
-          <button class="filter-btn active" data-filter="all">Tous</button>
-          <button class="filter-btn" data-filter="draft">Brouillon</button>
-          <button class="filter-btn" data-filter="sent">Envoyé</button>
-          <button class="filter-btn" data-filter="accepted">Accepté</button>
-          <button class="filter-btn" data-filter="rejected">Refusé</button>
-        </div>
-      </div>
-
-    </div><!-- /.main-inner -->
-
-    <!-- Desktop table card -->
-    <div class="main-inner">
-      <div class="card">
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>N° Devis</th>
-                <th>Client</th>
-                <th>Date</th>
-                <th>Statut</th>
-                <th>Total TTC</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="quotesTable">
-              <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
-              <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
-              <tr><td colspan="6"><div class="skeleton" style="height:44px;margin:8px 0;width:100%;"></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile cards -->
-    <div class="quote-cards" id="quoteCards">
-      <div class="skeleton" style="height:160px;border-radius:14px;"></div>
-      <div class="skeleton" style="height:160px;border-radius:14px;"></div>
-      <div class="skeleton" style="height:160px;border-radius:14px;"></div>
-    </div>
-
-  </main>
-
-  <!-- Mobile bottom nav -->
-  <nav class="mobile-nav">
-    <div class="mobile-nav-inner">
-      <a href="dashboard.html" class="mobile-nav-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
-      </a>
-      <a href="quotes.html" class="mobile-nav-link active">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Devis
-      </a>
-      <a href="liste-clients.html" class="mobile-nav-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Clients
-      </a>
-      <a href="settings.html" class="mobile-nav-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        Réglages
-      </a>
-    </div>
+    <span>Devis App</span>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Menu</span>
+    <a href="dashboard.html" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="quotes.html" class="nav-link active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Devis</a>
+    <a href="liste-clients.html" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
+    <span class="nav-section-label" style="margin-top:8px">Compte</span>
+    <a href="settings.html" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Paramètres</a>
   </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div><div class="user-name" id="sidebarName">Chargement...</div><div class="user-role" id="sidebarCompany">—</div></div>
+    </div>
+    <button class="btn-logout" id="logoutBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Déconnexion
+    </button>
+  </div>
+</aside>
 
-  <!-- Hidden doc for PDF generation -->
-  <div id="hiddenQuoteDoc" class="quote-doc" style="display:none; position:absolute; left:-9999px; width:800px;">
-    <div class="doc-header">
-      <div>
-        <div class="doc-company-name" id="docCompanyName">—</div>
-        <div class="doc-company-info" id="docCompanyInfo">—</div>
-      </div>
-      <div class="doc-quote-info">
-        <div class="doc-quote-label">Devis</div>
-        <div class="doc-quote-number" id="docQuoteNumber">—</div>
-        <div class="doc-quote-dates" id="docQuoteDates">—</div>
-      </div>
-    </div>
-    <div class="doc-body">
-      <div class="doc-section-title">Adressé à</div>
-      <div class="doc-client-box">
-        <div class="doc-client-name" id="docClientName">—</div>
-        <div class="doc-client-info" id="docClientInfo">—</div>
-      </div>
-      <table class="doc-table">
-        <thead><tr>
-          <th style="width:50%">Description</th>
-          <th class="right" style="width:14%">Quantité</th>
-          <th class="right" style="width:18%">Prix unitaire</th>
-          <th class="right" style="width:18%">Total HT</th>
-        </tr></thead>
-        <tbody id="docItems"></tbody>
-        <tfoot id="docTotals"></tfoot>
-      </table>
-      <div id="docNotesWrap" style="display:none;">
-        <div class="doc-section-title">Notes et conditions</div>
-        <div class="doc-notes"><p id="docNotes"></p></div>
-      </div>
-    </div>
-    <div class="doc-footer">
-      <div class="doc-footer-text">Merci de votre confiance.</div>
-      <div class="doc-footer-brand" id="docFooterBrand">Devis App</div>
-    </div>
+<!-- ══ Main ══ -->
+<main class="main">
+
+  <!-- ── Barre top mobile (bouton retour + titre) ── -->
+  <div class="mobile-topbar">
+    <a href="dashboard.html" class="mobile-back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour
+    </a>
+    <span class="mobile-topbar-title">Mes devis</span>
+    <div class="mobile-topbar-spacer"></div>
   </div>
 
-  <!-- Modal suppression -->
-  <div class="modal-overlay" id="deleteModal">
-    <div class="modal">
-      <div class="modal-icon red">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-      </div>
-      <h3>Supprimer ce devis ?</h3>
-      <p id="deleteModalText">Cette action est irréversible.</p>
-      <div class="modal-actions">
-        <button class="btn-modal-cancel" id="cancelDelete">Annuler</button>
-        <button class="btn-modal-confirm-red" id="confirmDelete">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-          Supprimer
-        </button>
-      </div>
-    </div>
+  <!-- ── En-tête desktop ── -->
+  <div class="page-header">
+    <h1 class="page-title">Mes devis</h1>
+    <a href="create-quote.html" class="btn-new">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nouveau devis
+    </a>
   </div>
 
-  <!-- Modal statut -->
-  <div class="modal-overlay" id="statusModal">
-    <div class="modal">
-      <div class="modal-icon orange">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </div>
-      <h3>Changer le statut</h3>
-      <p>Sélectionnez le nouveau statut pour ce devis.</p>
-      <div class="status-options">
-        <button class="status-option" data-status="draft">📝 Brouillon</button>
-        <button class="status-option" data-status="sent">📤 Envoyé</button>
-        <button class="status-option" data-status="accepted">✅ Accepté</button>
-        <button class="status-option" data-status="rejected">❌ Refusé</button>
-        <button class="status-option" data-status="expired">⏰ Expiré</button>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-modal-cancel" id="cancelStatus">Annuler</button>
-      </div>
+  <!-- KPIs -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card"><div class="kpi-label">Total devis</div><div class="kpi-value skeleton" style="width:60px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
+    <div class="kpi-card"><div class="kpi-label">Acceptés</div><div class="kpi-value skeleton" style="width:60px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
+    <div class="kpi-card"><div class="kpi-label">En attente</div><div class="kpi-value skeleton" style="width:60px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
+    <div class="kpi-card"><div class="kpi-label">CA accepté</div><div class="kpi-value skeleton" style="width:80px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un devis, un client...">
+    </div>
+    <select class="filter-select" id="sortSelect">
+      <option value="date_desc">Plus récents</option>
+      <option value="date_asc">Plus anciens</option>
+      <option value="amount_desc">Montant ↓</option>
+      <option value="amount_asc">Montant ↑</option>
+    </select>
+  </div>
+
+  <!-- Filter pills -->
+  <div class="filter-pills">
+    <div class="pill active" data-status="all">Tous</div>
+    <div class="pill" data-status="draft"><span class="dot" style="background:var(--gray-400)"></span>Brouillons</div>
+    <div class="pill" data-status="sent"><span class="dot" style="background:var(--blue)"></span>Envoyés</div>
+    <div class="pill" data-status="accepted"><span class="dot" style="background:var(--green)"></span>Acceptés</div>
+    <div class="pill" data-status="refused"><span class="dot" style="background:var(--red)"></span>Refusés</div>
+    <div class="pill" data-status="expired"><span class="dot" style="background:var(--yellow)"></span>Expirés</div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="quotes-grid" id="quotesGrid">
+    <div class="quote-card" style="height:200px"><div class="skeleton" style="height:100%"></div></div>
+    <div class="quote-card" style="height:200px"><div class="skeleton" style="height:100%"></div></div>
+    <div class="quote-card" style="height:200px"><div class="skeleton" style="height:100%"></div></div>
+  </div>
+
+</main>
+
+<!-- ══ FAB mobile ══ -->
+<a href="create-quote.html" class="fab" title="Nouveau devis">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</a>
+
+<!-- ══ Mobile nav ══ -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <a href="dashboard.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="quotes.html" class="mobile-nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Devis</a>
+    <a href="liste-clients.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
+    <a href="settings.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Réglages</a>
+  </div>
+</nav>
+
+<!-- ══ Delete modal ══ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <div class="modal-title">Supprimer ce devis ?</div>
+    <div class="modal-body">Cette action est irréversible. Le devis et toutes ses lignes seront définitivement supprimés.</div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="document.getElementById('deleteModal').classList.remove('open')">Annuler</button>
+      <button class="modal-btn danger" id="confirmDeleteBtn">Supprimer</button>
     </div>
   </div>
+</div>
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
 const supabase = createClient(
   'https://xeezdzbotsblzclnmnxg.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
 )
 
-const fmt = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF' }).format(n || 0)
-const fmtDate = (d) => d ? new Date(d).toLocaleDateString('fr-FR') : '—'
+let currentUserId=null, allQuotes=[], filtered=[], deleteTargetId=null
+let searchVal='', statusFilter='all', sortVal='date_desc'
 
-let currentUserId = null
-let allQuotes     = []
-let currentFilter = 'all'
-let quoteToDelete = null
-let quoteToStatus = null
-
-// ── Toast ─────────────────────────────────────────────────────────────────────
-function showToast(msg, type = 'success') {
-  document.querySelector('.toast')?.remove()
-  const t = document.createElement('div')
-  t.className = `toast ${type}`
-  t.innerHTML = type === 'success'
-    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${msg}`
-    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${msg}`
-  document.body.appendChild(t)
-  setTimeout(() => t.remove(), 3500)
+const fmt=(n,cur)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:cur||'XAF'}).format(n||0)
+const fmtDate=d=>d?new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}):'—'
+const STATUS={
+  draft:{label:'Brouillon',cls:'b-draft'},sent:{label:'Envoyé',cls:'b-sent'},
+  accepted:{label:'Accepté',cls:'b-accepted'},refused:{label:'Refusé',cls:'b-refused'},expired:{label:'Expiré',cls:'b-expired'}
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) { window.location.href = 'login.html'; return }
-  currentUserId = session.user.id
-  await loadUserProfile(session.user.id)
+function showToast(msg,type='success'){
+  document.querySelector('.toast')?.remove()
+  const t=document.createElement('div');t.className=`toast ${type}`
+  t.innerHTML=(type==='success'
+    ?`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+    :`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+  )+' '+msg
+  document.body.appendChild(t);setTimeout(()=>t.remove(),3500)
+}
+
+async function init(){
+  const {data:{session}}=await supabase.auth.getSession()
+  if(!session){location.href='login.html';return}
+  currentUserId=session.user.id
+  const {data:p}=await supabase.from('profiles').select('first_name,last_name,company').eq('id',currentUserId).single()
+  if(p){
+    const ini=[p.first_name?.[0],p.last_name?.[0]].filter(Boolean).join('').toUpperCase()||'U'
+    document.getElementById('userAvatar').textContent=ini
+    document.getElementById('sidebarName').textContent=[p.first_name,p.last_name].filter(Boolean).join(' ')||'Utilisateur'
+    document.getElementById('sidebarCompany').textContent=p.company||'Mon entreprise'
+  }
   await loadQuotes()
 }
 
-async function loadUserProfile(userId) {
-  const { data } = await supabase.from('profiles').select('first_name, last_name, company').eq('id', userId).single()
-  if (data) {
-    const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'U'
-    document.getElementById('userAvatar').textContent = initials
-    document.getElementById('sidebarName').textContent = [data.first_name, data.last_name].filter(Boolean).join(' ') || 'Utilisateur'
-    document.getElementById('sidebarCompany').textContent = data.company || 'Mon entreprise'
-  }
-}
-
-async function loadQuotes() {
-  const { data, error } = await supabase
-    .from('quotes')
-    .select(`id, quote_number, created_at, status, total_amount, clients(id, full_name, email, phone)`)
-    .eq('user_id', currentUserId)
-    .order('created_at', { ascending: false })
-  if (error) { showToast('Erreur chargement devis', 'error'); return }
-  allQuotes = data || []
+async function loadQuotes(){
+  const {data,error}=await supabase.from('quotes')
+    .select('id,quote_number,quote_date,expiry_date,total_amount,currency,status,clients(full_name)')
+    .eq('user_id',currentUserId)
+    .order('created_at',{ascending:false})
+  if(error){showToast('Erreur de chargement.','error');return}
+  const today=new Date().toISOString().split('T')[0]
+  allQuotes=(data||[]).map(q=>{
+    if(q.status==='sent'&&q.expiry_date&&q.expiry_date<today) return{...q,status:'expired'}
+    return q
+  })
+  renderKPIs(allQuotes)
   applyFilters()
 }
 
-function applyFilters() {
-  const q = document.getElementById('searchInput').value.toLowerCase()
-  let filtered = allQuotes
-  if (currentFilter !== 'all') filtered = filtered.filter(d => d.status === currentFilter)
-  if (q) filtered = filtered.filter(d =>
-    d.clients?.full_name?.toLowerCase().includes(q) ||
-    d.quote_number?.toLowerCase().includes(q)
-  )
-  renderQuotes(filtered)
+function renderKPIs(list){
+  const total=list.length
+  const accepted=list.filter(q=>q.status==='accepted')
+  const pending=list.filter(q=>['draft','sent'].includes(q.status))
+  const ca=accepted.reduce((s,q)=>s+(+q.total_amount),0)
+  const firstCur=accepted[0]?.currency||list[0]?.currency||'XAF'
+  document.getElementById('kpiGrid').innerHTML=`
+    <div class="kpi-card" style="animation-delay:0s">
+      <div class="kpi-icon" style="background:var(--orange-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="kpi-label">Total devis</div>
+      <div class="kpi-value">${total}</div>
+      <div class="kpi-sub">cette année</div>
+    </div>
+    <div class="kpi-card" style="animation-delay:.05s">
+      <div class="kpi-icon" style="background:var(--green-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="kpi-label">Acceptés</div>
+      <div class="kpi-value">${accepted.length}</div>
+      <div class="kpi-sub">${total?Math.round(accepted.length/total*100):0}% du total</div>
+    </div>
+    <div class="kpi-card" style="animation-delay:.1s">
+      <div class="kpi-icon" style="background:var(--blue-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="kpi-label">En attente</div>
+      <div class="kpi-value">${pending.length}</div>
+      <div class="kpi-sub">brouillons + envoyés</div>
+    </div>
+    <div class="kpi-card" style="animation-delay:.15s">
+      <div class="kpi-icon" style="background:var(--orange-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="kpi-label">CA accepté</div>
+      <div class="kpi-value" style="font-size:18px">${fmt(ca,firstCur)}</div>
+      <div class="kpi-sub">${accepted.length} devis confirmés</div>
+    </div>`
 }
 
-function statusBadge(status) {
-  const map = {
-    draft:    ['badge-draft',    'Brouillon'],
-    sent:     ['badge-sent',     'Envoyé'],
-    accepted: ['badge-accepted', 'Accepté'],
-    rejected: ['badge-rejected', 'Refusé'],
-    expired:  ['badge-expired',  'Expiré'],
+function applyFilters(){
+  let list=[...allQuotes]
+  if(statusFilter!=='all') list=list.filter(q=>q.status===statusFilter)
+  if(searchVal.trim()){
+    const s=searchVal.toLowerCase()
+    list=list.filter(q=>
+      (q.quote_number||'').toLowerCase().includes(s)||
+      (q.clients?.full_name||'').toLowerCase().includes(s)
+    )
   }
-  const [cls, label] = map[status] || map.draft
-  return `<span class="badge ${cls}">${label}</span>`
+  list.sort((a,b)=>{
+    if(sortVal==='date_desc') return new Date(b.quote_date||0)-new Date(a.quote_date||0)
+    if(sortVal==='date_asc')  return new Date(a.quote_date||0)-new Date(b.quote_date||0)
+    if(sortVal==='amount_desc') return (b.total_amount||0)-(a.total_amount||0)
+    if(sortVal==='amount_asc')  return (a.total_amount||0)-(b.total_amount||0)
+    return 0
+  })
+  filtered=list
+  renderCards(list)
 }
 
-function renderQuotes(quotes) {
-  const tbody = document.getElementById('quotesTable')
-  const cardsEl = document.getElementById('quoteCards')
-  const count = allQuotes.length
-  document.getElementById('quotesSubtitle').textContent =
-    `${count} devis au total — ${allQuotes.filter(d => d.status === 'accepted').length} acceptés`
-
-  if (!quotes.length) {
-    const empty = `
-      <div class="empty-state">
-        <div class="empty-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        </div>
-        <h3>Aucun devis trouvé</h3>
-        <p>${currentFilter === 'all' ? 'Créez votre premier devis.' : 'Aucun devis avec ce statut.'}</p>
-        ${currentFilter === 'all' ? `<a href="create-quote.html" class="btn-new" style="margin-top:16px;display:inline-flex;">+ Nouveau devis</a>` : ''}
-      </div>`
-    tbody.innerHTML = `<tr><td colspan="6">${empty}</td></tr>`
-    cardsEl.innerHTML = empty
+function renderCards(list){
+  const grid=document.getElementById('quotesGrid')
+  if(!list.length){
+    grid.innerHTML=`<div class="empty-state">
+      <div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="empty-title">${statusFilter==='all'&&!searchVal?'Aucun devis créé':'Aucun résultat'}</div>
+      <div class="empty-sub">${statusFilter==='all'&&!searchVal?'Commencez par créer votre premier devis.':'Modifiez vos filtres ou votre recherche.'}</div>
+      ${statusFilter==='all'&&!searchVal?`<a href="create-quote.html" class="btn-new" style="display:inline-flex;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Créer un devis</a>`:''}
+    </div>`
     return
   }
-
-  // ── Desktop table
-  tbody.innerHTML = quotes.map(q => `
-    <tr data-id="${q.id}">
-      <td><span class="quote-number">${q.quote_number || '—'}</span></td>
-      <td>${q.clients?.full_name || '<span style="color:var(--gray-400)">—</span>'}</td>
-      <td style="color:var(--gray-500);font-size:13px;">${fmtDate(q.created_at)}</td>
-      <td>${statusBadge(q.status)}</td>
-      <td><span class="total-amount">${fmt(q.total_amount)}</span></td>
-      <td>
-        <div class="actions-cell">
-          <a href="view-quote.html?id=${q.id}" class="btn-action btn-view" title="Voir le devis">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Voir
-          </a>
-          <button class="btn-action btn-email" data-id="${q.id}" title="Envoyer par email">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Email
-          </button>
-          <button class="btn-action btn-whatsapp" data-id="${q.id}" title="Envoyer par WhatsApp">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-            WhatsApp
-          </button>
-          <button class="btn-action btn-status" data-id="${q.id}" data-status="${q.status}" title="Changer le statut">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </button>
-          <button class="btn-action btn-delete-sm" data-id="${q.id}" data-number="${q.quote_number || 'ce devis'}" title="Supprimer">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-          </button>
+  grid.innerHTML=list.map(q=>{
+    const st=STATUS[q.status]||STATUS.draft
+    const isExpired=q.status==='expired'
+    return `
+    <div class="quote-card" onclick="location.href='view-quote.html?id=${q.id}'" style="cursor:pointer">
+      <div class="card-header">
+        <div>
+          <span class="card-number">${q.quote_number||'—'}</span>
+          <span class="card-client">${q.clients?.full_name||'Client inconnu'}</span>
         </div>
-      </td>
-    </tr>
-  `).join('')
-
-  // ── Mobile cards
-  cardsEl.innerHTML = quotes.map(q => `
-    <div class="quote-card">
-      <div class="quote-card-header">
-        <div class="quote-card-left">
-          <div class="quote-card-number">${q.quote_number || '—'}</div>
-          <div class="quote-card-client">${q.clients?.full_name || '—'}</div>
-          <div class="quote-card-date">${fmtDate(q.created_at)}</div>
-        </div>
-        <div class="quote-card-right">
-          <div class="quote-card-amount">${fmt(q.total_amount)}</div>
-          ${statusBadge(q.status)}
-        </div>
+        <span class="badge ${st.cls}">${st.label}</span>
       </div>
-      <div class="quote-card-actions">
-        <a href="view-quote.html?id=${q.id}" class="btn-action-mobile btn-view-m">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Voir
-        </a>
-        <button class="btn-action-mobile btn-status-m" data-id="${q.id}" data-status="${q.status}">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Statut
+      <div class="card-body">
+        <div class="card-row">
+          <span class="card-label">Date</span>
+          <span class="card-value">${fmtDate(q.quote_date)}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Expiration</span>
+          <span class="card-value" style="color:${isExpired?'var(--red)':'inherit'}">${fmtDate(q.expiry_date)}</span>
+        </div>
+        <span class="card-amount">${fmt(q.total_amount,q.currency)}</span>
+      </div>
+      <div class="card-footer" onclick="event.stopPropagation()">
+        <button class="card-btn view" onclick="location.href='view-quote.html?id=${q.id}'" title="Voir">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
-        <button class="btn-action-mobile btn-email-m" data-id="${q.id}">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Email
-        </button>
-        <button class="btn-action-mobile btn-wa-m" data-id="${q.id}">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-          WhatsApp
-        </button>
-        <button class="btn-action-mobile btn-delete-m full" data-id="${q.id}" data-number="${q.quote_number || 'ce devis'}">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-          Supprimer
+        <button class="card-btn del" onclick="openDelete('${q.id}')" title="Supprimer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
         </button>
       </div>
-    </div>
-  `).join('')
-
-  attachRowEvents()
+    </div>`
+  }).join('')
 }
 
-function attachRowEvents() {
-  // Email (desktop + mobile)
-  document.querySelectorAll('.btn-email, .btn-email-m').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      await sharePdfWithMessage(btn, true, btn.dataset.id || btn.closest('tr')?.dataset.id)
-    })
-  })
-  // WhatsApp
-  document.querySelectorAll('.btn-whatsapp, .btn-wa-m').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      await sharePdfWithMessage(btn, false, btn.dataset.id || btn.closest('tr')?.dataset.id)
-    })
-  })
-  // Statut
-  document.querySelectorAll('.btn-status, .btn-status-m').forEach(btn => {
-    btn.addEventListener('click', () => {
-      quoteToStatus = btn.dataset.id
-      document.querySelectorAll('.status-option').forEach(opt => {
-        opt.classList.toggle('selected', opt.dataset.status === btn.dataset.status)
-      })
-      document.getElementById('statusModal').classList.add('show')
-    })
-  })
-  // Supprimer
-  document.querySelectorAll('.btn-delete-sm, .btn-delete-m').forEach(btn => {
-    btn.addEventListener('click', () => {
-      quoteToDelete = btn.dataset.id
-      document.getElementById('deleteModalText').textContent =
-        `Voulez-vous vraiment supprimer le devis N°${btn.dataset.number} ? Cette action est irréversible.`
-      document.getElementById('deleteModal').classList.add('show')
-    })
-  })
-}
+function openDelete(id){deleteTargetId=id;document.getElementById('deleteModal').classList.add('open')}
+window.openDelete=openDelete
 
-async function updateStatus(id, status, showFeedback = true) {
-  const { error } = await supabase.from('quotes').update({ status }).eq('id', id)
-  if (error) { showToast('Erreur mise à jour statut', 'error'); return }
-  if (showFeedback) showToast('Statut mis à jour !')
-  await loadQuotes()
-}
-
-// ── Modal events ──────────────────────────────────────────────────────────────
-document.getElementById('confirmDelete').addEventListener('click', async () => {
-  if (!quoteToDelete) return
-  document.getElementById('deleteModal').classList.remove('show')
-  const { error } = await supabase.from('quotes').delete().eq('id', quoteToDelete)
-  if (error) { showToast('Erreur suppression', 'error'); return }
-  showToast('Devis supprimé.')
-  quoteToDelete = null
-  await loadQuotes()
-})
-document.getElementById('cancelDelete').addEventListener('click', () => {
-  document.getElementById('deleteModal').classList.remove('show')
-  quoteToDelete = null
-})
-document.getElementById('cancelStatus').addEventListener('click', () => {
-  document.getElementById('statusModal').classList.remove('show')
-  quoteToStatus = null
-})
-document.querySelectorAll('.status-option').forEach(opt => {
-  opt.addEventListener('click', () => {
-    document.getElementById('statusModal').classList.remove('show')
-    if (quoteToStatus) updateStatus(quoteToStatus, opt.dataset.status)
-    quoteToStatus = null
-  })
-})
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
-      e.currentTarget.classList.remove('show')
-      quoteToDelete = null; quoteToStatus = null
-    }
-  })
+document.getElementById('confirmDeleteBtn').addEventListener('click',async()=>{
+  if(!deleteTargetId)return
+  const {error}=await supabase.from('quotes').delete().eq('id',deleteTargetId)
+  document.getElementById('deleteModal').classList.remove('open')
+  if(error){showToast('Erreur suppression.','error');return}
+  showToast('Devis supprimé')
+  allQuotes=allQuotes.filter(q=>q.id!==deleteTargetId)
+  deleteTargetId=null
+  renderKPIs(allQuotes)
+  applyFilters()
 })
 
-// ── Filtres ───────────────────────────────────────────────────────────────────
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
-    btn.classList.add('active')
-    currentFilter = btn.dataset.filter
+document.getElementById('searchInput').addEventListener('input',e=>{searchVal=e.target.value;applyFilters()})
+document.getElementById('sortSelect').addEventListener('change',e=>{sortVal=e.target.value;applyFilters()})
+document.querySelectorAll('.pill').forEach(p=>{
+  p.addEventListener('click',()=>{
+    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'))
+    p.classList.add('active')
+    statusFilter=p.dataset.status
     applyFilters()
   })
 })
-document.getElementById('searchInput').addEventListener('input', applyFilters)
-
-// ── PDF generation ────────────────────────────────────────────────────────────
-async function generatePdf(returnBlob, elemId = 'hiddenQuoteDoc') {
-  const { jsPDF } = window.jspdf
-  const elem = document.getElementById(elemId)
-  elem.classList.add('pdf-mode')
-  try {
-    await document.fonts.ready
-    await new Promise(r => setTimeout(r, 300))
-    const canvas = await html2canvas(elem, {
-      scale: 2, useCORS: true, allowTaint: false,
-      backgroundColor: '#ffffff', logging: false,
-      imageTimeout: 0, removeContainer: true,
-      letterRendering: true,
-      windowWidth: elem.scrollWidth, windowHeight: elem.scrollHeight
-    })
-    const imgData = canvas.toDataURL('image/jpeg', 0.7)
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
-    const pageW = pdf.internal.pageSize.getWidth()
-    const pageH = pdf.internal.pageSize.getHeight()
-    const imgH = (canvas.height / canvas.width) * pageW
-    let yOff = 0, leftH = imgH
-    while (leftH > 0) {
-      pdf.addImage(imgData, 'JPEG', 0, yOff, pageW, imgH, '', 'FAST')
-      leftH -= pageH; yOff -= pageH
-      if (leftH > 0) pdf.addPage()
-    }
-    if (returnBlob) return pdf.output('blob')
-    pdf.save('Devis.pdf')
-  } finally {
-    elem.classList.remove('pdf-mode')
-  }
-}
-
-async function renderQuoteForPdf(id) {
-  const { data: fullQuote, error } = await supabase
-    .from('quotes').select(`*, clients(*), quote_items(*)`).eq('id', id).single()
-  if (error || !fullQuote) { showToast('Erreur chargement devis', 'error'); return null }
-  const client = fullQuote.clients || {}
-  const items  = fullQuote.quote_items || []
-  const { data: profile } = await supabase.from('profiles').select('company, address, city, country, phone').eq('id', currentUserId).single()
-  document.getElementById('docCompanyName').textContent = profile?.company || 'Mon entreprise'
-  const companyInfo = [profile?.address, profile?.city, profile?.country, profile?.phone].filter(Boolean).join('\n')
-  document.getElementById('docCompanyInfo').innerHTML = companyInfo.replace(/\n/g, '<br>') || '—'
-  document.getElementById('docQuoteNumber').textContent = fullQuote.quote_number || '—'
-  document.getElementById('docQuoteDates').innerHTML = `<strong>Date :</strong> ${fmtDate(fullQuote.created_at)}`
-  document.getElementById('docClientName').textContent = client.full_name || '—'
-  const clientInfo = [client.company_name, client.address, [client.postal_code, client.city].filter(Boolean).join(' '), client.country, client.email, client.phone].filter(Boolean).join('\n')
-  document.getElementById('docClientInfo').innerHTML = clientInfo.replace(/\n/g, '<br>') || '—'
-  document.getElementById('docItems').innerHTML = items.length
-    ? items.map(item => `<tr><td class="desc">${item.description || '—'}</td><td class="right">${item.quantity}</td><td class="right">${fmt(item.unit_price)}</td><td class="right">${fmt(item.total)}</td></tr>`).join('')
-    : `<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:20px;">Aucune ligne</td></tr>`
-  document.getElementById('docTotals').innerHTML = `
-    <tr><td colspan="2"></td><td class="label">Sous-total HT</td><td class="value">${fmt(fullQuote.subtotal)}</td></tr>
-    <tr><td colspan="2"></td><td class="label">TVA (${fullQuote.tax_rate || 0}%)</td><td class="value">${fmt(fullQuote.tax_amount)}</td></tr>
-    <tr class="total-row"><td colspan="2"></td><td class="total-label">Total TTC</td><td class="total-value">${fmt(fullQuote.total_amount)}</td></tr>`
-  if (fullQuote.notes) {
-    document.getElementById('docNotesWrap').style.display = 'block'
-    document.getElementById('docNotes').textContent = fullQuote.notes
-  } else {
-    document.getElementById('docNotesWrap').style.display = 'none'
-  }
-  return {
-    clientName: client.full_name || '',
-    clientEmail: client.email || '',
-    clientPhone: client.phone || '',
-    number: fullQuote.quote_number || '',
-    amount: fmt(fullQuote.total_amount),
-  }
-}
-
-async function sharePdfWithMessage(button, isEmail, quoteId) {
-  button.disabled = true
-  const origHtml = button.innerHTML
-  button.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.7s linear infinite;display:inline-block"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>'
-  const quoteInfo = await renderQuoteForPdf(quoteId)
-  if (!quoteInfo) { button.disabled = false; button.innerHTML = origHtml; return }
-  let pdfBlob = null
-  try { pdfBlob = await generatePdf(true) }
-  catch(e) { showToast('Erreur génération PDF.', 'error'); button.disabled = false; button.innerHTML = origHtml; return }
-  const filename = 'Devis-' + quoteInfo.number + '.pdf'
-  const messageText = `Bonjour ${quoteInfo.clientName} 👋,\n\nVeuillez trouver ci-joint votre devis N°${quoteInfo.number} d'un montant de ${quoteInfo.amount} TTC 📄.\n\nN'hésitez pas à me contacter pour toute question 😊.\n\nCordialement`
-  const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' })
-  if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-    try {
-      await navigator.share({ title: `Devis N°${quoteInfo.number}`, text: messageText, files: [pdfFile] })
-      updateStatus(quoteId, 'sent', false)
-      showToast('Devis partagé avec succès !')
-    } catch(err) { if (err.name !== 'AbortError') showToast('Partage annulé.', 'error') }
-  } else {
-    const url = URL.createObjectURL(pdfBlob)
-    const a = document.createElement('a'); a.href = url; a.download = filename; a.click()
-    setTimeout(() => URL.revokeObjectURL(url), 1000)
-    if (isEmail) {
-      if (quoteInfo.clientEmail) {
-        window.open(`mailto:${quoteInfo.clientEmail}?subject=${encodeURIComponent(`Devis N°${quoteInfo.number}`)}&body=${encodeURIComponent(messageText)}`)
-        showToast('📄 PDF téléchargé — joignez-le dans l\'email.')
-      } else { showToast('Aucun email enregistré pour ce client.', 'error') }
-    } else {
-      const cleanPhone = quoteInfo.clientPhone.replace(/[\s\-\(\)]/g, '').replace(/^\+/, '')
-      if (cleanPhone) {
-        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`)
-        showToast('📄 PDF téléchargé — joignez-le dans WhatsApp.')
-      } else { showToast('Aucun numéro WhatsApp enregistré pour ce client.', 'error') }
-    }
-    updateStatus(quoteId, 'sent', false)
-  }
-  button.disabled = false; button.innerHTML = origHtml
-}
-
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await supabase.auth.signOut(); window.location.href = 'login.html'
+document.getElementById('logoutBtn').addEventListener('click',async()=>{
+  await supabase.auth.signOut();location.href='login.html'
 })
 
 init()
 </script>
-
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        try {
-          const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
-          reg.addEventListener('updatefound', () => {
-            const nw = reg.installing
-            nw.addEventListener('statechange', () => {
-              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-                showPWAUpdate()
-              }
-            })
-          })
-        } catch(e) { console.warn('[SW]', e) }
-      })
-    }
-    function showPWAUpdate() {
-      const b = document.createElement('div')
-      b.id = 'pwa-banner'
-      b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1F2937;color:white;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.08);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        Mise à jour disponible
-        <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#F97316;color:white;border:none;border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
-        <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;">×</button>
-      </div>`
-      document.body.appendChild(b)
-    }
-    let _deferredPrompt = null
-    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e })
-    window.installPWA = async () => {
-      if (!_deferredPrompt) return
-      _deferredPrompt.prompt()
-      await _deferredPrompt.userChoice
-      _deferredPrompt = null
-    }
-  </script>
 </body>
 </html>
