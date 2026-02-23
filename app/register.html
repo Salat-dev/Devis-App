@@ -325,7 +325,8 @@
   input[type="text"],
   input[type="email"],
   input[type="tel"],
-  input[type="password"] {
+  input[type="password"],
+  select {
     width: 100%;
     border: 1.5px solid var(--gray-200);
     border-radius: 10px;
@@ -337,6 +338,14 @@
     outline: none;
     appearance: none;
     -webkit-appearance: none;
+  }
+  select:focus {
+    border-color: var(--orange); background: var(--white);
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+  }
+  select.error-f {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.09);
   }
   input::placeholder { color: var(--gray-300); }
   input:focus {
@@ -554,8 +563,8 @@
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       Gratuit pour commencer
     </div>
-    <h2 class="panel-headline">Votre compte<br>en <em>3 étapes</em><br>simples.</h2>
-    <p class="panel-desc">Configurez votre profil et commencez à créer des devis professionnels en moins de 5 minutes.</p>
+    <h2 class="panel-headline">Votre compte<br>en <em>4 étapes</em><br>simples.</h2>
+    <p class="panel-desc">Configurez votre profil professionnel complet et commencez à créer des devis en moins de 5 minutes.</p>
 
     <div class="steps-preview">
       <div class="step-preview-item">
@@ -569,11 +578,18 @@
         <div class="step-preview-num">2</div>
         <div class="step-preview-info">
           <div class="step-preview-title">Votre entreprise</div>
-          <div class="step-preview-desc">Nom, activité et adresse</div>
+          <div class="step-preview-desc">Raison sociale, activité, adresse</div>
         </div>
       </div>
       <div class="step-preview-item">
         <div class="step-preview-num">3</div>
+        <div class="step-preview-info">
+          <div class="step-preview-title">Informations légales</div>
+          <div class="step-preview-desc">Forme juridique, RCCM, NIU</div>
+        </div>
+      </div>
+      <div class="step-preview-item">
+        <div class="step-preview-num">4</div>
         <div class="step-preview-info">
           <div class="step-preview-title">Sécurité</div>
           <div class="step-preview-desc">Choisissez un mot de passe fort</div>
@@ -632,6 +648,10 @@
       </div>
       <div class="step-item" data-step="2">
         <div class="step-dot">3</div>
+        <span class="step-label">Légal</span>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="step-dot">4</div>
         <span class="step-label">Sécurité</span>
       </div>
     </div>
@@ -687,12 +707,12 @@
         <p class="step-section-title">Informations entreprise</p>
         <div class="grid-2">
           <div class="field-group col-2">
-            <label>Nom de l'entreprise <span class="req">*</span></label>
+            <label>Raison sociale / Nom de l'entreprise <span class="req">*</span></label>
             <div class="input-wrap">
               <span class="input-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
               </span>
-              <input id="company" type="text" placeholder="Dupont & Associés" required autocomplete="organization">
+              <input id="company" type="text" placeholder="Kamga BTP SARL" required autocomplete="organization">
             </div>
           </div>
           <div class="field-group col-2">
@@ -701,41 +721,87 @@
               <span class="input-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               </span>
-              <input id="activite" type="text" placeholder="ex: Électricien, Designer, BTP..." required>
+              <input id="activite" type="text" placeholder="ex : Électricien, BTP, Designer..." required>
             </div>
           </div>
           <div class="field-group col-2">
-            <label>Adresse <span class="opt">(optionnel)</span></label>
+            <label>Adresse complète <span class="req">*</span></label>
             <div class="input-wrap">
               <span class="input-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               </span>
-              <input id="address" type="text" placeholder="12 rue de la Paix" autocomplete="street-address">
+              <input id="address" type="text" placeholder="Rue 1.234, Quartier Bastos" autocomplete="street-address" required>
             </div>
           </div>
           <div class="field-group">
-            <label>Ville <span class="opt">(optionnel)</span></label>
+            <label>Ville <span class="req">*</span></label>
             <div class="input-wrap">
               <span class="input-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               </span>
-              <input id="city" type="text" placeholder="Paris" autocomplete="address-level2">
+              <input id="city" type="text" placeholder="Yaoundé" autocomplete="address-level2" required>
             </div>
           </div>
           <div class="field-group">
-            <label>Pays <span class="opt">(optionnel)</span></label>
+            <label>Pays <span class="req">*</span></label>
             <div class="input-wrap">
               <span class="input-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
               </span>
-              <input id="country" type="text" placeholder="France" autocomplete="country-name">
+              <input id="country" type="text" placeholder="Cameroun" autocomplete="country-name" required>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- STEP 3 : Sécurité -->
+      <!-- STEP 3 : Légal / Registre -->
       <div class="step" data-index="2">
+        <p class="step-section-title">Informations légales &amp; registre</p>
+        <p class="field-hint" style="margin-bottom:16px;">Ces informations apparaîtront automatiquement sur vos devis. Vous pourrez les modifier à tout moment dans vos paramètres.</p>
+        <div class="grid-2">
+          <div class="field-group col-2">
+            <label>Forme juridique <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              </span>
+              <select id="legal_form" required style="padding-left:39px;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%239CA3AF\' stroke-width=\'2\'%3E%3Cpolyline points=\'6 9 12 15 18 9\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 12px center;">
+                <option value="">Sélectionner...</option>
+                <option value="Entreprise Individuelle (EI)">Entreprise Individuelle (EI)</option>
+                <option value="SARL">SARL</option>
+                <option value="SA">SA</option>
+                <option value="SAS">SAS</option>
+                <option value="SNC">SNC</option>
+                <option value="GIE">GIE</option>
+                <option value="Auto-entrepreneur">Auto-entrepreneur</option>
+                <option value="Coopérative">Coopérative</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group col-2">
+            <label>N° RCCM / Registre du commerce <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+              </span>
+              <input id="rccm" type="text" placeholder="Ex : RC/YAO/2021/B/1234" required>
+            </div>
+          </div>
+          <div class="field-group col-2">
+            <label>N° Contribuable / NIU <span class="opt">(optionnel)</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </span>
+              <input id="niu" type="text" placeholder="Ex : M012300765432N">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 : Sécurité -->
+      <div class="step" data-index="3">
         <p class="step-section-title">Sécurité du compte</p>
         <div style="display:flex;flex-direction:column;gap:16px;">
           <div class="field-group">
@@ -903,7 +969,7 @@ function showStep(n) {
 
 /* ─── Validation ─── */
 function validateStep() {
-  const required = steps[currentStep].querySelectorAll('input[required]')
+  const required = steps[currentStep].querySelectorAll('input[required], select[required]')
   let valid = true
   required.forEach(f => {
     f.classList.remove('error-f')
@@ -977,14 +1043,23 @@ form.addEventListener('submit', async (e) => {
   setLoading(true)
 
   const profileData = {
-    first_name: document.getElementById('first_name').value.trim(),
-    last_name:  document.getElementById('last_name').value.trim(),
-    phone:      document.getElementById('phone').value.trim(),
-    company:    document.getElementById('company').value.trim(),
-    activite:   document.getElementById('activite').value.trim(),
-    address:    document.getElementById('address').value.trim(),
-    city:       document.getElementById('city').value.trim(),
-    country:    document.getElementById('country').value.trim(),
+    first_name:  document.getElementById('first_name').value.trim(),
+    last_name:   document.getElementById('last_name').value.trim(),
+    phone:       document.getElementById('phone').value.trim(),
+    company:     document.getElementById('company').value.trim(),
+    activite:    document.getElementById('activite').value.trim(),
+    // Adresse complète concaténée = ce que create-quote attend dans profiles.address
+    address:     [
+      document.getElementById('address').value.trim(),
+      document.getElementById('city').value.trim(),
+      document.getElementById('country').value.trim()
+    ].filter(Boolean).join(', '),
+    city:        document.getElementById('city').value.trim(),
+    country:     document.getElementById('country').value.trim(),
+    // Champs légaux — utilisés dans create-quote pour pré-remplir les snapshots pro_*
+    legal_form:  document.getElementById('legal_form').value,
+    rccm:        document.getElementById('rccm').value.trim(),
+    niu:         document.getElementById('niu').value.trim() || null,
   }
 
   const { data, error: authError } = await supabase.auth.signUp({
