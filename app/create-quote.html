@@ -12,6 +12,11 @@
 <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
 <title>Nouveau Devis - Devis App</title>
+<!-- Vercel Web Analytics -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -751,7 +756,7 @@ document.body.appendChild(toast)
 setTimeout(() => toast.remove(), 3500)
 }
 
-/* ── Init dates ────────────────────────────────────────────── */
+/* ── Init dates ────────────────────────────────────��───────── */
 function initDates() {
 const today = new Date().toISOString().split('T')[0]
 document.getElementById('quoteDate').value = today
@@ -852,7 +857,7 @@ document.getElementById('btnRemoveLogo').style.display = 'inline-flex'
 }
 }
 
-/* ── Clients ───────────────────────────────────────────────── */
+/* ── Clients ───────────────────────────────���───────────────── */
 async function loadClients() {
 const { data, error } = await supabase
 .from('clients').select('id, full_name, address')
@@ -1002,7 +1007,7 @@ showToast('Signature enregistrée')
 })
 }
 
-/* ── Collect items ─────────────────────────────────────────── */
+/* ── Collect items ───────────────────────────────────────��─── */
 function collectItems() {
 return Array.from(document.querySelectorAll('#itemsTable tr')).map(row => ({
 description: row.querySelector('.description').value.trim(),
