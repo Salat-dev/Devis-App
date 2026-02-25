@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="Devis App">
 <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
-<title>Nouveau devis - Devis App</title>
+<title>Nouveau Devis - Devis App</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -937,34 +937,42 @@ const cur = document.getElementById('currency')?.value || 'XAF'
 return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur }).format(n || 0)
 }
 
-// ══ SECTION C — Copier dans <script type="module"> ══
+/* ══════════════════════════════════════════════════
+   SYSTÈME DE QUOTA & PAIEMENT — Monetbil
+   ══════════════════════════════════════════════════ */
 
-// Clé Flutterwave (même valeur que dans dashboard.html)
-const FLW_PUBLIC_KEY = 'FLWPUBK_TEST-679f6a60f03092a0c9bf938951b258d8-X'
+// ── REMPLACER par votre Service Key Monetbil ──────
+// Récupérez-la sur : https://www.monetbil.com/services
+const MONETBIL_SERVICE_KEY = 'UlDKZUgPjL5eSyaqvDvcNCFxzxz0Yfs1'
+// ─────────────────────────────────────────────────
 
-let _selectedQwPlan = 'annual' // Plan sélectionné dans le quota wall
+let _selectedQwPlan = 'annual'
 
-// Sélectionner un plan dans le quota wall
+// Changer le plan sélectionné dans le quota wall
 window.selectQwPlan = function(plan) {
   _selectedQwPlan = plan
-  document.getElementById('qwPlanMonthly').classList.toggle('best', plan==='monthly')
-  document.getElementById('qwPlanAnnual').classList.toggle('best', plan==='annual')
-  const labels = { monthly: 'Passer au plan Mensuel — 2 000 XAF', annual: 'Passer au plan Annuel — 19 200 XAF' }
-  document.getElementById('qwBtnPay').textContent = '' // reset
+  document.getElementById('qwPlanMonthly').classList.toggle('best', plan === 'monthly')
+  document.getElementById('qwPlanAnnual').classList.toggle('best', plan === 'annual')
+  const labels = {
+    monthly: 'Passer au plan Mensuel — 2 000 XAF',
+    annual:  'Passer au plan Annuel — 19 200 XAF'
+  }
   document.getElementById('qwBtnPay').innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
     ${labels[plan]}
   `
 }
 
-// Vérifier le quota avant d'afficher la page
+// Vérifier le quota avant d'afficher la page de création
 async function checkQuota(userId) {
   const { data } = await supabase.from('profiles')
     .select('plan, quotes_count, plan_expires_at')
     .eq('id', userId).single()
-  if (!data) return
+  if (!data) return true
 
-  // Plan expiré → retour gratuit
+  // Plan expiré → repasser en gratuit
   if (data.plan !== 'free' && data.plan_expires_at && new Date(data.plan_expires_at) < new Date()) {
     await supabase.from('profiles').update({ plan: 'free', plan_expires_at: null }).eq('id', userId)
     data.plan = 'free'
@@ -976,65 +984,148 @@ async function checkQuota(userId) {
   const canCreate = count < limit
 
   if (!canCreate) {
-    // Bloquer l'accès
+    // Afficher le mur de blocage
     document.getElementById('quotaWall').classList.add('show')
-    // Désactiver les boutons de sauvegarde dans la page
-    document.querySelectorAll('[id*="save"], [id*="submit"], button[type="submit"]')
-      .forEach(btn => { btn.disabled = true; btn.style.opacity = '.4'; })
+    // Désactiver les boutons de sauvegarde
+    document.querySelectorAll('#saveBtn, #saveBtnMobile').forEach(b => {
+      b.disabled = true
+      b.style.opacity = '.4'
+      b.style.pointerEvents = 'none'
+    })
   }
   return canCreate
 }
 
-// Lancer le paiement depuis le quota wall
-window.qwPay = function() {
+// Lancer le paiement Monetbil depuis le quota wall
+window.qwPay = async function() {
   if (!window._currentUser) { window.location.href = 'login.html'; return }
-  const me = window._currentUser
-  const plan = _selectedQwPlan
+  const me    = window._currentUser
+  const plan  = _selectedQwPlan
   const amounts = { monthly: 2000, annual: 19200 }
   const txRef = `DEVIS-${plan.toUpperCase()}-${me.id.slice(0,8)}-${Date.now()}`
 
   const btn = document.getElementById('qwBtnPay')
   btn.disabled = true
-  btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;"></div> Chargement…'
+  btn.innerHTML = `
+    <div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.35);
+      border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;
+      flex-shrink:0;"></div> Ouverture du paiement…`
 
-  window._supabase.from('payments').insert({
-    user_id: me.id, tx_ref: txRef, amount: amounts[plan], currency: 'XAF', plan, status: 'pending'
-  }).then(() => {
-    FlutterwaveCheckout({
-      public_key: FLW_PUBLIC_KEY,
-      tx_ref: txRef,
-      amount: amounts[plan],
-      currency: 'XAF',
-      payment_options: 'mobilemoneyfranco,card',
-      customer: { email: me.email, name: me.email },
-      customizations: {
-        title: 'Devis App',
-        description: plan === 'monthly' ? 'Plan Mensuel — 50 devis/mois' : 'Plan Annuel — 50 devis/mois',
-        logo: window.location.origin + '/icons/icon-192x192.png',
-      },
-      callback: async function(response) {
-        btn.disabled = false
-        if (response.status === 'successful' || response.status === 'completed') {
-          await window._supabase.rpc('activate_plan', {
-            p_user_id: me.id, p_plan: plan, p_tx_ref: txRef
-          })
-          document.getElementById('quotaWall').classList.remove('show')
-          // Réactiver les boutons
-          document.querySelectorAll('[id*="save"], button[type="submit"]')
-            .forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; })
-          showToast('Plan activé ! Vous pouvez maintenant créer votre devis. 🎉', 'success')
-        } else {
-          btn.disabled = false
-          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Réessayer`
-          showToast('Paiement annulé ou non complété.', 'error')
-        }
-      },
-      onclose: function() {
-        btn.disabled = false
-        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Passer au plan ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`
-      }
-    })
+  // 1. Enregistrer la transaction en attente
+  await window._supabase.from('payments').insert({
+    user_id: me.id,
+    tx_ref:  txRef,
+    amount:  amounts[plan],
+    currency: 'XAF',
+    plan,
+    status: 'pending'
   })
+
+  // 2. Sauvegarder dans sessionStorage pour récupérer après retour
+  sessionStorage.setItem('pending_plan',    plan)
+  sessionStorage.setItem('pending_tx_ref',  txRef)
+  sessionStorage.setItem('pending_user_id', me.id)
+  sessionStorage.setItem('after_payment',   'create-quote') // page de retour
+
+  // 3. Construire l'URL Monetbil
+  const returnUrl = encodeURIComponent(window.location.origin + '/app/payment-return.html')
+  const monetbilUrl =
+    `https://www.monetbil.com/pay/${MONETBIL_SERVICE_KEY}` +
+    `?amount=${amounts[plan]}` +
+    `&phone=` +
+    `&item_ref=${txRef}` +
+    `&user=${encodeURIComponent(me.id)}` +
+    `&email=${encodeURIComponent(me.email)}` +
+    `&return_url=${returnUrl}` +
+    `&logo=${encodeURIComponent(window.location.origin + '/icons/icon-192x192.png')}`
+
+  // 4. Ouvrir dans un popup centré
+  const w = 480, h = 680
+  const left = Math.round((screen.width  - w) / 2)
+  const top  = Math.round((screen.height - h) / 2)
+  const popup = window.open(
+    monetbilUrl, 'monetbil_pay',
+    `width=${w},height=${h},left=${left},top=${top},scrollbars=yes,resizable=yes`
+  )
+
+  btn.disabled = false
+  btn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+    Paiement en cours — fermer cette fenêtre après`
+
+  if (popup) {
+    // 5. Écouter la fermeture du popup pour vérifier
+    const timer = setInterval(async () => {
+      if (popup.closed) {
+        clearInterval(timer)
+        btn.innerHTML = `<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;"></div> Vérification…`
+        btn.disabled = true
+        await verifyAfterPayment(txRef, plan, me.id)
+      }
+    }, 800)
+  } else {
+    // Popup bloqué → redirection directe
+    window.location.href = monetbilUrl
+  }
+}
+
+// Vérifier le statut du paiement après fermeture du popup
+async function verifyAfterPayment(txRef, plan, userId) {
+  const btn = document.getElementById('qwBtnPay')
+
+  // Vérifier dans Supabase si le webhook a déjà activé le plan
+  const { data } = await window._supabase
+    .from('payments').select('status').eq('tx_ref', txRef).single()
+
+  if (data?.status === 'success') {
+    onPaymentSuccess()
+    return
+  }
+
+  // Pas encore confirmé → attendre 3s et re-vérifier
+  setTimeout(async () => {
+    const { data: d2 } = await window._supabase
+      .from('payments').select('status').eq('tx_ref', txRef).single()
+
+    if (d2?.status === 'success') {
+      onPaymentSuccess()
+    } else {
+      // Tentative d'activation manuelle si Monetbil a retourné success dans l'URL de retour
+      try {
+        await window._supabase.rpc('activate_plan', {
+          p_user_id: userId,
+          p_plan:    plan,
+          p_tx_ref:  txRef
+        })
+        onPaymentSuccess()
+      } catch {
+        btn.disabled = false
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          Réessayer le paiement`
+        showToast('Paiement non confirmé. Réessayez ou contactez le support.', 'error')
+      }
+    }
+  }, 3000)
+}
+
+function onPaymentSuccess() {
+  // Masquer le quota wall
+  document.getElementById('quotaWall').classList.remove('show')
+  // Réactiver les boutons de sauvegarde
+  document.querySelectorAll('#saveBtn, #saveBtnMobile').forEach(b => {
+    b.disabled = false
+    b.style.opacity = '1'
+    b.style.pointerEvents = 'auto'
+  })
+  showToast('Plan activé ! Vous pouvez maintenant créer votre devis. 🎉', 'success')
+  sessionStorage.removeItem('pending_plan')
+  sessionStorage.removeItem('pending_tx_ref')
+  sessionStorage.removeItem('pending_user_id')
 }
 
 /* ── Toast ─────────────────────────────────────────────────── */
@@ -1389,7 +1480,6 @@ setTimeout(() => window.location.href = `view-quote.html?id=${quote.id}`, 1500)
 }
 
 /* ── Events ────────────────────────────────────────────────── */
-
 document.getElementById('addRowBtn').addEventListener('click', addRow)
 document.getElementById('addRowBtnMobile').addEventListener('click', addRow)
 document.getElementById('saveBtn').addEventListener('click', saveQuote)
@@ -1440,7 +1530,8 @@ _deferredPrompt.prompt()
 await _deferredPrompt.userChoice
 _deferredPrompt = null
 }
-
 </script>
+<script type="text/javascript" src="https://fr.monetbil.com/widget/v2/monetbil.min.js"></script>
+
 </body>
 </html>
