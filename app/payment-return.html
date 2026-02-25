@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vérification paiement — Devis App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'DM Sans',sans-serif; background:#F3F4F6; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; -webkit-font-smoothing:antialiased; }
+    .card { background:white; border-radius:24px; padding:40px 32px; max-width:420px; width:100%; text-align:center; box-shadow:0 4px 6px rgba(0,0,0,.05),0 16px 40px rgba(0,0,0,.08); }
+    .icon { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+    .icon.loading { background:#FEF3E7; }
+    .icon.success { background:#D1FAE5; }
+    .icon.pending { background:#FEF3E7; }
+    .icon.error   { background:#FEE2E2; }
+    .spinner { width:36px; height:36px; border:3px solid #FED7AA; border-top-color:#F97316; border-radius:50%; animation:spin .7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:#1F2937; margin-bottom:8px; }
+    p  { font-size:14px; color:#6B7280; line-height:1.6; }
+    .badge { display:inline-flex; align-items:center; gap:6px; background:#F3F4F6; color:#374151; font-size:12px; font-weight:700; padding:6px 14px; border-radius:100px; margin:16px 0; font-family:'Syne',sans-serif; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px; background:#F97316; color:white; border:none; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; margin-top:20px; text-decoration:none; box-shadow:0 4px 14px rgba(249,115,22,.35); transition:all .2s; }
+    .btn:hover { background:#EA6C0A; transform:translateY(-1px); }
+    .btn.ghost { background:#F3F4F6; color:#6B7280; box-shadow:none; margin-top:10px; }
+    .btn.ghost:hover { background:#E5E7EB; transform:none; }
+    .steps { text-align:left; margin:20px 0; display:flex; flex-direction:column; gap:10px; }
+    .step { display:flex; align-items:center; gap:12px; padding:10px 14px; background:#F9FAFB; border-radius:10px; font-size:13px; color:#374151; }
+    .step-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .step-dot.done    { background:#10B981; }
+    .step-dot.active  { background:#F97316; animation:pulse 1.2s ease infinite; }
+    .step-dot.pending { background:#D1D5DB; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+  </style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="icon loading"><div class="spinner"></div></div>
+  <h2>Vérification en cours…</h2>
+  <p>Nous vérifions votre paiement Monetbil.<br>Cela prend quelques secondes.</p>
+  <div class="steps">
+    <div class="step"><div class="step-dot done"></div>Paiement effectué</div>
+    <div class="step"><div class="step-dot active"></div>Confirmation du paiement</div>
+    <div class="step"><div class="step-dot pending"></div>Activation de votre plan</div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+const supabase = createClient(
+  'https://xeezdzbotsblzclnmnxg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+)
+
+// Récupérer les paramètres renvoyés par Monetbil dans l'URL
+// Monetbil ajoute : ?status=success&transaction_id=xxx&item_ref=xxx
+const params  = new URLSearchParams(window.location.search)
+const status  = params.get('status')        // 'success' | 'cancelled' | 'failed'
+const txRef   = params.get('item_ref') || sessionStorage.getItem('pending_tx_ref')
+const plan    = sessionStorage.getItem('pending_plan')
+const userId  = sessionStorage.getItem('pending_user_id')
+
+async function verify() {
+  // Cas 1 : Monetbil a renvoyé status=success dans l'URL
+  if (status === 'success' && txRef && userId && plan) {
+    await activatePlan()
+    return
+  }
+
+  // Cas 2 : Pas de status dans l'URL → vérifier dans la BDD (webhook déjà reçu ?)
+  if (txRef) {
+    const { data } = await supabase.from('payments').select('status,plan,user_id').eq('tx_ref', txRef).single()
+    if (data?.status === 'success') {
+      showSuccess(data.plan)
+      return
+    }
+  }
+
+  // Cas 3 : Paiement annulé
+  if (status === 'cancelled' || status === 'failed') {
+    showError()
+    return
+  }
+
+  // Cas 4 : Attente (webhook pas encore reçu)
+  showPending()
+}
+
+async function activatePlan() {
+  try {
+    await supabase.rpc('activate_plan', {
+      p_user_id: userId,
+      p_plan: plan,
+      p_tx_ref: txRef
+    })
+    // Nettoyer sessionStorage
+    sessionStorage.removeItem('pending_plan')
+    sessionStorage.removeItem('pending_tx_ref')
+    sessionStorage.removeItem('pending_user_id')
+    showSuccess(plan)
+  } catch(e) {
+    showPending() // Activation échouée → afficher attente
+  }
+}
+
+function showSuccess(p) {
+  const names = { monthly: 'Mensuel', annual: 'Annuel' }
+  document.getElementById('card').innerHTML = `
+    <div class="icon success">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Paiement confirmé !</h2>
+    <p>Votre plan <strong>${names[p]||p}</strong> est maintenant actif.<br>Vous pouvez créer jusqu'à 50 devis par mois.</p>
+    <div class="badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Plan ${names[p]||p} activé
+    </div>
+    <a href="dashboard.html" class="btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Aller au tableau de bord
+    </a>
+  `
+}
+
+function showPending() {
+  document.getElementById('card').innerHTML = `
+    <div class="icon pending">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <h2>Paiement en attente</h2>
+    <p>Votre paiement est en cours de traitement.<br>L'activation peut prendre 1 à 2 minutes.</p>
+    <a href="dashboard.html" class="btn">Retour au dashboard</a>
+    <a href="javascript:location.reload()" class="btn ghost">Vérifier à nouveau</a>
+  `
+}
+
+function showError() {
+  document.getElementById('card').innerHTML = `
+    <div class="icon error">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+    </div>
+    <h2>Paiement non complété</h2>
+    <p>Le paiement a été annulé ou a échoué.<br>Aucun montant n'a été débité.</p>
+    <a href="dashboard.html" class="btn">Retour au dashboard</a>
+  `
+}
+
+verify()
+</script>
+</body>
+</html>

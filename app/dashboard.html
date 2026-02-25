@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
   <title>Dashboard — Devis App</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <!-- Monetbil n'a pas de SDK JS externe — tout se fait via redirection ou iframe -->
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -434,8 +434,9 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
 )
 
-// ─── REMPLACER PAR VOTRE CLÉ FLUTTERWAVE ──────────────────────
-const FLW_PUBLIC_KEY = 'FLWPUBK_TEST-679f6a60f03092a0c9bf938951b258d8-X'
+// ─── REMPLACER PAR VOTRE CLÉ DE SERVICE MONETBIL ─────────────
+// Récupérez-la sur : https://www.monetbil.com/services
+const MONETBIL_SERVICE_KEY = 'UlDKZUgPjL5eSyaqvDvcNCFxzxz0Yfs1'
 // ─────────────────────────────────────────────────────────────
 
 window._supabase = supabase
@@ -558,44 +559,97 @@ async function loadRecent(uid) {
 window.openPlanModal  = () => document.getElementById('planModal').classList.add('open')
 window.handleModalClick = e => { if(e.target===document.getElementById('planModal')) document.getElementById('planModal').classList.remove('open') }
 
-window.payPlan = function(plan) {
+window.payPlan = async function(plan) {
   if (!me) return
-  const amounts={monthly:2000,annual:19200}
-  const labels={monthly:'Plan Mensuel — 50 devis/mois',annual:'Plan Annuel — 50 devis/mois'}
-  const txRef=`DEVIS-${plan.toUpperCase()}-${me.id.slice(0,8)}-${Date.now()}`
+  const amounts = { monthly: 2000, annual: 19200 }
+  const txRef   = `DEVIS-${plan.toUpperCase()}-${me.id.slice(0,8)}-${Date.now()}`
 
   document.getElementById('spinOverlay').classList.add('on')
 
-  supabase.from('payments').insert({user_id:me.id,tx_ref:txRef,amount:amounts[plan],currency:'XAF',plan,status:'pending'}).then(()=>{
-    FlutterwaveCheckout({
-      public_key: FLW_PUBLIC_KEY,
-      tx_ref: txRef,
-      amount: amounts[plan],
-      currency: 'XAF',
-      payment_options: 'mobilemoneyfranco,card',
-      customer: { email: me.email, name: me.email },
-      customizations: {
-        title: 'Devis App',
-        description: labels[plan],
-        logo: window.location.origin + '/icons/icon-192x192.png',
-      },
-      callback: async function(response) {
-        document.getElementById('spinOverlay').classList.remove('on')
-        if (response.status === 'successful' || response.status === 'completed') {
-          // ⚠️ En production, vérifier le paiement via webhook Flutterwave côté serveur
-          await supabase.rpc('activate_plan', { p_user_id: me.id, p_plan: plan, p_tx_ref: txRef })
-          document.getElementById('planModal').classList.remove('open')
-          toast('Plan activé avec succès ! 🎉', '#10B981')
-          setTimeout(() => location.reload(), 2000)
-        } else {
-          toast('Paiement annulé ou non complété.', '#EF4444')
-        }
-      },
-      onclose: function() {
-        document.getElementById('spinOverlay').classList.remove('on')
-      }
-    })
+  // 1. Enregistrer la transaction en attente dans Supabase
+  await supabase.from('payments').insert({
+    user_id: me.id, tx_ref: txRef,
+    amount: amounts[plan], currency: 'XAF',
+    plan, status: 'pending'
   })
+
+  // 2. Sauvegarder l'état dans sessionStorage pour récupérer après retour
+  sessionStorage.setItem('pending_plan', plan)
+  sessionStorage.setItem('pending_tx_ref', txRef)
+  sessionStorage.setItem('pending_user_id', me.id)
+
+  // 3. Construire l'URL Monetbil et rediriger
+  // Monetbil redirige l'utilisateur vers sa page de paiement
+  // Après paiement, il revient sur return_url avec le statut
+  const returnUrl  = encodeURIComponent(window.location.origin + '/app/payment-return.html')
+  const notifyUrl  = encodeURIComponent(window.location.origin + '/app/payment-notify.html')
+  const phone      = ''  // laisser vide = Monetbil demandera le numéro
+
+  const monetbilUrl =
+    `https://www.monetbil.com/pay/${MONETBIL_SERVICE_KEY}` +
+    `?amount=${amounts[plan]}` +
+    `&phone=${phone}` +
+    `&item_ref=${txRef}` +
+    `&user=${encodeURIComponent(me.id)}` +
+    `&first_name=${encodeURIComponent(me.email)}` +
+    `&email=${encodeURIComponent(me.email)}` +
+    `&return_url=${returnUrl}` +
+    `&notify_url=${notifyUrl}` +
+    `&logo=https://votre-domaine.vercel.app/icons/icon-192x192.png`
+
+  // Ouvrir dans une nouvelle fenêtre (popup) ou rediriger
+  const popup = window.open(monetbilUrl, 'monetbil_pay',
+    'width=500,height=700,scrollbars=yes,resizable=yes,left=' +
+    Math.round((screen.width-500)/2) + ',top=' + Math.round((screen.height-700)/2))
+
+  document.getElementById('spinOverlay').classList.remove('on')
+
+  // 4. Écouter la fermeture du popup pour vérifier le paiement
+  if (popup) {
+    const timer = setInterval(async () => {
+      if (popup.closed) {
+        clearInterval(timer)
+        await verifyMonetbilPayment(txRef, plan)
+      }
+    }, 800)
+  } else {
+    // Si popup bloqué par le navigateur → redirection directe
+    window.location.href = monetbilUrl
+  }
+}
+
+// Vérifier le statut du paiement après retour
+async function verifyMonetbilPayment(txRef, plan) {
+  document.getElementById('spinOverlay').classList.add('on')
+
+  // Vérifier dans la table payments si le webhook a confirmé
+  const { data: payment } = await supabase
+    .from('payments')
+    .select('status')
+    .eq('tx_ref', txRef)
+    .single()
+
+  document.getElementById('spinOverlay').classList.remove('on')
+
+  if (payment?.status === 'success') {
+    document.getElementById('planModal').classList.remove('open')
+    toast('Plan activé avec succès ! 🎉', '#10B981')
+    setTimeout(() => location.reload(), 2000)
+  } else {
+    // Statut encore "pending" = webhook pas encore reçu
+    // On vérifie une 2ème fois après 3 secondes
+    setTimeout(async () => {
+      const { data: p2 } = await supabase
+        .from('payments').select('status').eq('tx_ref', txRef).single()
+      if (p2?.status === 'success') {
+        document.getElementById('planModal').classList.remove('open')
+        toast('Plan activé avec succès ! 🎉', '#10B981')
+        setTimeout(() => location.reload(), 2000)
+      } else {
+        toast('Paiement en attente de confirmation. Rechargez dans quelques secondes.', '#F59E0B')
+      }
+    }, 3000)
+  }
 }
 
 function toast(msg, bg) {
@@ -615,5 +669,7 @@ init()
 <script>
 if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('/sw.js',{scope:'/'})}catch(e){console.warn('[SW]',e)}})}
 </script>
+<script type="text/javascript" src="https://fr.monetbil.com/widget/v2/monetbil.min.js"></script>
+
 </body>
 </html>
