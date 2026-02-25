@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="Devis App">
 <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
-<title>Nouveau Devis - Devis App</title>
+<title>Nouveau devis - Devis App</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -460,6 +460,60 @@ tbody input[type="number"] { text-align: right; }
 </style>
 </head>
 <body>
+
+<!-- ══ QUOTA WALL — mur de blocage quota ══════════════════════════ -->
+<div class="quota-wall" id="quotaWall">
+  <div class="qw-card">
+    <div class="qw-top">
+      <div class="qw-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      </div>
+      <div class="qw-title">Limite de devis atteinte</div>
+      <div class="qw-sub">Vous avez utilisé vos <strong style="color:white;">5 devis gratuits</strong>.<br>Choisissez un plan pour continuer à créer.</div>
+    </div>
+    <div class="qw-plans">
+      <!-- Plan mensuel -->
+      <div class="qw-plan" id="qwPlanMonthly" onclick="selectQwPlan('monthly')">
+        <div class="qw-plan-left">
+          <div class="qw-plan-name">Mensuel</div>
+          <div class="qw-plan-desc">50 devis par mois · renouvelable</div>
+        </div>
+        <div>
+          <div class="qw-plan-price">2 000 XAF</div>
+          <div class="qw-plan-period">/mois</div>
+        </div>
+      </div>
+      <!-- Plan annuel -->
+      <div class="qw-plan best" id="qwPlanAnnual" onclick="selectQwPlan('annual')">
+        <div class="qw-plan-left">
+          <div class="qw-plan-name">
+            Annuel
+            <span class="qw-plan-tag">−20%</span>
+          </div>
+          <div class="qw-plan-desc">50 devis/mois · 1 an · économisez 4 800 XAF</div>
+        </div>
+        <div>
+          <div class="qw-plan-price">19 200 XAF</div>
+          <div class="qw-plan-period">/an</div>
+        </div>
+      </div>
+    </div>
+    <div class="qw-cta">
+      <button class="qw-btn-pay" id="qwBtnPay" onclick="qwPay()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Passer au plan Annuel
+      </button>
+      <button class="qw-btn-back" onclick="window.location.href='dashboard.html'">
+        ← Retour au tableau de bord
+      </button>
+      <div class="qw-note">Paiement sécurisé via Flutterwave</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ Sidebar desktop ═════════════════════════════════════════════ -->
 <aside class="sidebar">
 <div class="sidebar-logo">
@@ -968,11 +1022,11 @@ window.qwPay = function() {
           // Réactiver les boutons
           document.querySelectorAll('[id*="save"], button[type="submit"]')
             .forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; })
-          showToast('Plan activé ! Vous pouvez maintenant créer votre devis. 🎉', '#10B981')
+          showToast('Plan activé ! Vous pouvez maintenant créer votre devis. 🎉', 'success')
         } else {
           btn.disabled = false
           btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Réessayer`
-          showToast('Paiement annulé ou non complété.', '#EF4444')
+          showToast('Paiement annulé ou non complété.', 'error')
         }
       },
       onclose: function() {
@@ -983,14 +1037,7 @@ window.qwPay = function() {
   })
 }
 
-function showToast(msg, bg) {
-  const t = document.createElement('div')
-  t.style.cssText = `position:fixed;bottom:24px;right:24px;background:${bg};color:white;padding:14px 20px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2);`
-  t.textContent = msg; document.body.appendChild(t)
-  setTimeout(() => t.remove(), 4500)
-}
-
-/* ── Toast ─────────────────────────────────────────────────── 
+/* ── Toast ─────────────────────────────────────────────────── */
 function showToast(message, type = 'success') {
 document.querySelector('.toast')?.remove()
 const toast = document.createElement('div')
@@ -1000,7 +1047,7 @@ toast.innerHTML = type === 'success'
 : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${message}`
 document.body.appendChild(toast)
 setTimeout(() => toast.remove(), 3500)
-}*/
+}
 
 /* ── Init dates ────────────────────────────────────────────── */
 function initDates() {
@@ -1062,6 +1109,9 @@ async function init() {
 const { data: { session } } = await supabase.auth.getSession()
 if (!session) { window.location.href = 'login.html'; return }
 currentUserId = session.user.id
+window._currentUser = session.user   // Exposé pour qwPay
+window._supabase    = supabase        // Exposé pour qwPay
+await checkQuota(session.user.id)    // Vérifier quota avant tout
 initDates()
 initLogoUpload()
 await loadUserProfile(session.user.id)
@@ -1332,11 +1382,14 @@ saveBtnM.disabled = false; saveBtnM.innerHTML = `${ic} Enregistrer le devis`
 return
 }
 await supabase.from('quote_items').insert(items.map(i => ({ ...i, quote_id: quote.id })))
+// Incrémenter le compteur de devis de l'utilisateur
+await supabase.rpc('increment_quote_count', { p_user_id: currentUserId })
 showToast('Devis enregistré avec succès !')
 setTimeout(() => window.location.href = `view-quote.html?id=${quote.id}`, 1500)
 }
 
 /* ── Events ────────────────────────────────────────────────── */
+
 document.getElementById('addRowBtn').addEventListener('click', addRow)
 document.getElementById('addRowBtnMobile').addEventListener('click', addRow)
 document.getElementById('saveBtn').addEventListener('click', saveQuote)
@@ -1387,60 +1440,7 @@ _deferredPrompt.prompt()
 await _deferredPrompt.userChoice
 _deferredPrompt = null
 }
+
 </script>
 </body>
-<div class="quota-wall" id="quotaWall">
-  <div class="qw-card">
-    <div class="qw-top">
-      <div class="qw-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
-          <rect x="3" y="11" width="18" height="11" rx="2"/>
-          <path d="M7 11V7a5 5 0 0110 0v4"/>
-        </svg>
-      </div>
-      <div class="qw-title">Limite de devis atteinte</div>
-      <div class="qw-sub">Vous avez utilisé vos <strong style="color:white;">5 devis gratuits</strong>.<br>Choisissez un plan pour continuer à créer.</div>
-    </div>
-
-    <div class="qw-plans">
-      <!-- Plan mensuel -->
-      <div class="qw-plan" id="qwPlanMonthly" onclick="selectQwPlan('monthly')">
-        <div class="qw-plan-left">
-          <div class="qw-plan-name">Mensuel</div>
-          <div class="qw-plan-desc">50 devis par mois · renouvelable</div>
-        </div>
-        <div>
-          <div class="qw-plan-price">2 000 XAF</div>
-          <div class="qw-plan-period">/mois</div>
-        </div>
-      </div>
-      <!-- Plan annuel -->
-      <div class="qw-plan best" id="qwPlanAnnual" onclick="selectQwPlan('annual')">
-        <div class="qw-plan-left">
-          <div class="qw-plan-name">
-            Annuel
-            <span class="qw-plan-tag">−20%</span>
-          </div>
-          <div class="qw-plan-desc">50 devis/mois · 1 an · économisez 4 800 XAF</div>
-        </div>
-        <div>
-          <div class="qw-plan-price">19 200 XAF</div>
-          <div class="qw-plan-period">/an</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="qw-cta">
-      <button class="qw-btn-pay" id="qwBtnPay" onclick="qwPay()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Passer au plan Annuel
-      </button>
-      <button class="qw-btn-back" onclick="window.location.href='dashboard.html'">
-        ← Retour au tableau de bord
-      </button>
-      <div class="qw-note">Paiement sécurisé via Flutterwave</div>
-    </div>
-  </div>
-</div>
-
 </html>
