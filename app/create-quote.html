@@ -315,6 +315,148 @@ tbody input[type="number"] { text-align: right; }
 .mobile-save-bar { display: none; }
 .toast { bottom: 28px; right: 28px; }
 }
+
+ /* ── QUOTA WALL (mur de blocage) ── */
+  .quota-wall {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(0,0,0,0.65);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .quota-wall.show { display: flex; }
+
+  .qw-card {
+    background: white;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: qwIn .3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes qwIn {
+    from { opacity:0; transform:scale(.88) translateY(24px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+  }
+
+  .qw-top {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    padding: 32px 28px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .qw-top::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 150px; height: 150px;
+    background: #F97316;
+    border-radius: 50%;
+    opacity: 0.07;
+  }
+  .qw-icon {
+    width: 64px; height: 64px;
+    background: rgba(239,68,68,.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .qw-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 800;
+    color: white; margin-bottom: 6px;
+  }
+  .qw-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,.5);
+    line-height: 1.5;
+  }
+
+  .qw-plans {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .qw-plan {
+    border: 2px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all .18s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .qw-plan:hover { border-color: #F97316; background: #FEF3E7; }
+  .qw-plan.best { border-color: #F97316; background: #FEF3E7; }
+
+  .qw-plan-left { flex: 1; }
+  .qw-plan-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 800;
+    color: #1F2937;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qw-plan-tag {
+    font-size: 9px; font-weight: 800;
+    letter-spacing: .06em; text-transform: uppercase;
+    background: #F97316; color: white;
+    padding: 2px 7px; border-radius: 100px;
+  }
+  .qw-plan-desc { font-size: 12px; color: #6B7280; margin-top: 3px; }
+  .qw-plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 800;
+    color: #F97316;
+    white-space: nowrap;
+  }
+  .qw-plan-period { font-size: 10px; color: #9CA3AF; text-align: right; }
+
+  .qw-cta {
+    padding: 0 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .qw-btn-pay {
+    width: 100%; padding: 14px;
+    background: #F97316; color: white;
+    border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(249,115,22,.4);
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .qw-btn-pay:hover { background: #EA6C0A; transform: translateY(-1px); }
+  .qw-btn-pay:disabled { opacity: .6; cursor: default; transform: none; }
+
+  .qw-btn-back {
+    width: 100%; padding: 11px;
+    background: transparent; color: #6B7280;
+    border: 1.5px solid #E5E7EB; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+  }
+  .qw-btn-back:hover { border-color: #D1D5DB; color: #374151; }
+
+  .qw-note {
+    text-align: center;
+    font-size: 11px; color: #9CA3AF;
+    margin-top: 8px;
+  }
 </style>
 </head>
 <body>
@@ -722,6 +864,8 @@ Réglages
 </nav>
 
 <script type="module">
+
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 const supabase = createClient(
 'https://xeezdzbotsblzclnmnxg.supabase.co',
@@ -737,6 +881,113 @@ let isDrawing = false, lastX = 0, lastY = 0
 const fmt = (n) => {
 const cur = document.getElementById('currency')?.value || 'XAF'
 return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur }).format(n || 0)
+}
+
+// ══ SECTION C — Copier dans <script type="module"> ══
+
+// Clé Flutterwave (même valeur que dans dashboard.html)
+const FLW_PUBLIC_KEY = 'FLWPUBK_TEST-679f6a60f03092a0c9bf938951b258d8-X'
+
+let _selectedQwPlan = 'annual' // Plan sélectionné dans le quota wall
+
+// Sélectionner un plan dans le quota wall
+window.selectQwPlan = function(plan) {
+  _selectedQwPlan = plan
+  document.getElementById('qwPlanMonthly').classList.toggle('best', plan==='monthly')
+  document.getElementById('qwPlanAnnual').classList.toggle('best', plan==='annual')
+  const labels = { monthly: 'Passer au plan Mensuel — 2 000 XAF', annual: 'Passer au plan Annuel — 19 200 XAF' }
+  document.getElementById('qwBtnPay').textContent = '' // reset
+  document.getElementById('qwBtnPay').innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    ${labels[plan]}
+  `
+}
+
+// Vérifier le quota avant d'afficher la page
+async function checkQuota(userId) {
+  const { data } = await supabase.from('profiles')
+    .select('plan, quotes_count, plan_expires_at')
+    .eq('id', userId).single()
+  if (!data) return
+
+  // Plan expiré → retour gratuit
+  if (data.plan !== 'free' && data.plan_expires_at && new Date(data.plan_expires_at) < new Date()) {
+    await supabase.from('profiles').update({ plan: 'free', plan_expires_at: null }).eq('id', userId)
+    data.plan = 'free'
+  }
+
+  const plan      = data.plan || 'free'
+  const count     = data.quotes_count || 0
+  const limit     = plan === 'free' ? 5 : 50
+  const canCreate = count < limit
+
+  if (!canCreate) {
+    // Bloquer l'accès
+    document.getElementById('quotaWall').classList.add('show')
+    // Désactiver les boutons de sauvegarde dans la page
+    document.querySelectorAll('[id*="save"], [id*="submit"], button[type="submit"]')
+      .forEach(btn => { btn.disabled = true; btn.style.opacity = '.4'; })
+  }
+  return canCreate
+}
+
+// Lancer le paiement depuis le quota wall
+window.qwPay = function() {
+  if (!window._currentUser) { window.location.href = 'login.html'; return }
+  const me = window._currentUser
+  const plan = _selectedQwPlan
+  const amounts = { monthly: 2000, annual: 19200 }
+  const txRef = `DEVIS-${plan.toUpperCase()}-${me.id.slice(0,8)}-${Date.now()}`
+
+  const btn = document.getElementById('qwBtnPay')
+  btn.disabled = true
+  btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;"></div> Chargement…'
+
+  window._supabase.from('payments').insert({
+    user_id: me.id, tx_ref: txRef, amount: amounts[plan], currency: 'XAF', plan, status: 'pending'
+  }).then(() => {
+    FlutterwaveCheckout({
+      public_key: FLW_PUBLIC_KEY,
+      tx_ref: txRef,
+      amount: amounts[plan],
+      currency: 'XAF',
+      payment_options: 'mobilemoneyfranco,card',
+      customer: { email: me.email, name: me.email },
+      customizations: {
+        title: 'Devis App',
+        description: plan === 'monthly' ? 'Plan Mensuel — 50 devis/mois' : 'Plan Annuel — 50 devis/mois',
+        logo: window.location.origin + '/icons/icon-192x192.png',
+      },
+      callback: async function(response) {
+        btn.disabled = false
+        if (response.status === 'successful' || response.status === 'completed') {
+          await window._supabase.rpc('activate_plan', {
+            p_user_id: me.id, p_plan: plan, p_tx_ref: txRef
+          })
+          document.getElementById('quotaWall').classList.remove('show')
+          // Réactiver les boutons
+          document.querySelectorAll('[id*="save"], button[type="submit"]')
+            .forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; })
+          showToast('Plan activé ! Vous pouvez maintenant créer votre devis. 🎉', '#10B981')
+        } else {
+          btn.disabled = false
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Réessayer`
+          showToast('Paiement annulé ou non complété.', '#EF4444')
+        }
+      },
+      onclose: function() {
+        btn.disabled = false
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Passer au plan ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`
+      }
+    })
+  })
+}
+
+function showToast(msg, bg) {
+  const t = document.createElement('div')
+  t.style.cssText = `position:fixed;bottom:24px;right:24px;background:${bg};color:white;padding:14px 20px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2);`
+  t.textContent = msg; document.body.appendChild(t)
+  setTimeout(() => t.remove(), 4500)
 }
 
 /* ── Toast ─────────────────────────────────────────────────── */
@@ -1138,4 +1389,58 @@ _deferredPrompt = null
 }
 </script>
 </body>
+<div class="quota-wall" id="quotaWall">
+  <div class="qw-card">
+    <div class="qw-top">
+      <div class="qw-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      </div>
+      <div class="qw-title">Limite de devis atteinte</div>
+      <div class="qw-sub">Vous avez utilisé vos <strong style="color:white;">5 devis gratuits</strong>.<br>Choisissez un plan pour continuer à créer.</div>
+    </div>
+
+    <div class="qw-plans">
+      <!-- Plan mensuel -->
+      <div class="qw-plan" id="qwPlanMonthly" onclick="selectQwPlan('monthly')">
+        <div class="qw-plan-left">
+          <div class="qw-plan-name">Mensuel</div>
+          <div class="qw-plan-desc">50 devis par mois · renouvelable</div>
+        </div>
+        <div>
+          <div class="qw-plan-price">2 000 XAF</div>
+          <div class="qw-plan-period">/mois</div>
+        </div>
+      </div>
+      <!-- Plan annuel -->
+      <div class="qw-plan best" id="qwPlanAnnual" onclick="selectQwPlan('annual')">
+        <div class="qw-plan-left">
+          <div class="qw-plan-name">
+            Annuel
+            <span class="qw-plan-tag">−20%</span>
+          </div>
+          <div class="qw-plan-desc">50 devis/mois · 1 an · économisez 4 800 XAF</div>
+        </div>
+        <div>
+          <div class="qw-plan-price">19 200 XAF</div>
+          <div class="qw-plan-period">/an</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qw-cta">
+      <button class="qw-btn-pay" id="qwBtnPay" onclick="qwPay()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Passer au plan Annuel
+      </button>
+      <button class="qw-btn-back" onclick="window.location.href='dashboard.html'">
+        ← Retour au tableau de bord
+      </button>
+      <div class="qw-note">Paiement sécurisé via Flutterwave</div>
+    </div>
+  </div>
+</div>
+
 </html>
