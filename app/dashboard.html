@@ -543,9 +543,9 @@ window.payPlan = async function(plan) {
 
   document.getElementById('spinOverlay').classList.remove('on')
 
-  // 3. Configurer le widget CamPay et déclencher le paiement
+  // 3. Configurer le widget CamPay
   campay.options({
-    payButtonId:       'btnMonthly_campay', // bouton caché — on trigger manuellement
+    payButtonId:       'btnMonthly_campay',
     description:       `Devis App — Plan ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`,
     amount:            String(amounts[plan]),
     currency:          'XAF',
@@ -553,8 +553,8 @@ window.payPlan = async function(plan) {
     redirectUrl:       APP_BASE_URL + '/app/payment-return.html',
   })
 
-  // Déclencher l'ouverture du modal CamPay
-  campay.open()
+  // Déclencher via clic sur le bouton caché (seule méthode supportée par le SDK)
+  document.getElementById('btnMonthly_campay').click()
 }
 
 // ── Callbacks du widget CamPay ─────────────────────────────────

@@ -1038,7 +1038,7 @@ window.qwPay = async function() {
     externalReference: txRef,
     redirectUrl:       'https://devis-app-two.vercel.app/app/payment-return.html',
   })
-  campay.open()
+  document.getElementById('qwCampayTrigger').click()
 }
 
 // ── Callbacks CamPay pour le quota wall ───────────────────────
