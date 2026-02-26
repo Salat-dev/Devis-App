@@ -2,84 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notification paiement — Devis App</title>
-  <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: #F3F4F6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 32px 28px;
-      max-width: 380px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,.05), 0 16px 40px rgba(0,0,0,.08);
-    }
-    .status-icon {
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-    }
-    .ok   { background: #D1FAE5; }
-    .fail { background: #FEE2E2; }
-    .wait { background: #FEF3E7; }
-    h2 { font-size: 18px; font-weight: 700; color: #1F2937; margin-bottom: 6px; }
-    p  { font-size: 13px; color: #6B7280; line-height: 1.5; }
-    .spinner {
-      width: 30px; height: 30px;
-      border: 3px solid #FED7AA;
-      border-top-color: #F97316;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      margin: 0 auto;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    pre {
-      margin-top: 14px;
-      background: #F9FAFB;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 11px;
-      color: #6B7280;
-      text-align: left;
-      overflow-x: auto;
-      border: 1px solid #E5E7EB;
-    }
-  </style>
+  <title>Webhook CamPay</title>
 </head>
 <body>
-
-<div class="card" id="card">
-  <div class="status-icon wait">
-    <div class="spinner"></div>
-  </div>
-  <h2>Traitement en cours…</h2>
-  <p>Notification Monetbil reçue.<br>Activation du plan en cours.</p>
-</div>
-
 <script type="module">
-/**
- * payment-notify.html
- * ════════════════════════════════════════════════════════
- * Page appelée par Monetbil après un paiement (notify_url).
- *
- * Monetbil envoie les paramètres de deux façons :
- *   1. Via POST (form-urlencoded) — reçu si hébergé sur un vrai serveur
- *   2. Via GET (query string) — reçu sur pages statiques Vercel/Netlify
- *
- * Cette page gère les DEUX cas.
- * ════════════════════════════════════════════════════════
- */
+// ═══════════════════════════════════════════════════════════════
+// payment-notify.html — Webhook CamPay
+//
+// CamPay envoie une requête POST à webhook_url avec les données :
+//   reference       : référence CamPay de la transaction
+//   external_reference : votre tx_ref (ex: DEVIS-MONTHLY-xxx)
+//   status          : 'SUCCESSFUL' | 'FAILED'
+//   amount          : montant
+//   operator        : 'MTN' | 'ORANGE'
+//   phone           : numéro du payeur
+//
+// Puisqu'on est sur hébergement statique (Vercel), CamPay envoie
+// aussi les paramètres en GET dans l'URL → on les lit des deux façons.
+// ═══════════════════════════════════════════════════════════════
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
@@ -88,144 +28,69 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
 )
 
-// ─── Lire les paramètres depuis l'URL (GET) ───────────────
-// Monetbil ajoute ces paramètres :
-//   status       → 'success' | 'failed' | 'cancelled'
-//   item_ref     → votre tx_ref (ex: DEVIS-MONTHLY-abc12345-1234567890)
-//   user         → l'user_id Supabase
-//   transaction_id → l'ID interne Monetbil
-//   phone_number → le numéro qui a payé
-//   operator     → 'MTN' | 'ORANGE'
-const params        = new URLSearchParams(window.location.search)
-const status        = params.get('status')
-const txRef         = params.get('item_ref')
-const userId        = params.get('user')
-const transactionId = params.get('transaction_id') || ''
-const phone         = params.get('phone_number')   || ''
-const operator      = params.get('operator')       || ''
+// Lire les paramètres de l'URL (GET fallback pour hébergement statique)
+const p = new URLSearchParams(window.location.search)
+const status    = p.get('status')             // 'SUCCESSFUL' | 'FAILED'
+const txRef     = p.get('external_reference') // votre référence interne
+const campayRef = p.get('reference')          // référence CamPay
+const operator  = p.get('operator') || ''
+const phone     = p.get('phone') || ''
 
-// Affichage debug (visible uniquement sur cette page)
-const debugInfo = { status, txRef, userId, transactionId, phone, operator }
-
-async function process() {
-  const card = document.getElementById('card')
-
-  // ── Validation des paramètres ──────────────────────────
-  if (!txRef || !userId) {
-    showResult('fail',
-      'Paramètres manquants',
-      'La notification ne contient pas les données attendues.',
-      debugInfo
-    )
+async function processWebhook() {
+  if (!txRef) {
+    document.body.innerHTML = 'OK — no reference'
     return
   }
 
-  // ── Paiement réussi ────────────────────────────────────
-  if (status === 'success') {
-    try {
-      // 1. Récupérer le plan depuis la table payments
-      const { data: payment, error: pErr } = await supabase
-        .from('payments')
-        .select('plan, status')
-        .eq('tx_ref', txRef)
-        .single()
+  if (status === 'SUCCESSFUL' || status === 'successful') {
+    // Vérifier si déjà traité
+    const { data: existing } = await supabase
+      .from('payments').select('status, plan, user_id').eq('tx_ref', txRef).single()
 
-      if (pErr || !payment) {
-        showResult('fail',
-          'Transaction introuvable',
-          `La référence ${txRef} n'existe pas dans la base de données.`,
-          debugInfo
-        )
-        return
-      }
-
-      // 2. Éviter la double activation
-      if (payment.status === 'success') {
-        showResult('ok',
-          'Déjà activé',
-          `Ce paiement a déjà été traité. Plan ${payment.plan} actif.`,
-          debugInfo
-        )
-        return
-      }
-
-      // 3. Mettre à jour le paiement avec les infos Monetbil
-      await supabase.from('payments').update({
-        flw_ref:    transactionId,
-        status:     'success',
-        verified_at: new Date().toISOString()
-      }).eq('tx_ref', txRef)
-
-      // 4. Activer le plan via la fonction PostgreSQL
-      const { error: rpcErr } = await supabase.rpc('activate_plan', {
-        p_user_id: userId,
-        p_plan:    payment.plan,
-        p_tx_ref:  txRef
-      })
-
-      if (rpcErr) {
-        showResult('fail',
-          'Erreur d\'activation',
-          `Le plan n'a pas pu être activé : ${rpcErr.message}`,
-          debugInfo
-        )
-        return
-      }
-
-      showResult('ok',
-        'Plan activé avec succès',
-        `Plan ${payment.plan === 'monthly' ? 'Mensuel' : 'Annuel'} activé pour l'utilisateur.\nOpérateur : ${operator || 'N/A'} · Numéro : ${phone || 'N/A'}`,
-        debugInfo
-      )
-
-    } catch (err) {
-      showResult('fail',
-        'Erreur serveur',
-        err.message || 'Une erreur inattendue est survenue.',
-        debugInfo
-      )
+    if (!existing || existing.status === 'success') {
+      document.body.innerHTML = 'OK — already processed'
+      return
     }
 
-  // ── Paiement échoué ou annulé ──────────────────────────
-  } else if (status === 'failed' || status === 'cancelled') {
+    // Activer le plan
+    const { error } = await supabase.rpc('activate_plan', {
+      p_user_id: existing.user_id,
+      p_plan:    existing.plan,
+      p_tx_ref:  txRef
+    })
 
-    await supabase.from('payments').update({
-      status: status === 'cancelled' ? 'cancelled' : 'failed'
-    }).eq('tx_ref', txRef)
+    if (error) {
+      // Fallback manuel
+      const expires = existing.plan === 'monthly'
+        ? new Date(Date.now() + 30*24*60*60*1000).toISOString()
+        : new Date(Date.now() + 365*24*60*60*1000).toISOString()
 
-    showResult('fail',
-      status === 'cancelled' ? 'Paiement annulé' : 'Paiement échoué',
-      'Aucun montant n\'a été débité. Le plan reste inchangé.',
-      debugInfo
-    )
+      await supabase.from('payments').update({
+        status:      'success',
+        verified_at: new Date().toISOString(),
+        flw_ref:     campayRef || ''
+      }).eq('tx_ref', txRef)
 
-  // ── Statut inconnu ─────────────────────────────────────
+      await supabase.from('profiles').update({
+        plan:            existing.plan,
+        plan_started_at: new Date().toISOString(),
+        plan_expires_at: expires,
+        quotes_count:    0,
+        quotes_reset_at: new Date().toISOString()
+      }).eq('id', existing.user_id)
+    }
+
+    document.body.innerHTML = 'OK'
+
+  } else if (status === 'FAILED' || status === 'failed') {
+    await supabase.from('payments').update({ status:'failed' }).eq('tx_ref', txRef)
+    document.body.innerHTML = 'OK'
   } else {
-    showResult('fail',
-      'Statut inconnu',
-      `Statut reçu : "${status}". Aucune action effectuée.`,
-      debugInfo
-    )
+    document.body.innerHTML = 'OK — unhandled status: ' + status
   }
 }
 
-function showResult(type, title, message, debug) {
-  const icons = {
-    ok:   `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,
-    fail: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
-    wait: `<div class="spinner"></div>`
-  }
-  const card = document.getElementById('card')
-  card.innerHTML = `
-    <div class="status-icon ${type}">${icons[type]}</div>
-    <h2>${title}</h2>
-    <p>${message.replace(/\n/g, '<br>')}</p>
-    ${debug ? `<pre>${JSON.stringify(debug, null, 2)}</pre>` : ''}
-  `
-}
-
-process()
+processWebhook()
 </script>
-
 </body>
 </html>

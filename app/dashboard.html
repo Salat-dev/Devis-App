@@ -377,9 +377,11 @@
           <button class="po-btn primary" id="btnAnnual" onclick="payPlan('annual')">Choisir Annuel — 19 200 XAF/an</button>
         </div>
       </div>
-      <div class="modal-note">Paiement sécurisé via <strong>Monetbil</strong> · MTN MoMo & Orange Money · <a href="#" style="color:var(--orange);" onclick="document.getElementById('planModal').classList.remove('open')">Annuler</a></div>
+      <div class="modal-note">Paiement sécurisé via <strong>CamPay</strong> · MTN MoMo & Orange Money · <a href="#" style="color:var(--orange);" onclick="document.getElementById('planModal').classList.remove('open')">Annuler</a></div>
     </div>
   </div>
+  <!-- Bouton caché requis par le SDK CamPay -->
+  <button id="btnMonthly_campay" style="display:none;">Pay</button>
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js'
@@ -390,10 +392,10 @@ const supabase = createClient(
 )
 
 /* ══════════════════════════════════════════════════════
-   CONFIGURATION — modifier uniquement si domaine change
+   CONFIGURATION CAMPAY WIDGET
+   app-id récupéré sur : https://demo.campay.net → Applications
    ══════════════════════════════════════════════════════ */
-const MONETBIL_SERVICE_KEY = 'UlDKZUgPjL5eSyaqvDvcNCFxzxz0Yfs1'
-const APP_BASE_URL         = 'https://devis-app-two.vercel.app'
+const APP_BASE_URL = 'https://devis-app-two.vercel.app'
 /* ══════════════════════════════════════════════════════ */
 
 window._supabase = supabase
@@ -504,20 +506,27 @@ window.openPlanModal    = () => document.getElementById('planModal').classList.a
 window.handleModalClick = e  => { if(e.target===document.getElementById('planModal')) document.getElementById('planModal').classList.remove('open') }
 
 /* ══════════════════════════════════════════════════════
-   PAYPLAN — CORRIGÉE ✅
-   - URLs en dur avec APP_BASE_URL (plus de window.location.origin)
-   - notify_url et return_url complètes et correctes
-   - SDK Monetbil widget supprimé (inutile pour redirection)
+   PAYPLAN — CAMPAY WIDGET ✅
+   Le widget CamPay ouvre un modal de paiement intégré.
+   onSuccess / onFail / onModalClose gèrent le résultat
+   directement sans redirection.
    ══════════════════════════════════════════════════════ */
+
+let _currentTxRef = null
+let _currentPlan  = null
+
 window.payPlan = async function(plan) {
   if (!me) return
 
   const amounts = { monthly: 2000, annual: 19200 }
   const txRef   = `DEVIS-${plan.toUpperCase()}-${me.id.slice(0,8)}-${Date.now()}`
 
+  _currentTxRef = txRef
+  _currentPlan  = plan
+
   document.getElementById('spinOverlay').classList.add('on')
 
-  // 1. Enregistrer la transaction en attente
+  // 1. Enregistrer la transaction en attente dans Supabase
   await supabase.from('payments').insert({
     user_id:  me.id,
     tx_ref:   txRef,
@@ -527,70 +536,84 @@ window.payPlan = async function(plan) {
     status:   'pending'
   })
 
-  // 2. Sauvegarder dans sessionStorage pour la page de retour
+  // 2. Sauvegarder dans sessionStorage (fallback si page rechargée)
   sessionStorage.setItem('pending_plan',    plan)
   sessionStorage.setItem('pending_tx_ref',  txRef)
   sessionStorage.setItem('pending_user_id', me.id)
 
-  // 3. Construire l'URL Monetbil — URLs complètes en dur
-  const returnUrl = encodeURIComponent(APP_BASE_URL + '/app/payment-return.html')
-  const notifyUrl = encodeURIComponent(APP_BASE_URL + '/app/payment-notify.html')
-
-  const monetbilUrl =
-    `https://www.monetbil.com/pay/${MONETBIL_SERVICE_KEY}` +
-    `?amount=${amounts[plan]}` +
-    `&phone=` +
-    `&item_ref=${txRef}` +
-    `&user=${encodeURIComponent(me.id)}` +
-    `&email=${encodeURIComponent(me.email)}` +
-    `&return_url=${returnUrl}` +
-    `&notify_url=${notifyUrl}`
-
   document.getElementById('spinOverlay').classList.remove('on')
 
-  // 4. Ouvrir dans un popup centré
-  const w=500, h=700
-  const left=Math.round((screen.width-w)/2)
-  const top=Math.round((screen.height-h)/2)
-  const popup = window.open(monetbilUrl,'monetbil_pay',
-    `width=${w},height=${h},left=${left},top=${top},scrollbars=yes,resizable=yes`)
+  // 3. Configurer le widget CamPay et déclencher le paiement
+  campay.options({
+    payButtonId:       'btnMonthly_campay', // bouton caché — on trigger manuellement
+    description:       `Devis App — Plan ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`,
+    amount:            String(amounts[plan]),
+    currency:          'XAF',
+    externalReference: txRef,
+    redirectUrl:       APP_BASE_URL + '/app/payment-return.html',
+  })
 
-  if (popup) {
-    // 5. Surveiller la fermeture du popup
-    const timer = setInterval(async () => {
-      if (popup.closed) {
-        clearInterval(timer)
-        await verifyPayment(txRef)
-      }
-    }, 800)
-  } else {
-    // Popup bloqué → redirection directe
-    window.location.href = monetbilUrl
-  }
+  // Déclencher l'ouverture du modal CamPay
+  campay.open()
 }
 
-async function verifyPayment(txRef) {
-  document.getElementById('spinOverlay').classList.add('on')
-  const { data } = await supabase.from('payments').select('status').eq('tx_ref', txRef).single()
-  document.getElementById('spinOverlay').classList.remove('on')
+// ── Callbacks du widget CamPay ─────────────────────────────────
 
-  if (data?.status === 'success') {
-    document.getElementById('planModal').classList.remove('open')
-    toast('Plan activé avec succès ! 🎉', '#10B981')
-    setTimeout(() => location.reload(), 2000)
-    return
+// Paiement réussi — CamPay retourne { status, reference }
+campay.onSuccess = async function(data) {
+  const txRef = _currentTxRef
+  const plan  = _currentPlan
+  if (!txRef || !me) return
+
+  document.getElementById('spinOverlay').classList.add('on')
+
+  // Activer le plan via RPC PostgreSQL
+  const { error } = await supabase.rpc('activate_plan', {
+    p_user_id: me.id,
+    p_plan:    plan,
+    p_tx_ref:  txRef
+  })
+
+  if (error) {
+    // Fallback manuel si RPC échoue
+    const expires = plan === 'monthly'
+      ? new Date(Date.now() + 30*24*60*60*1000).toISOString()
+      : new Date(Date.now() + 365*24*60*60*1000).toISOString()
+
+    await supabase.from('payments').update({
+      status: 'success', verified_at: new Date().toISOString(), flw_ref: data.reference || ''
+    }).eq('tx_ref', txRef)
+
+    await supabase.from('profiles').update({
+      plan, plan_started_at: new Date().toISOString(),
+      plan_expires_at: expires, quotes_count: 0, quotes_reset_at: new Date().toISOString()
+    }).eq('id', me.id)
   }
-  // 2ème vérification après 3s, puis redirection vers payment-return
-  setTimeout(async () => {
-    const { data: d2 } = await supabase.from('payments').select('status').eq('tx_ref', txRef).single()
-    if (d2?.status === 'success') {
-      document.getElementById('planModal').classList.remove('open')
-      toast('Plan activé avec succès ! 🎉', '#10B981')
-      setTimeout(() => location.reload(), 2000)
-    } else {
-      window.location.href = APP_BASE_URL + '/app/payment-return.html'
-    }
-  }, 3000)
+
+  // Nettoyer sessionStorage
+  sessionStorage.removeItem('pending_plan')
+  sessionStorage.removeItem('pending_tx_ref')
+  sessionStorage.removeItem('pending_user_id')
+
+  document.getElementById('spinOverlay').classList.remove('on')
+  document.getElementById('planModal').classList.remove('open')
+  toast('Plan activé avec succès ! 🎉', '#10B981')
+  setTimeout(() => location.reload(), 2000)
+}
+
+// Paiement échoué
+campay.onFail = async function(data) {
+  if (_currentTxRef) {
+    await supabase.from('payments').update({ status: 'failed' }).eq('tx_ref', _currentTxRef)
+  }
+  toast('Paiement échoué. Réessayez.', '#EF4444')
+}
+
+// Modal fermé sans paiement
+campay.onModalClose = function(data) {
+  if (data.status !== 'SUCCESSFUL') {
+    toast('Paiement annulé.', '#6B7280')
+  }
 }
 
 function toast(msg, bg) {
@@ -610,5 +633,9 @@ init()
 <script>
 if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('/sw.js',{scope:'/'})}catch(e){console.warn('[SW]',e)}})}
 </script>
+
+<!-- SDK CamPay Widget — remplacer l'app-id par le vôtre -->
+<script src="https://demo.campay.net/sdk/js?app-id=EqWhFqtpUyDbgBodktFuh6a_ReQjE0RojK1YlPYeO1_x49chUTsY-lXe8KawxzWSJfOvWlQPznp_dEipGpZoHQ"></script>
+
 </body>
 </html>
