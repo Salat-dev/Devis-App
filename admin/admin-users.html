@@ -160,6 +160,61 @@
     .pg-btn:disabled{opacity:.4;cursor:not-allowed;}
     .pg-btn.active{background:var(--orange);color:white;border-color:var(--orange);}
 
+
+    /* Tabs */
+    .page-tabs{display:flex;gap:2px;background:var(--white);border-radius:11px;padding:4px;border:1.5px solid var(--gray-200);width:fit-content;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+    .page-tab{padding:7px 16px;border-radius:8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--gray-500);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:6px;}
+    .page-tab.active{background:var(--orange);color:white;box-shadow:0 2px 8px rgba(249,115,22,.3);}
+    .page-tab:hover:not(.active){background:var(--gray-50);color:var(--gray-700);}
+    .tab-section{display:none;} .tab-section.show{display:block;}
+    /* Pending payments */
+    .pending-grid{display:flex;flex-direction:column;gap:10px;}
+    .pending-card{background:var(--white);border-radius:12px;border:1.5px solid var(--gray-200);padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+    .pending-card.urgent{border-color:rgba(245,158,11,.4);background:#FFFBF0;}
+    .pend-avatar{width:38px;height:38px;border-radius:50%;background:var(--yellow-light);color:var(--yellow);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;flex-shrink:0;}
+    .pend-info{flex:1;min-width:0;}
+    .pend-name{font-weight:700;color:var(--gray-800);font-size:13px;}
+    .pend-meta{font-size:11px;color:var(--gray-500);margin-top:2px;}
+    .pend-meta strong{color:var(--orange);}
+    .pend-txref{font-family:monospace;font-size:11px;color:var(--gray-400);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+    .pend-amount{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green);flex-shrink:0;}
+    .pend-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+    .btn-approve{padding:7px 14px;border-radius:8px;border:none;background:var(--green);color:white;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .btn-approve:hover{background:#059669;}
+    .btn-reject{padding:7px 14px;border-radius:8px;border:none;background:var(--red-light);color:var(--red);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;border:1.5px solid rgba(239,68,68,.3);}
+    .btn-reject:hover{background:var(--red);color:white;}
+    .pend-op{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;background:var(--yellow-light);color:var(--yellow);}
+    .empty-pending{text-align:center;padding:40px;color:var(--gray-400);background:var(--white);border-radius:12px;border:1.5px dashed var(--gray-200);}
+    /* ── NOTIFICATION BELL ── */
+    .notif-bell-btn{position:relative;width:38px;height:38px;border-radius:10px;border:1.5px solid var(--gray-200);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+    .notif-bell-btn:hover{border-color:var(--orange);background:var(--orange-light);}
+    .notif-bell-btn.ringing svg{animation:ringBell .4s ease 2;}
+    @keyframes ringBell{0%,100%{transform:rotate(0)}25%{transform:rotate(-20deg)}75%{transform:rotate(20deg)}}
+    .notif-pip{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:100px;background:var(--red);color:white;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;border:2px solid var(--gray-50);}
+    .notif-pip.show{display:flex;}
+    .notif-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:var(--white);border:1px solid var(--gray-200);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.14);z-index:200;overflow:hidden;display:none;animation:dropIn .2s ease;}
+    .notif-dropdown.open{display:block;}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .notif-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--gray-100);}
+    .notif-header-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--gray-800);}
+    .notif-mark-all{font-size:11px;font-weight:600;color:var(--orange);cursor:pointer;border:none;background:none;padding:0;}
+    .notif-mark-all:hover{text-decoration:underline;}
+    .notif-list{max-height:320px;overflow-y:auto;}
+    .notif-item{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--gray-100);cursor:pointer;transition:background .15s;}
+    .notif-item:hover{background:var(--orange-light);}
+    .notif-item.unread{background:#FFF7F0;}
+    .notif-item:last-child{border-bottom:none;}
+    .notif-icon{width:34px;height:34px;border-radius:10px;background:var(--orange-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .notif-body{flex:1;min-width:0;}
+    .notif-title{font-size:12px;font-weight:700;color:var(--gray-800);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .notif-text{font-size:11px;color:var(--gray-500);line-height:1.4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;}
+    .notif-time{font-size:10px;color:var(--gray-400);margin-top:3px;}
+    .notif-empty{padding:24px;text-align:center;color:var(--gray-400);font-size:12px;}
+    .notif-footer{padding:10px 16px;border-top:1px solid var(--gray-100);text-align:center;}
+    .notif-footer a{font-size:12px;font-weight:600;color:var(--orange);text-decoration:none;}
+    .notif-footer a:hover{text-decoration:underline;}
+    .notif-wrapper{position:relative;}
+    .pend-days{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;background:var(--orange-light);color:var(--orange);margin-left:6px;}
     @media(max-width:768px){.sidebar{display:none;}.main{padding:16px;}.filters-bar{flex-direction:column;}.filter-select{width:100%;}}
   </style>
 </head>
@@ -191,8 +246,41 @@
       <h1 class="page-title">Gestion des utilisateurs</h1>
       <p class="page-sub" id="pageSubtitle">Chargement...</p>
     </div>
+    <div class="notif-wrapper" id="notifWrapper">
+      <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifDropdown()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-600)" stroke-width="2.2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <div class="notif-pip" id="notifPip">0</div>
+      </button>
+      <div class="notif-dropdown" id="notifDropdown">
+        <div class="notif-header">
+          <span class="notif-header-title">Notifications</span>
+          <button class="notif-mark-all" onclick="markAllRead()">Tout marquer lu</button>
+        </div>
+        <div class="notif-list" id="notifList">
+          <div class="notif-empty">Aucune notification</div>
+        </div>
+        <div class="notif-footer">
+          <a href="#" onclick="switchTab('pending');toggleNotifDropdown();return false;">Voir tous les paiements en attente &rarr;</a>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- TABS -->
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="switchTab('users')" id="tabUsers">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Utilisateurs
+    </button>
+    <button class="page-tab" onclick="switchTab('pending')" id="tabPending">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Paiements en attente
+      <span id="pendingBadge" style="background:var(--red);color:white;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:700;display:none;">0</span>
+    </button>
+  </div>
+
+  <!-- TAB: USERS -->
+  <div class="tab-section show" id="sectionUsers">
   <div class="filters-bar">
     <div class="search-wrap">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -234,6 +322,20 @@
     <div class="pagination" id="paginationBar">
       <span class="pg-info" id="pgInfo"></span>
       <div class="pg-btns" id="pgBtns"></div>
+    </div>
+  </div>
+  </div><!-- /sectionUsers -->
+
+  <!-- TAB: PENDING PAYMENTS -->
+  <div class="tab-section" id="sectionPending">
+    <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--gray-700);">Paiements en attente de validation</div>
+      <button onclick="loadPending()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-600);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Actualiser
+      </button>
+    </div>
+    <div class="pending-grid" id="pendingGrid">
+      <div class="empty-pending">Chargement...</div>
     </div>
   </div>
 </main>
@@ -489,6 +591,146 @@ window.deleteUser=async function(uid){
 const urlUid=new URLSearchParams(window.location.search).get('uid')
 
 /* ── Events ── */
+
+/* ══ TABS ══ */
+window.switchTab = function(tab){
+  document.getElementById('tabUsers').classList.toggle('active', tab==='users')
+  document.getElementById('tabPending').classList.toggle('active', tab==='pending')
+  document.getElementById('sectionUsers').classList.toggle('show', tab==='users')
+  document.getElementById('sectionPending').classList.toggle('show', tab==='pending')
+  if(tab==='pending') loadPending()
+}
+
+/* ══ PENDING PAYMENTS ══ */
+let pendingList = []
+
+window.loadPending = async function(){
+  document.getElementById('pendingGrid').innerHTML='<div class="empty-pending">Chargement...</div>'
+  const {data:pays} = await supabase.from('payments').select('*').eq('status','pending').order('created_at',{ascending:true}).range(0,199)
+  pendingList = pays||[]
+
+  /* Badge */
+  const badge = document.getElementById('pendingBadge')
+  badge.style.display = pendingList.length ? 'inline' : 'none'
+  badge.textContent = pendingList.length
+
+  if(!pendingList.length){
+    document.getElementById('pendingGrid').innerHTML=`<div class="empty-pending">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:10px;color:var(--gray-300)"><circle cx="12" cy="12" r="10"/><polyline points="20 6 9 17 4 12"/></svg>
+      <div>Aucun paiement en attente 🎉</div>
+      <div style="font-size:11px;margin-top:4px;">Tous les paiements ont été traités.</div>
+    </div>`
+    return
+  }
+
+  document.getElementById('pendingGrid').innerHTML = pendingList.map(p=>{
+    const prof = allUsers.find(u=>u.id===p.user_id)
+    const name = prof ? [prof.first_name,prof.last_name].filter(Boolean).join(' ')||prof.company||'—' : 'Inconnu'
+    const ini  = (name[0]||'?').toUpperCase()
+    const hoursSince = Math.round((Date.now()-new Date(p.created_at).getTime())/36e5)
+    const isUrgent = hoursSince >= 2
+    const opLabel = p.flw_ref && p.flw_ref.startsWith('MP') ? 'Orange Money' : p.flw_ref && p.flw_ref.startsWith('CI') ? 'MTN MoMo' : 'OM / MoMo'
+    return `<div class="pending-card ${isUrgent?'urgent':''}" id="pcard-${p.id}">
+      <div class="pend-avatar">${ini}</div>
+      <div class="pend-info">
+        <div class="pend-name">${name}</div>
+        <div class="pend-meta">
+          Plan <strong>${p.plan==='monthly'?'Mensuel':'Annuel'}</strong>
+          <span class="pend-op">${opLabel}</span>
+          ${isUrgent?`<span class="pend-days">⏰ ${hoursSince}h</span>`:''}
+        </div>
+        <div class="pend-txref">Réf opérateur : ${p.flw_ref||'—'}</div>
+        <div style="font-size:10px;color:var(--gray-400);margin-top:2px;">Soumis le ${fmtDate(p.created_at)}</div>
+      </div>
+      <div class="pend-amount">${fmt(p.amount)} XAF</div>
+      <div class="pend-actions">
+        <button class="btn-approve" onclick="approvePay('${p.id}','${p.user_id}','${p.plan}','${p.tx_ref}',this)">
+          ✓ Valider
+        </button>
+        <button class="btn-reject" onclick="rejectPay('${p.id}')">
+          ✗ Rejeter
+        </button>
+      </div>
+    </div>`
+  }).join('')
+}
+
+window.approvePay = async function(payId, userId, plan, txRef, btnEl){
+  const planLabel = plan==='monthly'?'Mensuel':'Annuel'
+  if(!confirm(`Valider ce paiement et activer le plan ${planLabel} ?`)) return
+  const btn = btnEl || document.querySelector(`#pcard-${payId} .btn-approve`)
+  if(btn){ btn.textContent='⏳ ...'; btn.disabled=true }
+
+  const duration = plan==='monthly' ? 30 : 365
+  const expires  = new Date(Date.now()+duration*864e5).toISOString()
+  const amount   = plan==='monthly' ? 2000 : 19200
+
+  const [r1,r2] = await Promise.all([
+    supabase.from('payments').update({status:'success',verified_at:new Date().toISOString()}).eq('id',payId),
+    supabase.from('profiles').update({
+      plan, plan_started_at:new Date().toISOString(),
+      plan_expires_at:expires, quotes_count:0, quotes_reset_at:new Date().toISOString()
+    }).eq('id',userId)
+  ])
+
+  if(r1.error||r2.error){
+    if(btn){ btn.textContent='✓ Valider'; btn.disabled=false }
+    showToast('Erreur : '+((r1.error||r2.error).message||'Erreur inconnue'),'error'); return
+  }
+
+  /* Notif admin_notifications — marquer comme traitée */
+  supabase.from('admin_notifications')
+    .update({read:true})
+    .eq('type','new_payment')
+    .contains('data', {user_id:userId})
+    .then()
+
+  /* Mettre à jour allUsers en mémoire */
+  const u = allUsers.find(x=>x.id===userId)
+  if(u){ u.plan=plan; u.plan_expires_at=expires; u.plan_started_at=new Date().toISOString(); u.quotes_count=0 }
+
+  /* Retirer la carte */
+  document.getElementById('pcard-'+payId)?.remove()
+  pendingList = pendingList.filter(x=>x.id!==payId)
+  const badge=document.getElementById('pendingBadge')
+  badge.textContent=pendingList.length
+  badge.style.display=pendingList.length?'inline':'none'
+  if(!pendingList.length) loadPending()
+
+  const userName = u ? `${u.first_name||''} ${u.last_name||''}`.trim() : 'Utilisateur'
+  const expiryStr = new Date(expires).toLocaleDateString('fr-FR')
+  showToast(`✅ Plan ${planLabel} activé pour ${userName||'cet utilisateur'}`)
+
+  /* WhatsApp au client — confirmation d'activation */
+  const userPhone = u?.phone
+  if(userPhone){
+    const waPhone = userPhone.replace(/[^0-9]/g,'').replace(/^0/,'237')
+    const msg = encodeURIComponent(
+      `✅ Bonjour ${u?.first_name||''},\n\n` +
+      `Votre abonnement DevisApp a été activé !\n\n` +
+      `📦 Plan : ${planLabel}\n` +
+      `💰 Montant : ${new Intl.NumberFormat('fr-FR').format(amount)} XAF\n` +
+      `📅 Expire le : ${expiryStr}\n` +
+      `🔢 50 devis/mois disponibles\n\n` +
+      `Connectez-vous sur DevisApp pour commencer à créer vos devis.\n` +
+      `Support : 693 421 348 / 678 526 390`
+    )
+    window.open(`https://wa.me/${waPhone}?text=${msg}`, '_blank')
+  }
+}
+
+window.rejectPay = async function(payId){
+  if(!confirm('Rejeter et marquer ce paiement comme échoué ?')) return
+  await supabase.from('payments').update({status:'failed'}).eq('id',payId)
+  document.getElementById('pcard-'+payId)?.remove()
+  pendingList = pendingList.filter(x=>x.id!==payId)
+  const badge=document.getElementById('pendingBadge')
+  badge.textContent=pendingList.length
+  badge.style.display=pendingList.length?'inline':'none'
+  if(!pendingList.length) loadPending()
+  showToast('Paiement rejeté','error')
+}
+
 document.getElementById('searchInput').addEventListener('input',applyFilters)
 document.getElementById('filterPlan').addEventListener('change',applyFilters)
 document.getElementById('filterStatus').addEventListener('change',applyFilters)
@@ -496,6 +738,170 @@ document.getElementById('logoutBtn').addEventListener('click',async()=>{await su
 
 await loadUsers()
 if(urlUid)window.openModal(urlUid)
+
+/* ════════════════════════════════════════
+   NOTIFICATIONS REALTIME
+   ════════════════════════════════════════ */
+
+let notifications = []
+let notifOpen = false
+
+/* Close dropdown on outside click */
+document.addEventListener('click', e => {
+  const wrapper = document.getElementById('notifWrapper')
+  if(notifOpen && !wrapper.contains(e.target)) closeNotifDropdown()
+})
+
+window.toggleNotifDropdown = function(){
+  notifOpen ? closeNotifDropdown() : openNotifDropdown()
+}
+function openNotifDropdown(){
+  notifOpen = true
+  document.getElementById('notifDropdown').classList.add('open')
+}
+function closeNotifDropdown(){
+  notifOpen = false
+  document.getElementById('notifDropdown').classList.remove('open')
+}
+
+/* Format relative time */
+function relativeTime(isoStr){
+  const diff = Date.now() - new Date(isoStr).getTime()
+  const m = Math.floor(diff/60000)
+  if(m < 1)  return "à l'instant"
+  if(m < 60) return `il y a ${m} min`
+  const h = Math.floor(m/60)
+  if(h < 24) return `il y a ${h}h`
+  return `il y a ${Math.floor(h/24)}j`
+}
+
+/* Render notification list */
+function renderNotifs(){
+  const list = document.getElementById('notifList')
+  const unread = notifications.filter(n=>!n.read)
+  const pip = document.getElementById('notifPip')
+
+  if(unread.length){
+    pip.textContent = unread.length > 9 ? '9+' : unread.length
+    pip.classList.add('show')
+    const btn = document.getElementById('notifBellBtn')
+    btn.classList.add('ringing')
+    setTimeout(()=>btn.classList.remove('ringing'), 1000)
+  } else {
+    pip.classList.remove('show')
+  }
+
+  if(!notifications.length){
+    list.innerHTML = '<div class="notif-empty">Aucune notification pour le moment</div>'
+    return
+  }
+
+  list.innerHTML = notifications.slice(0,12).map(n => {
+    const data = n.data ? (typeof n.data==='string' ? JSON.parse(n.data) : n.data) : {}
+    return `<div class="notif-item ${n.read?'':'unread'}" onclick="clickNotif('${n.id}')">
+      <div class="notif-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="notif-body">
+        <div class="notif-title">${n.title||'Nouveau paiement'}</div>
+        <div class="notif-text">${n.body||''}</div>
+        <div class="notif-time">${relativeTime(n.created_at)}</div>
+      </div>
+    </div>`
+  }).join('')
+}
+
+/* Click on notification → go to pending tab & mark read */
+window.clickNotif = async function(id){
+  await supabase.from('admin_notifications').update({read:true}).eq('id',id)
+  notifications = notifications.map(n => n.id===id ? {...n, read:true} : n)
+  renderNotifs()
+  closeNotifDropdown()
+  switchTab('pending')
+}
+
+/* Mark all read */
+window.markAllRead = async function(){
+  await supabase.from('admin_notifications').update({read:true}).eq('read',false)
+  notifications = notifications.map(n=>({...n, read:true}))
+  renderNotifs()
+}
+
+/* Load existing notifications */
+async function loadNotifications(){
+  try {
+    const {data} = await supabase.from('admin_notifications')
+      .select('*').order('created_at',{ascending:false}).limit(20)
+    if(data) notifications = data
+    renderNotifs()
+  } catch(e){
+    /* Table may not exist yet — create it via SQL in Supabase */
+    console.warn('admin_notifications table missing. Run SQL setup.')
+  }
+}
+
+/* Realtime subscription on payments table */
+function subscribeRealtimePayments(){
+  supabase.channel('payments-realtime')
+    .on('postgres_changes',
+      { event:'INSERT', schema:'public', table:'payments', filter:'status=eq.pending' },
+      async (payload) => {
+        const pay = payload.new
+        /* Fetch user profile */
+        const {data:prof} = await supabase.from('profiles')
+          .select('first_name,last_name,phone').eq('id', pay.user_id).single()
+        const name = prof ? `${prof.first_name||''} ${prof.last_name||''}`.trim() : 'Utilisateur inconnu'
+        const planLabel = pay.plan==='monthly' ? 'Mensuel' : 'Annuel'
+        const opLabel = pay.flw_ref ? 'OM/MoMo' : 'inconnu'
+
+        /* Show in-page toast notification */
+        showToast(`🔔 Nouveau paiement ${planLabel} de ${name}`, 'success')
+
+        /* Add to local notifications list */
+        const fakeNotif = {
+          id: 'rt-'+Date.now(),
+          title: `Nouveau paiement – ${planLabel}`,
+          body: `${name} · ${new Intl.NumberFormat('fr-FR').format(pay.amount)} XAF · Réf: ${pay.flw_ref||'—'}`,
+          data: JSON.stringify({ user_name: name, plan: pay.plan, amount: pay.amount }),
+          read: false,
+          created_at: new Date().toISOString()
+        }
+        notifications = [fakeNotif, ...notifications]
+        renderNotifs()
+
+        /* Also reload pending tab if it's open */
+        const pendingSection = document.getElementById('sectionPending')
+        if(pendingSection && pendingSection.classList.contains('show')) loadPending()
+
+        /* Update pending badge */
+        pendingList = [...pendingList, pay]
+        const badge = document.getElementById('pendingBadge')
+        badge.textContent = pendingList.length
+        badge.style.display = 'inline'
+      }
+    )
+    .subscribe()
+}
+
+/* Realtime subscription on admin_notifications table */
+function subscribeRealtimeNotifs(){
+  try {
+    supabase.channel('admin-notifs-realtime')
+      .on('postgres_changes',
+        { event:'INSERT', schema:'public', table:'admin_notifications' },
+        (payload) => {
+          notifications = [{ ...payload.new, read: false }, ...notifications]
+          renderNotifs()
+        }
+      )
+      .subscribe()
+  } catch(e){ console.warn('Notifs realtime skip:', e.message) }
+}
+
+/* Init */
+await loadNotifications()
+subscribeRealtimePayments()
+subscribeRealtimeNotifs()
 </script>
 </body>
 </html>

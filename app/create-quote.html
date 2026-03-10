@@ -509,7 +509,10 @@ tbody input[type="number"] { text-align: right; }
       <button class="qw-btn-back" onclick="window.location.href='dashboard.html'">
         ← Retour au tableau de bord
       </button>
-      <div class="qw-note">Paiement sécurisé via Flutterwave</div>
+      <div class="qw-note">
+        Paiement OM / MTN MoMo · Activation sous 2h<br>
+        <span style="color:#9CA3AF;">Questions : <strong style="color:#6B7280;">693 421 348</strong> / <strong style="color:#6B7280;">678 526 390</strong></span>
+      </div>
     </div>
   </div>
 </div>
@@ -938,11 +941,10 @@ return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur }).form
 }
 
 /* ══════════════════════════════════════════════════
-   SYSTÈME DE QUOTA & PAIEMENT — CamPay Widget
+   SYSTÈME DE QUOTA & PAIEMENT — Manuel OM / MoMo
    ══════════════════════════════════════════════════ */
 
 let _selectedQwPlan = 'annual'
-let _qwTxRef        = null
 
 // Changer le plan sélectionné dans le quota wall
 window.selectQwPlan = function(plan) {
@@ -950,8 +952,8 @@ window.selectQwPlan = function(plan) {
   document.getElementById('qwPlanMonthly').classList.toggle('best', plan === 'monthly')
   document.getElementById('qwPlanAnnual').classList.toggle('best', plan === 'annual')
   const labels = {
-    monthly: 'Passer au plan Mensuel — 2 000 XAF',
-    annual:  'Passer au plan Annuel — 19 200 XAF'
+    monthly: 'Payer — 2 000 XAF (Mensuel)',
+    annual:  'Payer — 19 200 XAF (Annuel)'
   }
   document.getElementById('qwBtnPay').innerHTML = `
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -990,120 +992,9 @@ async function checkQuota(userId) {
   return canCreate
 }
 
-// Lancer le paiement CamPay depuis le quota wall
-window.qwPay = async function() {
-  if (!window._currentUser) { window.location.href = 'login.html'; return }
-  const me      = window._currentUser
-  const plan    = _selectedQwPlan
-  const amounts = { monthly: 2000, annual: 19200 }
-  const txRef   = `DEVIS-${plan.toUpperCase()}-${me.id.slice(0,8)}-${Date.now()}`
-
-  _qwTxRef = txRef
-
-  const btn = document.getElementById('qwBtnPay')
-  btn.disabled = true
-  btn.innerHTML = `
-    <div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.35);
-      border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;
-      flex-shrink:0;"></div> Ouverture du paiement…`
-
-  // 1. Enregistrer la transaction en attente
-  await window._supabase.from('payments').insert({
-    user_id:  me.id,
-    tx_ref:   txRef,
-    amount:   amounts[plan],
-    currency: 'XAF',
-    plan,
-    status:   'pending'
-  })
-
-  // 2. Sauvegarder dans sessionStorage (fallback)
-  sessionStorage.setItem('pending_plan',    plan)
-  sessionStorage.setItem('pending_tx_ref',  txRef)
-  sessionStorage.setItem('pending_user_id', me.id)
-
-  btn.disabled = false
-  btn.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-    </svg>
-    Payer maintenant`
-
-  // 3. Configurer et ouvrir le widget CamPay
-  campay.options({
-    payButtonId:       'qwCampayTrigger',
-    description:       `Devis App — Plan ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`,
-    amount:            String(amounts[plan]),
-    currency:          'XAF',
-    externalReference: txRef,
-    redirectUrl:       'https://devis-app-two.vercel.app/app/payment-return.html',
-  })
-  document.getElementById('qwCampayTrigger').click()
-}
-
-// ── Callbacks CamPay pour le quota wall ───────────────────────
-
-campay.onSuccess = async function(data) {
-  const txRef = _qwTxRef
-  const me    = window._currentUser
-  const plan  = _selectedQwPlan
-  if (!txRef || !me) return
-
-  const btn = document.getElementById('qwBtnPay')
-  btn.disabled = true
-  btn.innerHTML = `<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;"></div> Activation…`
-
-  // Activer le plan
-  const { error } = await window._supabase.rpc('activate_plan', {
-    p_user_id: me.id,
-    p_plan:    plan,
-    p_tx_ref:  txRef
-  })
-
-  if (error) {
-    // Fallback manuel
-    const expires = plan === 'monthly'
-      ? new Date(Date.now() + 30*24*60*60*1000).toISOString()
-      : new Date(Date.now() + 365*24*60*60*1000).toISOString()
-
-    await window._supabase.from('payments').update({
-      status: 'success', verified_at: new Date().toISOString(), flw_ref: data.reference || ''
-    }).eq('tx_ref', txRef)
-
-    await window._supabase.from('profiles').update({
-      plan, plan_started_at: new Date().toISOString(),
-      plan_expires_at: expires, quotes_count: 0, quotes_reset_at: new Date().toISOString()
-    }).eq('id', me.id)
-  }
-
-  onPaymentSuccess()
-}
-
-campay.onFail = async function(data) {
-  if (_qwTxRef) {
-    await window._supabase.from('payments').update({ status:'failed' }).eq('tx_ref', _qwTxRef)
-  }
-  const btn = document.getElementById('qwBtnPay')
-  btn.disabled = false
-  btn.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-    </svg>
-    Réessayer le paiement`
-  showToast('Paiement échoué. Réessayez.', 'error')
-}
-
-campay.onModalClose = function(data) {
-  if (data.status !== 'SUCCESSFUL') {
-    const btn = document.getElementById('qwBtnPay')
-    btn.disabled = false
-    const labels = { monthly: 'Passer au plan Mensuel — 2 000 XAF', annual: 'Passer au plan Annuel — 19 200 XAF' }
-    btn.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-      </svg>
-      ${labels[_selectedQwPlan]}`
-  }
+// Rediriger vers la page de paiement manuel OM/MoMo
+window.qwPay = function() {
+  window.location.href = 'payment-manual.html?plan=' + _selectedQwPlan
 }
 
 function onPaymentSuccess() {
@@ -1529,7 +1420,7 @@ _deferredPrompt = null
 <button id="qwCampayTrigger" style="display:none;">Pay</button>
 
 <!-- SDK CamPay Widget — remplacer l'app-id par le vôtre -->
-<script src="https://demo.campay.net/sdk/js?app-id=EqWhFqtpUyDbgBodktFuh6a_ReQjE0RojK1YlPYeO1_x49chUTsY-lXe8KawxzWSJfOvWlQPznp_dEipGpZoHQ"></script>
+
 
 </body>
 </html>

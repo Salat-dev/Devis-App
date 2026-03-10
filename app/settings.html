@@ -654,7 +654,7 @@
           <div class="plan-name">Gratuit</div>
           <div class="plan-price">0 XAF<br><sub>À vie</sub></div>
           <div class="plan-features">
-            <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>5 devis par mois</div>
+            <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>5 devis maximum (gratuit)</div>
             <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Clients illimités</div>
             <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Export PDF</div>
             <div class="plan-feature off"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gray-300)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Support prioritaire</div>
@@ -683,7 +683,7 @@
           <div class="plan-price">19 200 XAF<br><sub>/ an · 1 600 XAF/mois</sub></div>
           <div style="font-size:11px;color:var(--green);font-weight:700;margin-top:3px;">Économisez 4 800 XAF (−20%)</div>
           <div class="plan-features">
-            <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>50 devis/mois · 12 mois</div>
+            <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>50 devis/mois pendant 12 mois</div>
             <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Clients illimités</div>
             <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Export PDF &amp; WhatsApp</div>
             <div class="plan-feature"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Support prioritaire 12 mois</div>
@@ -695,14 +695,15 @@
 
       <div class="info-box" style="margin-top:20px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Paiement sécurisé via <strong>CamPay</strong> · MTN Mobile Money &amp; Orange Money · Activation immédiate à réception du paiement.
+        Paiement via <strong>Orange Money</strong> (693 421 348) &amp; <strong>MTN MoMo</strong> (672 475 045) · Bénéficiaire : <strong>DevisApp</strong> · Activation sous 2h.<br>
+        <span style="margin-top:6px;display:block;">📞 Support &amp; renseignements : <strong>693 421 348</strong> ou <strong>678 526 390</strong></span>
       </div>
     </div>
 
   </div>
 
-  <!-- CamPay trigger caché -->
-  <button id="campayTriggerBtn" style="display:none;">Pay</button>
+
+
 
 </main>
 
@@ -1031,49 +1032,10 @@ document.getElementById('btnDeleteAccount').addEventListener('click', () => {
   showToast('Contactez le support pour supprimer votre compte.', 'error')
 })
 
-/* ═══ PAIEMENT CAMPAY ═══ */
-let _payPlan = null, _payTxRef = null
-
-window.triggerPayment = async function(plan) {
-  if (!currentUserId) return
-  const amounts = { monthly: 2000, annual: 19200 }
-  const txRef = `DEVIS-${plan.toUpperCase()}-${currentUserId.slice(0,8)}-${Date.now()}`
-  _payPlan = plan; _payTxRef = txRef
-  await supabase.from('payments').insert({
-    user_id: currentUserId, tx_ref: txRef, amount: amounts[plan], currency: 'XAF', plan, status: 'pending'
-  })
-  sessionStorage.setItem('pending_plan', plan)
-  sessionStorage.setItem('pending_tx_ref', txRef)
-  sessionStorage.setItem('pending_user_id', currentUserId)
-  campay.options({
-    payButtonId:       'campayTriggerBtn',
-    description:       `Devis App — Plan ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`,
-    amount:            String(amounts[plan]),
-    currency:          'XAF',
-    externalReference: txRef,
-    redirectUrl:       'https://devis-app-two.vercel.app/app/payment-return.html',
-  })
-  document.getElementById('campayTriggerBtn').click()
+/* ═══ PAIEMENT MANUEL OM / MOMO ═══ */
+window.triggerPayment = function(plan) {
+  window.location.href = 'payment-manual.html?plan=' + plan
 }
-
-campay.onSuccess = async function(data) {
-  const { error } = await supabase.rpc('activate_plan', { p_user_id: currentUserId, p_plan: _payPlan, p_tx_ref: _payTxRef })
-  if (error) {
-    const expires = _payPlan === 'monthly'
-      ? new Date(Date.now() + 30*24*60*60*1000).toISOString()
-      : new Date(Date.now() + 365*24*60*60*1000).toISOString()
-    await supabase.from('payments').update({ status: 'success', verified_at: new Date().toISOString(), flw_ref: data.reference || '' }).eq('tx_ref', _payTxRef)
-    await supabase.from('profiles').update({ plan: _payPlan, plan_started_at: new Date().toISOString(), plan_expires_at: expires, quotes_count: 0, quotes_reset_at: new Date().toISOString() }).eq('id', currentUserId)
-  }
-  sessionStorage.removeItem('pending_plan'); sessionStorage.removeItem('pending_tx_ref'); sessionStorage.removeItem('pending_user_id')
-  showToast('Plan activé avec succès ! 🎉')
-  setTimeout(() => location.reload(), 2000)
-}
-campay.onFail = async function() {
-  if (_payTxRef) await supabase.from('payments').update({ status: 'failed' }).eq('tx_ref', _payTxRef)
-  showToast('Paiement échoué. Réessayez.', 'error')
-}
-campay.onModalClose = function() {}
 
 /* Clic sur le widget sidebar plan → onglet abonnement */
 window.goToAbonnement = function() {
@@ -1126,6 +1088,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <!-- SDK CamPay Widget -->
-<script src="https://demo.campay.net/sdk/js?app-id=EqWhFqtpUyDbgBodktFuh6a_ReQjE0RojK1YlPYeO1_x49chUTsY-lXe8KawxzWSJfOvWlQPznp_dEipGpZoHQ"></script>
+
 </body>
 </html>
