@@ -450,6 +450,9 @@ async function init() {
   const {data:{session}} = await supabase.auth.getSession()
   if (!session) { window.location.href='login.html'; return }
   me = session.user
+  /* ── Vérification bannissement ── */
+  const {data:banCheck} = await supabase.from('profiles').select('is_banned').eq('id', me.id).single()
+  if(banCheck?.is_banned){ await supabase.auth.signOut(); window.location.href='login.html?error=banned'; return }
   await Promise.all([loadProfile(me.id), loadPlan(me.id)])
   await Promise.all([loadStats(me.id), loadRecent(me.id)])
 }

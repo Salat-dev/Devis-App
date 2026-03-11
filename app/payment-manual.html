@@ -602,6 +602,13 @@
     return
   }
   currentUser = session.user
+  /* ── Ban check ── */
+  const {data:banChk2} = await sb.from('profiles').select('is_banned').eq('id', currentUser.id).single()
+  if(banChk2?.is_banned){
+    await sb.auth.signOut()
+    window.location.href = 'login.html?error=banned'
+    return
+  }
 
   /* Profil */
   const { data: prof } = await sb.from('profiles')
