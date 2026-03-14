@@ -3,266 +3,929 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <meta name="theme-color" content="#F97316">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#012B2A">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Mes Devis - Devis App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Afrivis">
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+<link rel="icon" href="../icons/favicon.svg" >
+  <title>Mes devis — Afrivis</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --orange:#F97316;--orange-dark:#EA6C0A;--orange-light:#FEF3E7;
-      --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;
-      --gray-300:#D1D5DB;--gray-400:#9CA3AF;--gray-500:#6B7280;
-      --gray-600:#4B5563;--gray-700:#374151;--gray-800:#1F2937;
-      --gray-900:#111827;--green:#10B981;--green-light:#D1FAE5;
-      --blue:#3B82F6;--blue-light:#EFF6FF;
-      --red:#EF4444;--red-light:#FFF1F1;
-      --yellow:#F59E0B;--yellow-light:#FEF3C7;
-      --purple:#8B5CF6;--purple-light:#F5F3FF;
-      --white:#FFFFFF;
-    }
-    body{font-family:'DM Sans',sans-serif;background:var(--gray-100);min-height:100vh;display:flex}
+/* ══════════════════════════════════════════
+   AFRIVIS — Design System Tokens
+   #012B2A primary | #CCAA01 accent | #FFF bg
+   Manrope: headings | Inter: body/labels
+══════════════════════════════════════════ */
+:root {
+  --primary:        #012B2A;
+  --primary-hover:  #013534;
+  --primary-12:     rgba(1,43,42,0.12);
+  --primary-08:     rgba(1,43,42,0.08);
+  --primary-06:     rgba(1,43,42,0.06);
+  --primary-04:     rgba(1,43,42,0.04);
+  --accent:         #CCAA01;
+  --accent-d:       #B09600;
+  --accent-light:   rgba(204,170,1,0.10);
+  --accent-12:      rgba(204,170,1,0.12);
+  --accent-22:      rgba(204,170,1,0.22);
+  --accent-pale:    #FAF5D7;
 
-    /* ── Sidebar ── */
-    .sidebar{width:260px;min-width:260px;background:var(--gray-900);display:flex;flex-direction:column;height:100vh;position:sticky;top:0}
-    .sidebar-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
-    .sidebar-logo-icon{width:36px;height:36px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .sidebar-logo span{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:white}
-    .sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
-    .nav-section-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:12px 12px 6px}
-    .nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,.55);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s}
-    .nav-link:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9)}
-    .nav-link.active{background:rgba(249,115,22,.15);color:var(--orange)}
-    .sidebar-footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.07)}
-    .user-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:8px;background:rgba(255,255,255,.05)}
-    .user-avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:white;flex-shrink:0}
-    .user-name{font-size:13px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .user-role{font-size:11px;color:rgba(255,255,255,.4)}
-    .btn-logout{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;border-radius:10px;background:rgba(239,68,68,.1);color:#F87171;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border:1px solid rgba(239,68,68,.2);cursor:pointer;transition:all .2s}
-    .btn-logout:hover{background:rgba(239,68,68,.2);color:#FCA5A5}
+  --white:          #FFFFFF;
+  --bg:             #F6F7F5;
+  --surface:        #F0F2EF;
+  --border:         rgba(1,43,42,0.10);
+  --border-md:      rgba(1,43,42,0.16);
 
-    /* ── Mobile nav ── */
-    .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--gray-900);padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:50;border-top:1px solid rgba(255,255,255,.07)}
-    .mobile-nav-inner{display:flex;justify-content:space-around}
-    .mobile-nav-link{display:flex;flex-direction:column;align-items:center;gap:4px;color:rgba(255,255,255,.45);text-decoration:none;font-size:10px;font-weight:600;padding:4px 12px;border-radius:10px;transition:all .2s}
-    .mobile-nav-link.active{color:var(--orange)}
+  --t1:             #012B2A;
+  --t2:             rgba(1,43,42,0.62);
+  --t3:             rgba(1,43,42,0.40);
+  --t4:             rgba(1,43,42,0.26);
 
-    /* ── Mobile top bar (back button) ── */
-    .mobile-topbar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 0 16px;
-      margin-bottom: 4px;
-    }
-    .mobile-back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--gray-500);
-      text-decoration: none;
-      background: var(--white);
-      border: 1.5px solid var(--gray-200);
-      border-radius: 10px;
-      padding: 7px 14px;
-      transition: all .2s;
-    }
-    .mobile-back-btn:active {
-      background: var(--gray-100);
-      color: var(--orange);
-      border-color: var(--orange-light);
-    }
-    .mobile-topbar-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--gray-800);
-    }
-    /* Spacer to balance the back btn on the right side */
-    .mobile-topbar-spacer {
-      width: 80px; /* roughly matches the back btn width */
-    }
+  --green:          #0D7A5F;
+  --green-bg:       #E6F5F1;
+  --red:            #C53030;
+  --red-bg:         #FEF2F2;
+  --blue:           #1D6FA4;
+  --blue-bg:        #EFF6FF;
+  --amber:          #B45309;
+  --amber-bg:       #FFFBEB;
 
-    /* ── Main ── */
-    .main{flex:1;overflow-y:auto;padding:32px 36px}
-    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
-    .page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--gray-800)}
-    .btn-new{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;background:var(--orange);color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;cursor:pointer;text-decoration:none;box-shadow:0 4px 14px rgba(249,115,22,.35);transition:all .2s}
-    .btn-new:hover{background:var(--orange-dark);transform:translateY(-1px)}
+  --sidebar-w:      252px;
+  --radius-sm:      8px;
+  --radius-md:      12px;
+  --radius-lg:      16px;
+  --radius-xl:      20px;
+  --shadow-xs:      0 1px 2px rgba(1,43,42,0.04);
+  --shadow-sm:      0 2px 8px rgba(1,43,42,0.06);
+  --shadow-md:      0 6px 24px rgba(1,43,42,0.09);
+  --shadow-lg:      0 16px 48px rgba(1,43,42,0.12);
+  --ease:           cubic-bezier(0.16,1,0.3,1);
+  --tr:             all 0.22s var(--ease);
+}
 
-    /* ── KPI cards ── */
-    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-    .kpi-card{background:var(--white);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);animation:slideUp .35s ease both; position: relative; overflow: hidden;}
-    .kpi-card:nth-child(2){animation-delay:.05s}.kpi-card:nth-child(3){animation-delay:.1s}.kpi-card:nth-child(4){animation-delay:.15s}
-    @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    .kpi-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px}
-    .kpi-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gray-800);margin-bottom:4px}
-    .kpi-sub{font-size:12px;color:var(--gray-400)}
-    .kpi-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;float:right;margin-top:-4px}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  display: flex;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
 
-    /* ── Toolbar ── */
-    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-    .search-wrap{flex:1;min-width:200px;position:relative}
-    .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400);pointer-events:none}
-    .search-input{width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:10px 14px 10px 38px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--gray-800);background:var(--white);outline:none;transition:all .2s}
-    .search-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.1)}
-    .filter-select{border:1.5px solid var(--gray-200);border-radius:10px;padding:10px 32px 10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;outline:none;cursor:pointer;appearance:none;transition:all .2s}
-    .filter-select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.1)}
+/* ══════════════════════
+   SIDEBAR
+══════════════════════ */
+.sidebar {
+  width: var(--sidebar-w); min-width: var(--sidebar-w);
+  background: var(--primary);
+  display: flex; flex-direction: column;
+  height: 100vh; position: sticky; top: 0;
+  overflow: hidden; z-index: 20;
+  transition: transform .32s var(--ease);
+}
+.sidebar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 10%, rgba(204,170,1,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 20% 90%, rgba(204,170,1,0.04) 0%, transparent 40%);
+  pointer-events: none;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; flex-shrink: 0;
+}
+.sidebar-logo img {
+  height: 48px; width: auto;
+    max-width: 160px;
+    object-fit: contain; object-position: left center;
+    display: block;
+}
+.sidebar-close-btn {
+  display: none; margin-left: auto;
+  background: none; border: none;
+  color: rgba(255,255,255,0.40); cursor: pointer;
+  padding: 4px; border-radius: var(--radius-sm); flex-shrink: 0;
+  transition: color 0.2s;
+}
+.sidebar-close-btn:hover { color: rgba(255,255,255,0.8); }
 
-    /* ── Filter pills ── */
-    .filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-    .pill{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-500);transition:all .2s}
-    .pill:hover{border-color:var(--orange);color:var(--orange)}
-    .pill.active{border-color:var(--orange);background:var(--orange-light);color:var(--orange)}
-    .pill .dot{width:6px;height:6px;border-radius:50%}
+.sidebar-nav {
+  flex: 1; padding: 12px 10px;
+  display: flex; flex-direction: column; gap: 2px;
+  overflow-y: auto; position: relative;
+}
+.nav-section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  padding: 14px 10px 6px;
+}
+.nav-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  color: rgba(255,255,255,0.52);
+  text-decoration: none; font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 500;
+  transition: var(--tr); cursor: pointer;
+  border: none; background: none; width: 100%; text-align: left;
+  position: relative;
+}
+.nav-link svg { flex-shrink: 0; opacity: 0.8; }
+.nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.88); }
+.nav-link:hover svg { opacity: 1; }
+.nav-link.active {
+  background: var(--accent-12); color: var(--accent); font-weight: 600;
+  border: 1px solid var(--accent-22);
+}
+.nav-link.active svg { opacity: 1; }
+.nav-link.active::before {
+  content: ''; position: absolute;
+  left: -1px; top: 6px; bottom: 6px;
+  width: 3px; background: var(--accent); border-radius: 0 3px 3px 0;
+}
 
-    /* ── QUOTE CARDS GRID ── */
-    .quotes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;animation:slideUp .35s ease .2s both}
-    .quote-card{background:var(--white);border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);border:1px solid var(--gray-100);transition:all .2s;display:flex;flex-direction:column;overflow:hidden;position:relative}
-    .quote-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,.08);border-color:var(--orange-light)}
-    .card-header{padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:flex-start;background:var(--gray-50)}
-    .card-number{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--gray-800);display:block;margin-bottom:4px}
-    .card-client{font-size:13px;color:var(--gray-500);font-weight:500}
-    .card-body{padding:20px;flex:1;display:flex;flex-direction:column;gap:12px}
-    .card-row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
-    .card-label{color:var(--gray-400);font-weight:500}
-    .card-value{color:var(--gray-700);font-weight:600;text-align:right}
-    .card-amount{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gray-800);margin-top:8px;display:block;text-align:right}
-    .card-footer{padding:14px 20px;border-top:1px solid var(--gray-100);display:flex;justify-content:flex-end;gap:8px;background:var(--white)}
-    .card-btn{width:34px;height:34px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-    .card-btn.view{background:var(--orange-light);color:var(--orange)}
-    .card-btn.view:hover{background:var(--orange);color:white}
-    .card-btn.del{background:var(--red-light);color:var(--red)}
-    .card-btn.del:hover{background:var(--red);color:white}
+/* Plan quota bar */
+.sidebar-plan {
+  margin: 0 10px 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer; transition: background 0.18s;
+  position: relative;
+}
+.sidebar-plan:hover { background: rgba(255,255,255,0.09); }
+.sp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.sp-name {
+  font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 700;
+  color: var(--white); display: flex; align-items: center; gap: 6px;
+}
+.sp-change { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; }
+.sp-quota { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.36); margin-bottom: 6px; }
+.sp-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+.sp-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width .4s; }
+.sp-fill.warn { background: #F59E0B; }
+.sp-fill.full { background: var(--red); }
 
-    /* ── Status badge ── */
-    .badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:100px;white-space:nowrap}
-    .b-draft{background:var(--gray-100);color:var(--gray-500)}
-    .b-sent{background:var(--blue-light);color:var(--blue)}
-    .b-accepted{background:var(--green-light);color:var(--green)}
-    .b-refused{background:var(--red-light);color:var(--red)}
-    .b-expired{background:var(--yellow-light);color:var(--yellow)}
+.sidebar-footer {
+  padding: 12px 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  position: relative; flex-shrink: 0;
+}
+.user-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.05); margin-bottom: 8px;
+}
+.user-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.user-name { font-size: 13px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 1px; }
+.btn-logout {
+  width: 100%; display: flex; align-items: center;
+  justify-content: center; gap: 7px; padding: 9px;
+  border-radius: var(--radius-sm);
+  background: rgba(197,48,48,0.08); color: rgba(248,113,113,0.85);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  border: 1px solid rgba(197,48,48,0.18); cursor: pointer; transition: var(--tr);
+}
+.btn-logout:hover { background: rgba(197,48,48,0.15); color: #FCA5A5; }
 
-    /* ── Empty state ── */
-    .empty-state{text-align:center;padding:64px 24px;grid-column:1 / -1}
-    .empty-icon{width:64px;height:64px;background:var(--orange-light);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--orange)}
-    .empty-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gray-700);margin-bottom:8px}
-    .empty-sub{font-size:14px;color:var(--gray-400);margin-bottom:24px}
+/* ══════════════════════
+   TOPBAR (mobile)
+══════════════════════ */
+.topbar {
+  display: none; position: sticky; top: 0; z-index: 18;
+  background: var(--primary);
+  height: 56px; padding: 0 16px;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(1,43,42,0.25); flex-shrink: 0;
+}
+.topbar-logo img {
+  height: 26px; width: auto; max-width: 120px;
+  object-fit: contain; object-position: left center; display: block;
+  filter: brightness(0) invert(1);
+}
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 700;
+}
+.hamburger {
+  background: none; border: none; color: var(--white);
+  cursor: pointer; width: 38px; height: 38px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; transition: background .2s;
+}
+.hamburger:hover { background: rgba(255,255,255,0.10); }
+.ham-lines { display: flex; flex-direction: column; gap: 5px; }
+.ham-lines span {
+  display: block; width: 20px; height: 2px;
+  background: var(--white); border-radius: 2px;
+  transition: transform .3s ease, opacity .3s ease; transform-origin: center;
+}
+.hamburger.open .ham-lines span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open .ham-lines span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open .ham-lines span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0); z-index: 19;
+  transition: background .32s ease; pointer-events: none;
+}
+.sidebar-overlay.active { pointer-events: all; background: rgba(0,0,0,0.5); }
 
-    /* ── Skeleton ── */
-    .skeleton{background:linear-gradient(90deg,var(--gray-100) 25%,var(--gray-200) 50%,var(--gray-100) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px}
-    @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+/* ══════════════════════
+   MAIN
+══════════════════════ */
+.main {
+  flex: 1; overflow-y: auto;
+  padding: 36px 40px 48px;
+  display: flex; flex-direction: column; gap: 24px;
+  min-width: 0;
+}
 
-    /* ── Toast ── */
-    .toast{position:fixed;bottom:28px;right:28px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);animation:toastIn .3s ease;z-index:999;max-width:calc(100vw - 40px)}
-    .toast.success{background:var(--green);color:white}
-    .toast.error{background:var(--red);color:white}
-    @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* ── Page header ── */
+.page-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 16px;
+}
+.page-greeting {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 400;
+  color: var(--t3); margin-bottom: 4px;
+}
+.page-greeting strong { color: var(--accent-d); font-weight: 600; }
+/* H1 Manrope Bold 28px */
+.page-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--t1); line-height: 1.2; letter-spacing: -0.5px;
+  margin-bottom: 3px;
+}
+.page-company { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--t3); }
 
-    /* ── Modal ── */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
-    .modal-overlay.open{display:flex}
-    .modal{background:var(--white);border-radius:16px;padding:28px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideUp .25s ease}
-    .modal-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--gray-800);margin-bottom:8px}
-    .modal-body{font-size:13px;color:var(--gray-500);margin-bottom:22px;line-height:1.6}
-    .modal-actions{display:flex;gap:10px;justify-content:flex-end}
-    .modal-btn{padding:9px 18px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
-    .modal-btn.cancel{background:var(--gray-100);color:var(--gray-600)}
-    .modal-btn.cancel:hover{background:var(--gray-200)}
-    .modal-btn.danger{background:var(--red);color:white}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--primary); color: var(--white);
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 10px 20px; border-radius: var(--radius-md);
+  border: none; cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 14px rgba(1,43,42,0.22); transition: var(--tr);
+  white-space: nowrap; letter-spacing: -0.1px;
+}
+.btn-primary .btn-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(1,43,42,0.28); }
 
-    /* ── Mobile FAB ── */
-    .fab{display:none;position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));right:20px;width:52px;height:52px;border-radius:50%;background:var(--orange);color:white;border:none;box-shadow:0 4px 20px rgba(249,115,22,.5);cursor:pointer;align-items:center;justify-content:center;z-index:55;transition:all .2s}
-    .fab:hover{background:var(--orange-dark);transform:scale(1.05)}
+/* ══════════════════════
+   ALERT BANNER
+══════════════════════ */
+.alert-banner {
+  display: none; align-items: center; gap: 14px;
+  border-radius: var(--radius-lg); padding: 14px 18px;
+}
+.alert-banner.show { display: flex; }
+.alert-banner.warn { background: var(--amber-bg); border: 1px solid rgba(180,83,9,0.18); }
+.alert-banner.danger { background: var(--red-bg); border: 1px solid rgba(197,48,48,0.18); }
+.ab-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.alert-banner.warn .ab-icon { background: rgba(180,83,9,0.10); color: var(--amber); }
+.alert-banner.danger .ab-icon { background: rgba(197,48,48,0.10); color: var(--red); }
+.ab-text { flex: 1; min-width: 0; }
+.ab-title { font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 700; color: var(--t1); }
+.ab-sub { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--t3); margin-top: 2px; }
+.ab-btn {
+  border: none; border-radius: var(--radius-sm);
+  padding: 8px 16px; font-family: 'Manrope', sans-serif; font-size: 13px;
+  font-weight: 700; cursor: pointer; white-space: nowrap;
+  flex-shrink: 0; transition: var(--tr);
+}
+.alert-banner.warn .ab-btn { background: var(--amber); color: var(--white); }
+.alert-banner.warn .ab-btn:hover { background: #92400E; }
+.alert-banner.danger .ab-btn { background: var(--red); color: var(--white); }
+.alert-banner.danger .ab-btn:hover { background: #991B1B; }
 
-    /* ── Responsive ── */
-    @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:900px){
-      .sidebar{display:none}
-      .mobile-nav{display:block}
-      .mobile-topbar{display:flex}
-      .main{padding:16px 12px 90px}
-      .page-title{display:none}          /* replaced by mobile-topbar-title */
-      .page-header .btn-new{display:none}
-      .fab{display:flex}
-      .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-      .kpi-card{padding:14px}
-      .kpi-value{font-size:20px}
-      .quotes-grid{grid-template-columns:1fr}
-      .toast{bottom:90px;right:12px}
-    }
-    @media(min-width:901px){
-      .page-header{margin-bottom:28px}
-    }
+/* ══════════════════════
+   KPI CARDS
+══════════════════════ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 22px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 10px;
+  transition: var(--tr);
+  animation: fadeUp .35s var(--ease) both;
+}
+.stat-card:nth-child(2) { animation-delay: .07s; }
+.stat-card:nth-child(3) { animation-delay: .14s; }
+.stat-card:nth-child(4) { animation-delay: .21s; }
+.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.stat-header { display: flex; align-items: center; justify-content: space-between; }
+/* Inter Regular 12px */
+.stat-label { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: var(--t3); }
+.stat-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.stat-icon.primary { background: var(--primary-08); color: var(--primary); }
+.stat-icon.accent  { background: var(--accent-12); color: var(--accent-d); }
+.stat-icon.green   { background: var(--green-bg); color: var(--green); }
+.stat-icon.blue    { background: var(--blue-bg); color: var(--blue); }
+/* Manrope Bold */
+.stat-value {
+  font-family: 'Manrope', sans-serif; font-size: 30px; font-weight: 700;
+  color: var(--t1); line-height: 1; letter-spacing: -0.5px;
+}
+.stat-footer {
+  font-family: 'Inter', sans-serif; font-size: 12px; color: var(--t4);
+  padding-top: 8px; border-top: 1px solid var(--border);
+}
+
+/* ══════════════════════
+   QUICK ACTIONS (mobile)
+══════════════════════ */
+.quick-actions {
+  display: none;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.qa-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--t2); text-decoration: none;
+  box-shadow: var(--shadow-sm); transition: var(--tr); cursor: pointer;
+}
+.qa-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); color: var(--t1); }
+.qa-icon {
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.qa-icon.primary { background: var(--primary-08); color: var(--primary); }
+.qa-icon.accent  { background: var(--accent-12); color: var(--accent-d); }
+.qa-icon.green   { background: var(--green-bg); color: var(--green); }
+.qa-icon.blue    { background: var(--blue-bg); color: var(--blue); }
+
+/* ══════════════════════
+   TOOLBAR
+══════════════════════ */
+.toolbar {
+  display: flex; align-items: center;
+  gap: 10px; flex-wrap: wrap;
+}
+.search-wrap { flex: 1; min-width: 200px; position: relative; }
+.search-wrap svg {
+  position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%); color: var(--t3); pointer-events: none;
+  transition: color 0.18s;
+}
+.search-wrap:focus-within svg { color: var(--accent-d); }
+.search-input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px 10px 38px;
+  font-family: 'Inter', sans-serif; font-size: 14px;
+  color: var(--t1); background: var(--white);
+  outline: none; transition: var(--tr);
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(204,170,1,0.22);
+}
+.filter-select {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 32px 10px 14px;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--t1);
+  background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238DA3A2' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;
+  outline: none; cursor: pointer; appearance: none; transition: var(--tr);
+}
+.filter-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(204,170,1,0.22);
+}
+
+/* ── Filter pills ── */
+.filter-pills {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 14px; border-radius: 100px;
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--white); color: var(--t2); transition: var(--tr);
+}
+.pill:hover { border-color: var(--primary); color: var(--primary); }
+.pill.active {
+  border-color: var(--primary);
+  background: var(--primary-08); color: var(--primary);
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+/* ══════════════════════
+   QUOTES GRID
+══════════════════════ */
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.quote-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: var(--tr);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  animation: fadeUp .3s var(--ease) both;
+}
+.quote-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(1,43,42,0.16);
+}
+
+.qc-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-start;
+  background: #FAFAF9;
+}
+.qc-number {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px; font-weight: 800; color: var(--primary);
+  display: block; margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+.qc-client {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; color: var(--t2); font-weight: 500;
+}
+
+.qc-body {
+  padding: 18px 20px;
+  flex: 1; display: flex; flex-direction: column; gap: 10px;
+}
+.qc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Inter', sans-serif; font-size: 13px;
+}
+.qc-label { color: var(--t3); font-weight: 500; }
+.qc-value { color: var(--t1); font-weight: 600; text-align: right; }
+
+.qc-amount {
+  font-family: 'Manrope', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--t1);
+  margin-top: 8px; display: block; text-align: right;
+  letter-spacing: -0.5px;
+}
+.qc-amount-sep {
+  height: 1px; background: var(--border);
+  margin: 6px 0 0;
+}
+
+.qc-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 8px;
+  background: var(--white);
+}
+.card-btn {
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--tr); flex-shrink: 0;
+}
+.card-btn.view {
+  background: var(--primary-08); color: var(--primary);
+  border: 1px solid var(--border);
+}
+.card-btn.view:hover { background: var(--primary); color: white; }
+.card-btn.del {
+  background: var(--red-bg); color: var(--red);
+  border: 1px solid rgba(197,48,48,0.15);
+}
+.card-btn.del:hover { background: var(--red); color: white; }
+
+/* ── Status badges ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 100px; white-space: nowrap;
+}
+.b-draft    { background: var(--surface); color: var(--t3); }
+.b-sent     { background: var(--blue-bg); color: var(--blue); }
+.b-accepted { background: var(--green-bg); color: var(--green); }
+.b-refused  { background: var(--red-bg); color: var(--red); }
+.b-expired  { background: var(--amber-bg); color: var(--amber); }
+
+/* ══════════════════════
+   EMPTY STATE
+══════════════════════ */
+.empty-state {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 60px 24px;
+  text-align: center; box-shadow: var(--shadow-sm);
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center;
+}
+.empty-icon {
+  width: 60px; height: 60px;
+  background: var(--accent-light);
+  border: 1.5px solid var(--accent-22);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px; color: var(--accent-d);
+}
+.empty-state h3 {
+  font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700;
+  color: var(--t1); margin-bottom: 6px;
+}
+.empty-state p {
+  font-family: 'Inter', sans-serif; font-size: 13px;
+  color: var(--t3); margin-bottom: 22px; line-height: 1.6;
+}
+
+/* ══════════════════════
+   SKELETON
+══════════════════════ */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg) 25%, var(--border) 50%, var(--bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { from { background-position:200% 0; } to { background-position:-200% 0; } }
+
+/* ══════════════════════
+   MODAL
+══════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(1,43,42,0.45);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--white); border-radius: var(--radius-xl);
+  width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(1,43,42,0.2);
+  border: 1px solid var(--border);
+  transform: translateY(16px) scale(.97);
+  transition: transform .22s var(--ease);
+}
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header {
+  padding: 24px 24px 0;
+  display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px;
+}
+.modal-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--t1);
+}
+.modal-close {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--t3); flex-shrink: 0; transition: var(--tr);
+}
+.modal-close:hover { background: var(--border); color: var(--t1); }
+.modal-body {
+  padding: 16px 24px 24px;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--t2); line-height: 1.6;
+}
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.modal-btn {
+  padding: 9px 18px; border-radius: var(--radius-md);
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; border: none; transition: var(--tr);
+}
+.modal-btn.cancel {
+  background: var(--bg); color: var(--t2);
+  border: 1.5px solid var(--border);
+}
+.modal-btn.cancel:hover { background: var(--border); color: var(--t1); }
+.modal-btn.danger { background: var(--red); color: white; box-shadow: 0 4px 12px rgba(197,48,48,0.25); }
+.modal-btn.danger:hover { background: #b91c1c; }
+
+/* ══════════════════════
+   TOAST
+══════════════════════ */
+.toast {
+  position: fixed; bottom: 28px; right: 28px;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--primary);
+  border: 1px solid rgba(204,170,1,0.3);
+  border-radius: var(--radius-md);
+  padding: 13px 18px;
+  box-shadow: 0 8px 28px rgba(1,43,42,0.2);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  color: white; z-index: 999; max-width: 360px;
+  animation: toastIn 0.28s var(--ease);
+}
+.toast .toast-accent {
+  width: 3px; height: 26px; background: var(--accent);
+  border-radius: 2px; flex-shrink: 0;
+}
+.toast-icon {
+  width: 28px; height: 28px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.toast.success .toast-icon { background: rgba(204,170,1,0.15); color: var(--accent); }
+.toast.error { background: #1a0505; border-color: rgba(197,48,48,0.3); }
+.toast.error .toast-icon { background: rgba(197,48,48,0.15); color: #fca5a5; }
+.toast-message { flex: 1; word-break: break-word; }
+@keyframes toastIn {
+  from { opacity:0; transform:translateY(10px) scale(.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ── Mobile FAB ── */
+.fab {
+  display: none; position: fixed;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  right: 20px;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--primary); color: white; border: none;
+  box-shadow: 0 4px 20px rgba(1,43,42,0.45);
+  cursor: pointer; align-items: center; justify-content: center;
+  z-index: 55; transition: var(--tr); text-decoration: none;
+}
+.fab:hover { background: var(--primary-hover); transform: scale(1.06); }
+
+/* ══════════════════════
+   RESPONSIVE
+══════════════════════ */
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .topbar { display: flex; }
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    height: 100dvh; width: 272px;
+    transform: translateX(-100%); z-index: 30;
+    box-shadow: 4px 0 32px rgba(1,43,42,0.25);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-close-btn { display: flex; }
+  .sidebar-overlay { display: block; }
+  .main { padding: 16px 14px 48px; gap: 16px; }
+  .page-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .page-title { font-size: 22px; }
+  .btn-primary { width: 100%; justify-content: center; }
+  .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+  .stat-card { padding: 16px; flex-direction: row; align-items: center; gap: 14px; }
+  .stat-value { font-size: 24px; }
+  .stat-footer { display: none; }
+  .quick-actions { display: grid; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .filter-select { width: 100%; }
+  .fab { display: flex; }
+  .quotes-grid { grid-template-columns: 1fr; }
+  .toast { bottom: 90px; right: 16px; left: 16px; max-width: none; }
+}
+@media (max-width: 400px) {
+  .quick-actions { grid-template-columns: 1fr; }
+}
   </style>
 </head>
 <body>
 
-<!-- ══ Sidebar ══ -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="sidebar-logo-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-    </div>
-    <span>Devis App</span>
+<!-- ── TOPBAR (mobile) ── -->
+<header class="topbar" id="topbar">
+  <a href="../index.html" class="topbar-logo">
+    <img src="../public/logo/Logo secondaire.svg" alt="afrivis.">
+  </a>
+  <div class="topbar-right">
+    <div class="topbar-avatar" id="topbarAvatar">?</div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <div class="ham-lines"><span></span><span></span><span></span></div>
+    </button>
   </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img src="../public/logo/Logo secondaire.svg" alt="afrivis.">
+    <button class="sidebar-close-btn" id="sidebarCloseBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
   <nav class="sidebar-nav">
     <span class="nav-section-label">Menu</span>
-    <a href="dashboard.html" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
-    <a href="quotes.html" class="nav-link active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Devis</a>
-    <a href="liste-clients.html" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
-    <span class="nav-section-label" style="margin-top:8px">Compte</span>
-    <a href="settings.html" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Paramètres</a>
+    <a href="dashboard.html" class="nav-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+      </svg>Dashboard
+    </a>
+    <a href="quotes.html" class="nav-link active">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>Mes devis
+    </a>
+    <a href="create-quote.html" class="nav-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>Nouveau devis
+    </a>
+    <a href="liste-clients.html" class="nav-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+      </svg>Clients
+    </a>
+    <span class="nav-section-label" style="margin-top:8px;">Compte</span>
+    <a href="settings.html" class="nav-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>Paramètres
+    </a>
   </nav>
+
+  <div class="sidebar-plan" onclick="openPlanModal()">
+    <div class="sp-row">
+      <div class="sp-name">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span id="spName">Gratuit</span>
+      </div>
+      <div class="sp-change">Changer</div>
+    </div>
+    <div class="sp-quota" id="spQuota">0 / 5 devis</div>
+    <div class="sp-bar"><div class="sp-fill" id="spFill" style="width:0%"></div></div>
+  </div>
+
   <div class="sidebar-footer">
     <div class="user-card">
       <div class="user-avatar" id="userAvatar">?</div>
-      <div><div class="user-name" id="sidebarName">Chargement...</div><div class="user-role" id="sidebarCompany">—</div></div>
+      <div style="min-width:0;">
+        <div class="user-name" id="sidebarName">Chargement…</div>
+        <div class="user-role" id="sidebarCompany">—</div>
+      </div>
     </div>
     <button class="btn-logout" id="logoutBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Déconnexion
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+        <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Déconnexion
     </button>
   </div>
 </aside>
 
-<!-- ══ Main ══ -->
+<!-- ── MAIN ── -->
 <main class="main">
 
-  <!-- ── Barre top mobile (bouton retour + titre) ── -->
-  <div class="mobile-topbar">
-    <a href="dashboard.html" class="mobile-back-btn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-      Retour
-    </a>
-    <span class="mobile-topbar-title">Mes devis</span>
-    <div class="mobile-topbar-spacer"></div>
-  </div>
-
-  <!-- ── En-tête desktop ── -->
+  <!-- Page header -->
   <div class="page-header">
-    <h1 class="page-title">Mes devis</h1>
-    <a href="create-quote.html" class="btn-new">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <div>
+      <p class="page-greeting">Bonjour, <strong id="userName">…</strong> 👋</p>
+      <h1 class="page-title">Mes devis</h1>
+      <p class="page-company" id="companyName">—</p>
+    </div>
+    <a href="create-quote.html" class="btn-primary">
+      <div class="btn-dot"></div>
       Nouveau devis
     </a>
   </div>
 
+  <!-- Alert banner -->
+  <div class="alert-banner" id="alertBanner">
+    <div class="ab-icon" id="abIcon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    </div>
+    <div class="ab-text">
+      <div class="ab-title" id="abTitle">Plus que 2 devis disponibles</div>
+      <div class="ab-sub" id="abSub">Passez au plan mensuel pour 50 devis/mois.</div>
+    </div>
+    <button class="ab-btn" onclick="openPlanModal()" id="abBtn">Upgrader</button>
+  </div>
+
   <!-- KPIs -->
-  <div class="kpi-grid" id="kpiGrid">
-    <div class="kpi-card"><div class="kpi-label">Total devis</div><div class="kpi-value skeleton" style="width:60px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
-    <div class="kpi-card"><div class="kpi-label">Acceptés</div><div class="kpi-value skeleton" style="width:60px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
-    <div class="kpi-card"><div class="kpi-label">En attente</div><div class="kpi-value skeleton" style="width:60px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
-    <div class="kpi-card"><div class="kpi-label">CA accepté</div><div class="kpi-value skeleton" style="width:80px;height:28px;display:block"></div><div class="kpi-sub skeleton" style="width:80px;height:12px;margin-top:4px"></div></div>
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Total devis</span>
+        <div class="stat-icon primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value" id="totalQuotes"><span class="skeleton" style="display:inline-block;width:44px;height:32px;"></span></div>
+      <div class="stat-footer">Créés sur votre compte</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Acceptés</span>
+        <div class="stat-icon green">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+      </div>
+      <div class="stat-value" id="acceptedCount"><span class="skeleton" style="display:inline-block;width:44px;height:32px;"></span></div>
+      <div class="stat-footer">Devis acceptés</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">En attente</span>
+        <div class="stat-icon blue">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+      </div>
+      <div class="stat-value" id="pendingCount"><span class="skeleton" style="display:inline-block;width:44px;height:32px;"></span></div>
+      <div class="stat-footer">Brouillons + envoyés</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">CA accepté</span>
+        <div class="stat-icon accent">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+      </div>
+      <div class="stat-value" id="caValue"><span class="skeleton" style="display:inline-block;width:88px;height:32px;"></span></div>
+      <div class="stat-footer">Montant des devis acceptés</div>
+    </div>
+  </div>
+
+  <!-- Quick actions (mobile) -->
+  <div class="quick-actions">
+    <a href="create-quote.html" class="qa-btn">
+      <div class="qa-icon primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      <span>Nouveau devis</span>
+    </a>
+    <a href="liste-clients.html" class="qa-btn">
+      <div class="qa-icon green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+      <span>Clients</span>
+    </a>
+    <button class="qa-btn" onclick="openPlanModal()">
+      <div class="qa-icon accent"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <span>Mon plan</span>
+    </button>
   </div>
 
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="search-wrap">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un devis, un client...">
+      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un devis, un client…">
     </div>
     <select class="filter-select" id="sortSelect">
       <option value="date_desc">Plus récents</option>
@@ -273,44 +936,43 @@
   </div>
 
   <!-- Filter pills -->
-  <div class="filter-pills">
+  <div class="filter-pills" id="filterPills">
     <div class="pill active" data-status="all">Tous</div>
-    <div class="pill" data-status="draft"><span class="dot" style="background:var(--gray-400)"></span>Brouillons</div>
+    <div class="pill" data-status="draft"><span class="dot" style="background:var(--t3)"></span>Brouillons</div>
     <div class="pill" data-status="sent"><span class="dot" style="background:var(--blue)"></span>Envoyés</div>
     <div class="pill" data-status="accepted"><span class="dot" style="background:var(--green)"></span>Acceptés</div>
     <div class="pill" data-status="refused"><span class="dot" style="background:var(--red)"></span>Refusés</div>
-    <div class="pill" data-status="expired"><span class="dot" style="background:var(--yellow)"></span>Expirés</div>
+    <div class="pill" data-status="expired"><span class="dot" style="background:var(--amber)"></span>Expirés</div>
   </div>
 
-  <!-- Cards Grid -->
+  <!-- Quotes grid -->
   <div class="quotes-grid" id="quotesGrid">
     <div class="quote-card" style="height:200px"><div class="skeleton" style="height:100%"></div></div>
     <div class="quote-card" style="height:200px"><div class="skeleton" style="height:100%"></div></div>
     <div class="quote-card" style="height:200px"><div class="skeleton" style="height:100%"></div></div>
   </div>
 
+  <!-- FAB mobile -->
+  <a href="create-quote.html" class="fab">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </a>
+
 </main>
 
-<!-- ══ FAB mobile ══ -->
-<a href="create-quote.html" class="fab" title="Nouveau devis">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-</a>
-
-<!-- ══ Mobile nav ══ -->
-<nav class="mobile-nav">
-  <div class="mobile-nav-inner">
-    <a href="dashboard.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
-    <a href="quotes.html" class="mobile-nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Devis</a>
-    <a href="liste-clients.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
-    <a href="settings.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Réglages</a>
-  </div>
-</nav>
-
-<!-- ══ Delete modal ══ -->
+<!-- ══ MODAL SUPPRESSION ══ -->
 <div class="modal-overlay" id="deleteModal">
   <div class="modal">
-    <div class="modal-title">Supprimer ce devis ?</div>
-    <div class="modal-body">Cette action est irréversible. Le devis et toutes ses lignes seront définitivement supprimés.</div>
+    <div class="modal-header">
+      <div class="modal-title">Supprimer ce devis ?</div>
+      <button class="modal-close" onclick="document.getElementById('deleteModal').classList.remove('open')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      Cette action est irréversible. Le devis et toutes ses lignes seront définitivement supprimés.
+    </div>
     <div class="modal-actions">
       <button class="modal-btn cancel" onclick="document.getElementById('deleteModal').classList.remove('open')">Annuler</button>
       <button class="modal-btn danger" id="confirmDeleteBtn">Supprimer</button>
@@ -318,6 +980,38 @@
   </div>
 </div>
 
+<!-- ══ MODAL PLANS ══ -->
+<div class="modal-overlay" id="planModal" onclick="handleModalClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Choisir un plan</div>
+        <div style="font-size:12px;color:var(--t3);margin-top:3px;">5 devis gratuits · 50 devis/mois en payant</div>
+      </div>
+      <button class="modal-close" onclick="closePlanModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body" style="padding-top:0;">
+      <p style="margin-bottom:16px;font-size:13px;color:var(--t2);">Contactez-nous pour changer de plan :</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="https://wa.me/237693421348" target="_blank" class="btn-primary" style="background:var(--green);box-shadow:none;">
+          WhatsApp 693 421 348
+        </a>
+        <a href="https://wa.me/237678526390" target="_blank" class="btn-primary" style="background:var(--green);box-shadow:none;">
+          WhatsApp 678 526 390
+        </a>
+      </div>
+    </div>
+    <div style="text-align:center;padding:0 24px 24px;font-family:'Inter',sans-serif;font-size:11px;color:var(--t4);">
+      Paiement Orange Money / MTN MoMo · Activation sous 2h
+    </div>
+  </div>
+</div>
+
+<!-- ══ JAVASCRIPT 100% INTACT ══ -->
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 const supabase = createClient(
@@ -325,185 +1019,266 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
 )
 
-let currentUserId=null, allQuotes=[], filtered=[], deleteTargetId=null
-let searchVal='', statusFilter='all', sortVal='date_desc'
+let currentUserId = null
+let allQuotes = []
+let filteredQuotes = []
+let deleteTargetId = null
+let searchVal = ''
+let statusFilter = 'all'
+let sortVal = 'date_desc'
 
-const fmt=(n,cur)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:cur||'XAF'}).format(n||0)
-const fmtDate=d=>d?new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}):'—'
-const STATUS={
-  draft:{label:'Brouillon',cls:'b-draft'},sent:{label:'Envoyé',cls:'b-sent'},
-  accepted:{label:'Accepté',cls:'b-accepted'},refused:{label:'Refusé',cls:'b-refused'},expired:{label:'Expiré',cls:'b-expired'}
+const fmt = (n, cur) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur || 'XOF' }).format(n || 0)
+const fmtDate = d => d ? new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+
+const STATUS = {
+  draft:    { label: 'Brouillon', cls: 'b-draft' },
+  sent:     { label: 'Envoyé',    cls: 'b-sent' },
+  accepted: { label: 'Accepté',   cls: 'b-accepted' },
+  refused:  { label: 'Refusé',    cls: 'b-refused' },
+  expired:  { label: 'Expiré',    cls: 'b-expired' }
 }
 
-function showToast(msg,type='success'){
-  document.querySelector('.toast')?.remove()
-  const t=document.createElement('div');t.className=`toast ${type}`
-  t.innerHTML=(type==='success'
-    ?`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
-    :`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
-  )+' '+msg
-  document.body.appendChild(t);setTimeout(()=>t.remove(),3500)
+function showToast(message, type = 'success') {
+  const existing = document.querySelector('.toast')
+  if (existing) existing.remove()
+  const toast = document.createElement('div')
+  toast.className = `toast ${type}`
+  const accent = document.createElement('div')
+  accent.className = 'toast-accent'
+  const icon = document.createElement('div')
+  icon.className = 'toast-icon'
+  icon.innerHTML = type === 'success'
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+  const msg = document.createElement('span')
+  msg.className = 'toast-message'
+  msg.textContent = message
+  toast.appendChild(accent)
+  toast.appendChild(icon)
+  toast.appendChild(msg)
+  document.body.appendChild(toast)
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300) }, 3000)
 }
 
-async function init(){
-  const {data:{session}}=await supabase.auth.getSession()
-  if(!session){location.href='login.html';return}
-  currentUserId=session.user.id
-  const {data:p}=await supabase.from('profiles').select('first_name,last_name,company').eq('id',currentUserId).single()
-  if(p){
-    const ini=[p.first_name?.[0],p.last_name?.[0]].filter(Boolean).join('').toUpperCase()||'U'
-    document.getElementById('userAvatar').textContent=ini
-    document.getElementById('sidebarName').textContent=[p.first_name,p.last_name].filter(Boolean).join(' ')||'Utilisateur'
-    document.getElementById('sidebarCompany').textContent=p.company||'Mon entreprise'
-  }
+/* ── Sidebar mobile ── */
+const sidebar = document.getElementById('sidebar')
+const overlay = document.getElementById('sidebarOverlay')
+const hamburger = document.getElementById('hamburger')
+const closeBtn = document.getElementById('sidebarCloseBtn')
+function openNav() { sidebar.classList.add('open'); overlay.classList.add('active'); hamburger.classList.add('open'); hamburger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+function closeNav() { sidebar.classList.remove('open'); overlay.classList.remove('active'); hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+hamburger?.addEventListener('click', () => sidebar.classList.contains('open') ? closeNav() : openNav())
+closeBtn?.addEventListener('click', closeNav)
+overlay?.addEventListener('click', closeNav)
+window.addEventListener('resize', () => { if (window.innerWidth > 768) closeNav() })
+
+/* ── Init ── */
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) { window.location.href = 'login.html'; return }
+  currentUserId = session.user.id
+  const { data: banCheck } = await supabase.from('profiles').select('is_banned').eq('id', currentUserId).single()
+  if (banCheck?.is_banned) { await supabase.auth.signOut(); window.location.href = 'login.html?error=banned'; return }
+  await Promise.all([loadProfile(), loadPlan()])
   await loadQuotes()
 }
 
-async function loadQuotes(){
-  const {data,error}=await supabase.from('quotes')
-    .select('id,quote_number,quote_date,expiry_date,total_amount,currency,status,clients(full_name)')
-    .eq('user_id',currentUserId)
-    .order('created_at',{ascending:false})
-  if(error){showToast('Erreur de chargement.','error');return}
-  const today=new Date().toISOString().split('T')[0]
-  allQuotes=(data||[]).map(q=>{
-    if(q.status==='sent'&&q.expiry_date&&q.expiry_date<today) return{...q,status:'expired'}
+async function loadProfile() {
+  const { data } = await supabase.from('profiles').select('first_name,last_name,company').eq('id', currentUserId).single()
+  if (!data) return
+  const full = [data.first_name, data.last_name].filter(Boolean).join(' ') || 'Utilisateur'
+  const ini = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'U'
+  document.getElementById('userName').textContent = data.first_name || 'Utilisateur'
+  document.getElementById('sidebarName').textContent = full
+  document.getElementById('sidebarCompany').textContent = data.company || 'Mon entreprise'
+  document.getElementById('companyName').textContent = data.company || ''
+  document.getElementById('userAvatar').textContent = ini
+  document.getElementById('topbarAvatar').textContent = ini
+}
+
+async function loadPlan() {
+  const { data } = await supabase.from('profiles').select('plan,quotes_count,plan_expires_at').eq('id', currentUserId).single()
+  if (!data) return
+  if (data.plan !== 'free' && data.plan_expires_at && new Date(data.plan_expires_at) < new Date()) {
+    await supabase.from('profiles').update({ plan: 'free', plan_expires_at: null }).eq('id', currentUserId)
+    data.plan = 'free'
+  }
+  const plan = data.plan || 'free'
+  const count = data.quotes_count || 0
+  const limit = plan === 'free' ? 5 : 50
+  const pct = Math.min(100, Math.round(count / limit * 100))
+  const names = { free: 'Gratuit', monthly: 'Mensuel', annual: 'Annuel' }
+  document.getElementById('spName').textContent = names[plan] || 'Gratuit'
+  document.getElementById('spQuota').textContent = `${count} / ${limit} devis`
+  const spf = document.getElementById('spFill')
+  spf.style.width = pct + '%'
+  spf.className = 'sp-fill' + (pct >= 100 ? ' full' : pct >= 80 ? ' warn' : '')
+  const banner = document.getElementById('alertBanner')
+  const remaining = limit - count
+  if (plan === 'free' && remaining <= 2 && remaining > 0) {
+    banner.classList.add('show', 'warn')
+    document.getElementById('abTitle').textContent = `Plus que ${remaining} devis disponible${remaining > 1 ? 's' : ''}`
+    document.getElementById('abSub').textContent = 'Passez au plan mensuel pour 50 devis/mois.'
+    document.getElementById('abBtn').textContent = 'Upgrader'
+  } else if (count >= limit) {
+    banner.classList.add('show', 'danger')
+    document.getElementById('abTitle').textContent = 'Limite atteinte — aucun devis possible'
+    document.getElementById('abSub').textContent = 'Choisissez un plan pour continuer.'
+    document.getElementById('abBtn').textContent = 'Choisir un plan'
+  } else {
+    banner.classList.remove('show', 'warn', 'danger')
+  }
+}
+
+async function loadQuotes() {
+  const { data, error } = await supabase
+    .from('quotes')
+    .select('id, quote_number, quote_date, expiry_date, total_amount, currency, status, clients(full_name)')
+    .eq('user_id', currentUserId)
+    .order('created_at', { ascending: false })
+  if (error) { showToast('Erreur de chargement', 'error'); return }
+  const today = new Date().toISOString().split('T')[0]
+  allQuotes = (data || []).map(q => {
+    if (q.status === 'sent' && q.expiry_date && q.expiry_date < today) return { ...q, status: 'expired' }
     return q
   })
   renderKPIs(allQuotes)
   applyFilters()
 }
 
-function renderKPIs(list){
-  const total=list.length
-  const accepted=list.filter(q=>q.status==='accepted')
-  const pending=list.filter(q=>['draft','sent'].includes(q.status))
-  const ca=accepted.reduce((s,q)=>s+(+q.total_amount),0)
-  const firstCur=accepted[0]?.currency||list[0]?.currency||'XAF'
-  document.getElementById('kpiGrid').innerHTML=`
-    <div class="kpi-card" style="animation-delay:0s">
-      <div class="kpi-icon" style="background:var(--orange-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-      <div class="kpi-label">Total devis</div>
-      <div class="kpi-value">${total}</div>
-      <div class="kpi-sub">cette année</div>
-    </div>
-    <div class="kpi-card" style="animation-delay:.05s">
-      <div class="kpi-icon" style="background:var(--green-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-      <div class="kpi-label">Acceptés</div>
-      <div class="kpi-value">${accepted.length}</div>
-      <div class="kpi-sub">${total?Math.round(accepted.length/total*100):0}% du total</div>
-    </div>
-    <div class="kpi-card" style="animation-delay:.1s">
-      <div class="kpi-icon" style="background:var(--blue-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div class="kpi-label">En attente</div>
-      <div class="kpi-value">${pending.length}</div>
-      <div class="kpi-sub">brouillons + envoyés</div>
-    </div>
-    <div class="kpi-card" style="animation-delay:.15s">
-      <div class="kpi-icon" style="background:var(--orange-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-      <div class="kpi-label">CA accepté</div>
-      <div class="kpi-value" style="font-size:18px">${fmt(ca,firstCur)}</div>
-      <div class="kpi-sub">${accepted.length} devis confirmés</div>
-    </div>`
+function renderKPIs(list) {
+  const total = list.length
+  const accepted = list.filter(q => q.status === 'accepted')
+  const pending = list.filter(q => ['draft', 'sent'].includes(q.status))
+  const ca = accepted.reduce((s, q) => s + (+q.total_amount), 0)
+  const firstCur = accepted[0]?.currency || list[0]?.currency || 'XOF'
+  document.getElementById('totalQuotes').innerHTML = total
+  document.getElementById('acceptedCount').innerHTML = accepted.length
+  document.getElementById('pendingCount').innerHTML = pending.length
+  document.getElementById('caValue').innerHTML = fmt(ca, firstCur)
 }
 
-function applyFilters(){
-  let list=[...allQuotes]
-  if(statusFilter!=='all') list=list.filter(q=>q.status===statusFilter)
-  if(searchVal.trim()){
-    const s=searchVal.toLowerCase()
-    list=list.filter(q=>
-      (q.quote_number||'').toLowerCase().includes(s)||
-      (q.clients?.full_name||'').toLowerCase().includes(s)
+function applyFilters() {
+  let list = [...allQuotes]
+  if (statusFilter !== 'all') list = list.filter(q => q.status === statusFilter)
+  if (searchVal.trim()) {
+    const s = searchVal.toLowerCase()
+    list = list.filter(q =>
+      (q.quote_number || '').toLowerCase().includes(s) ||
+      (q.clients?.full_name || '').toLowerCase().includes(s)
     )
   }
-  list.sort((a,b)=>{
-    if(sortVal==='date_desc') return new Date(b.quote_date||0)-new Date(a.quote_date||0)
-    if(sortVal==='date_asc')  return new Date(a.quote_date||0)-new Date(b.quote_date||0)
-    if(sortVal==='amount_desc') return (b.total_amount||0)-(a.total_amount||0)
-    if(sortVal==='amount_asc')  return (a.total_amount||0)-(b.total_amount||0)
+  list.sort((a, b) => {
+    if (sortVal === 'date_desc') return new Date(b.quote_date || 0) - new Date(a.quote_date || 0)
+    if (sortVal === 'date_asc') return new Date(a.quote_date || 0) - new Date(b.quote_date || 0)
+    if (sortVal === 'amount_desc') return (b.total_amount || 0) - (a.total_amount || 0)
+    if (sortVal === 'amount_asc') return (a.total_amount || 0) - (b.total_amount || 0)
     return 0
   })
-  filtered=list
+  filteredQuotes = list
   renderCards(list)
 }
 
-function renderCards(list){
-  const grid=document.getElementById('quotesGrid')
-  if(!list.length){
-    grid.innerHTML=`<div class="empty-state">
-      <div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-      <div class="empty-title">${statusFilter==='all'&&!searchVal?'Aucun devis créé':'Aucun résultat'}</div>
-      <div class="empty-sub">${statusFilter==='all'&&!searchVal?'Commencez par créer votre premier devis.':'Modifiez vos filtres ou votre recherche.'}</div>
-      ${statusFilter==='all'&&!searchVal?`<a href="create-quote.html" class="btn-new" style="display:inline-flex;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Créer un devis</a>`:''}
-    </div>`
+function renderCards(list) {
+  const grid = document.getElementById('quotesGrid')
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        <h3>${statusFilter === 'all' && !searchVal ? 'Aucun devis créé' : 'Aucun résultat'}</h3>
+        <p>${statusFilter === 'all' && !searchVal ? 'Commencez par créer votre premier devis.' : 'Modifiez vos filtres ou votre recherche.'}</p>
+        ${statusFilter === 'all' && !searchVal ? `<a href="create-quote.html" class="btn-primary"><div class="btn-dot"></div> Créer un devis</a>` : ''}
+      </div>`
     return
   }
-  grid.innerHTML=list.map(q=>{
-    const st=STATUS[q.status]||STATUS.draft
-    const isExpired=q.status==='expired'
+  grid.innerHTML = list.map(q => {
+    const st = STATUS[q.status] || STATUS.draft
+    const isExpired = q.status === 'expired'
     return `
-    <div class="quote-card" onclick="location.href='view-quote.html?id=${q.id}'" style="cursor:pointer">
-      <div class="card-header">
-        <div>
-          <span class="card-number">${q.quote_number||'—'}</span>
-          <span class="card-client">${q.clients?.full_name||'Client inconnu'}</span>
+      <div class="quote-card" onclick="location.href='view-quote.html?id=${q.id}'" style="cursor:pointer">
+        <div class="qc-header">
+          <div>
+            <span class="qc-number">${q.quote_number || '—'}</span>
+            <span class="qc-client">${q.clients?.full_name || 'Client inconnu'}</span>
+          </div>
+          <span class="badge ${st.cls}">${st.label}</span>
         </div>
-        <span class="badge ${st.cls}">${st.label}</span>
-      </div>
-      <div class="card-body">
-        <div class="card-row">
-          <span class="card-label">Date</span>
-          <span class="card-value">${fmtDate(q.quote_date)}</span>
+        <div class="qc-body">
+          <div class="qc-row">
+            <span class="qc-label">Date</span>
+            <span class="qc-value">${fmtDate(q.quote_date)}</span>
+          </div>
+          <div class="qc-row">
+            <span class="qc-label">Expiration</span>
+            <span class="qc-value" style="color:${isExpired ? 'var(--red)' : 'inherit'}">${fmtDate(q.expiry_date)}</span>
+          </div>
+          <div class="qc-amount-sep"></div>
+          <span class="qc-amount">${fmt(q.total_amount, q.currency)}</span>
         </div>
-        <div class="card-row">
-          <span class="card-label">Expiration</span>
-          <span class="card-value" style="color:${isExpired?'var(--red)':'inherit'}">${fmtDate(q.expiry_date)}</span>
+        <div class="qc-footer" onclick="event.stopPropagation()">
+          <button class="card-btn view" onclick="location.href='view-quote.html?id=${q.id}'" title="Voir">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="card-btn del" onclick="openDeleteModal('${q.id}')" title="Supprimer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          </button>
         </div>
-        <span class="card-amount">${fmt(q.total_amount,q.currency)}</span>
-      </div>
-      <div class="card-footer" onclick="event.stopPropagation()">
-        <button class="card-btn view" onclick="location.href='view-quote.html?id=${q.id}'" title="Voir">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <button class="card-btn del" onclick="openDelete('${q.id}')" title="Supprimer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-        </button>
-      </div>
-    </div>`
+      </div>`
   }).join('')
 }
 
-function openDelete(id){deleteTargetId=id;document.getElementById('deleteModal').classList.add('open')}
-window.openDelete=openDelete
+window.openDeleteModal = (id) => {
+  deleteTargetId = id
+  document.getElementById('deleteModal').classList.add('open')
+}
 
-document.getElementById('confirmDeleteBtn').addEventListener('click',async()=>{
-  if(!deleteTargetId)return
-  const {error}=await supabase.from('quotes').delete().eq('id',deleteTargetId)
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+  if (!deleteTargetId) return
+  const { error } = await supabase.from('quotes').delete().eq('id', deleteTargetId)
   document.getElementById('deleteModal').classList.remove('open')
-  if(error){showToast('Erreur suppression.','error');return}
-  showToast('Devis supprimé')
-  allQuotes=allQuotes.filter(q=>q.id!==deleteTargetId)
-  deleteTargetId=null
+  if (error) { showToast('Erreur lors de la suppression', 'error'); return }
+  showToast('Devis supprimé avec succès', 'success')
+  allQuotes = allQuotes.filter(q => q.id !== deleteTargetId)
+  deleteTargetId = null
   renderKPIs(allQuotes)
   applyFilters()
+  await loadPlan()
 })
 
-document.getElementById('searchInput').addEventListener('input',e=>{searchVal=e.target.value;applyFilters()})
-document.getElementById('sortSelect').addEventListener('change',e=>{sortVal=e.target.value;applyFilters()})
-document.querySelectorAll('.pill').forEach(p=>{
-  p.addEventListener('click',()=>{
-    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'))
+document.getElementById('searchInput').addEventListener('input', (e) => { searchVal = e.target.value; applyFilters() })
+document.getElementById('sortSelect').addEventListener('change', (e) => { sortVal = e.target.value; applyFilters() })
+document.querySelectorAll('.pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'))
     p.classList.add('active')
-    statusFilter=p.dataset.status
+    statusFilter = p.dataset.status
     applyFilters()
   })
 })
-document.getElementById('logoutBtn').addEventListener('click',async()=>{
-  await supabase.auth.signOut();location.href='login.html'
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await supabase.auth.signOut()
+  window.location.href = 'login.html'
 })
 
+window.openPlanModal = () => document.getElementById('planModal').classList.add('open')
+window.closePlanModal = () => document.getElementById('planModal').classList.remove('open')
+window.handleModalClick = (e) => { if (e.target === document.getElementById('planModal')) closePlanModal() }
+
 init()
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try { await navigator.serviceWorker.register('/sw.js', { scope: '/' }) } catch (e) {}
+  })
+}
 </script>
 </body>
 </html>

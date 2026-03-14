@@ -3,145 +3,734 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paiement — DevisApp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="afrivis.">
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+  <title>Paiement — Afrivis.</title>
+<link rel="icon" href="../icons/favicon.svg" >
+  <!-- Google Fonts : Manrope & Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --orange:#F97316;--orange-dark:#EA6C0A;--orange-light:#FEF3E7;
-      --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;
-      --gray-400:#9CA3AF;--gray-500:#6B7280;--gray-600:#4B5563;
-      --gray-700:#374151;--gray-800:#1F2937;--gray-900:#111827;
-      --green:#10B981;--green-light:#D1FAE5;
-      --blue:#3B82F6;--blue-light:#EFF6FF;
-      --white:#FFFFFF;
+    /* RESET & VARIABLES */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    body{font-family:'DM Sans',sans-serif;background:var(--gray-100);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;-webkit-font-smoothing:antialiased;}
-    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(249,115,22,.08),transparent);pointer-events:none;z-index:0;}
-    .wrap{width:100%;max-width:500px;animation:fadeUp .35s ease both;position:relative;z-index:1;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-    .brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;}
-    .brand-icon{width:40px;height:40px;background:var(--orange);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(249,115,22,.35);}
-    .brand-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gray-800);}
+    :root {
+      --primary: #012B2A;
+      --accent: #CCAA01;
+      --background: #FFFFFF;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --green: #10B981;
+      --green-light: #D1FAE5;
+      --blue: #3B82F6;
+      --blue-light: #EFF6FF;
+      --white: #FFFFFF;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --border-radius-card: 24px;
+      --border-radius-element: 12px;
+    }
 
-    .card{background:var(--white);border-radius:20px;box-shadow:0 4px 6px rgba(0,0,0,.04),0 16px 40px rgba(0,0,0,.08);margin-bottom:12px;}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    /* PLAN */
-    .plan-selector{padding:22px 22px 16px;}
-    .section-label{font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
-    .plan-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-    .plan-opt{border:2px solid var(--gray-200);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .18s;position:relative;user-select:none;}
-    .plan-opt:hover{border-color:var(--orange);background:rgba(249,115,22,.04);}
-    .plan-opt.selected{border-color:var(--orange);background:var(--orange-light);}
-    .plan-opt-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--gray-800);}
-    .plan-opt-price{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--orange);margin-top:3px;}
-    .plan-opt-sub{font-size:10px;color:var(--gray-500);margin-top:1px;}
-    .plan-tag{position:absolute;top:-8px;right:10px;background:var(--orange);color:white;font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:100px;}
+    /* LÉGER OVERLAY DÉCO */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(204, 170, 1, 0.05), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-    /* AMOUNT */
-    .amount-banner{padding:16px 22px;border-top:1px solid var(--gray-100);border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;background:var(--gray-50);}
-    .amount-label{font-size:12px;color:var(--gray-500);margin-bottom:2px;}
-    .amount-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gray-900);}
-    .amount-right{text-align:right;}
-    .amount-dur{font-size:13px;font-weight:700;color:var(--gray-700);}
-    .amount-quota{font-size:11px;color:var(--gray-400);margin-top:2px;}
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+      animation: fadeUp 0.35s ease both;
+      position: relative;
+      z-index: 1;
+    }
 
-    /* STEPS */
-    .steps{padding:18px 22px;}
-    .steps-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
-    .steps-title svg{color:var(--orange);}
-    .step{display:flex;align-items:flex-start;gap:11px;margin-bottom:12px;}
-    .step:last-child{margin-bottom:0;}
-    .step-num{width:22px;height:22px;min-width:22px;border-radius:50%;background:var(--orange);color:white;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;}
-    .step-title{font-size:13px;font-weight:700;color:var(--gray-800);}
-    .step-desc{font-size:12px;color:var(--gray-500);margin-top:2px;line-height:1.5;}
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    /* OPERATOR CARDS */
-    .pay-methods{padding:0 22px 18px;display:flex;flex-direction:column;gap:10px;}
-    .pay-method{border:2px solid var(--gray-200);border-radius:12px;padding:13px 15px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .18s;user-select:none;}
-    .pay-method:hover{border-color:var(--orange);background:rgba(249,115,22,.04);}
-    .pay-method.selected{border-color:var(--orange);background:var(--orange-light);}
-    .pay-check{width:18px;height:18px;min-width:18px;border-radius:50%;border:2px solid var(--gray-300);display:flex;align-items:center;justify-content:center;transition:all .18s;}
-    .pay-method.selected .pay-check{border-color:var(--orange);background:var(--orange);}
-    .pay-check svg{opacity:0;transition:opacity .15s;}
-    .pay-method.selected .pay-check svg{opacity:1;}
-    .pay-method-icon{width:38px;height:38px;min-width:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-    .pay-method-icon.om{background:#FF6B00;}
-    .pay-method-icon.momo{background:#FFCC00;}
-    .pay-method-info{flex:1;min-width:0;}
-    .pay-method-name{font-size:12px;font-weight:700;color:var(--gray-700);}
-    .pay-method-num{font-family:monospace;font-size:17px;font-weight:800;color:var(--orange);letter-spacing:.05em;margin-top:2px;}
-    .pay-method-recip{font-size:11px;color:var(--gray-400);margin-top:1px;}
-    .copy-btn{padding:6px 12px;border-radius:8px;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-600);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
-    .copy-btn:hover{border-color:var(--orange);color:var(--orange);}
-    .copy-btn.copied{border-color:var(--green);color:var(--green);background:var(--green-light);}
+    /* BRAND AVEC LOGO */
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .brand img {
+     height: 48px; width: auto;
+    max-width: 160px;
+    object-fit: contain; object-position: left center;
+    display: block;
+    }
+    .brand-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--white);
+      padding: 4px 12px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-sm);
+    }
 
-    /* FORM */
-    .form-section{padding:18px 22px;border-top:1px solid var(--gray-100);}
-    .form-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
-    .form-title svg{color:var(--orange);}
-    .field{margin-bottom:12px;}
-    .field label{display:block;font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
-    .field input{width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray-800);background:var(--gray-50);outline:none;transition:all .2s;}
-    .field input:focus{border-color:var(--orange);background:var(--white);box-shadow:0 0 0 3px rgba(249,115,22,.1);}
-    .field input.error{border-color:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,.1);}
-    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    .field-hint{font-size:11px;color:var(--gray-400);margin-top:4px;}
+    /* CARTE PRINCIPALE */
+    .card {
+      background: var(--background);
+      border-radius: var(--border-radius-card);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+
+    /* SECTIONS LABELS */
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    /* PLAN SELECTOR */
+    .plan-selector {
+      padding: 24px 24px 16px;
+    }
+    .plan-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .plan-opt {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--border-radius-element);
+      padding: 16px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      background: var(--white);
+    }
+    .plan-opt:hover {
+      border-color: var(--accent);
+      background: rgba(204, 170, 1, 0.02);
+    }
+    .plan-opt.selected {
+      border-color: var(--accent);
+      background: rgba(204, 170, 1, 0.04);
+      box-shadow: 0 0 0 2px rgba(204, 170, 1, 0.2);
+    }
+    .plan-opt-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+    .plan-opt-price {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+    .plan-opt-sub {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+    .plan-tag {
+      position: absolute;
+      top: -8px;
+      right: 12px;
+      background: var(--accent);
+      color: var(--primary);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 10px;
+      border-radius: 100px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* MONTANT BANNER */
+    .amount-banner {
+      padding: 18px 24px;
+      border-top: 1px solid var(--gray-100);
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--gray-50);
+    }
+    .amount-label {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-bottom: 2px;
+    }
+    .amount-val {
+      font-family: 'Manrope', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .amount-right {
+      text-align: right;
+    }
+    .amount-dur {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-700);
+    }
+    .amount-quota {
+      font-size: 11px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* ÉTAPES */
+    .steps {
+      padding: 20px 24px;
+    }
+    .steps-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .steps-title svg {
+      stroke: var(--accent);
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .step-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+    .step-desc {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    /* OPÉRATEURS */
+    .pay-methods {
+      padding: 0 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pay-method {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--border-radius-element);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+    }
+    .pay-method:hover {
+      border-color: var(--accent);
+      background: rgba(204, 170, 1, 0.02);
+    }
+    .pay-method.selected {
+      border-color: var(--accent);
+      background: rgba(204, 170, 1, 0.04);
+      box-shadow: 0 0 0 2px rgba(204, 170, 1, 0.2);
+    }
+    .pay-check {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+    }
+    .pay-method.selected .pay-check {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+    .pay-check svg {
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .pay-method.selected .pay-check svg {
+      opacity: 1;
+      stroke: var(--primary);
+    }
+    .pay-method-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .pay-method-icon.om {
+      background: #FF6B00; /* Orange Money */
+      color: white;
+    }
+    .pay-method-icon.momo {
+      background: #FFCC00; /* MTN MoMo */
+      color: #333;
+    }
+    .pay-method-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .pay-method-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-700);
+    }
+    .pay-method-num {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+    .pay-method-recip {
+      font-size: 11px;
+      color: var(--gray-400);
+      margin-top: 1px;
+    }
+    .copy-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-600);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .copy-btn.copied {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-light);
+    }
+
+    /* FORMULAIRE */
+    .form-section {
+      padding: 20px 24px;
+      border-top: 1px solid var(--gray-100);
+    }
+    .form-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-title svg {
+      stroke: var(--accent);
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .field input:focus {
+      border-color: var(--accent);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(204, 170, 1, 0.1);
+    }
+    .field input.error {
+      border-color: #EF4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field-hint {
+      font-size: 11px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
 
     /* CONTACT BOX */
-    .contact-box{margin:0 22px 18px;padding:13px 15px;background:var(--blue-light);border:1.5px solid rgba(59,130,246,.2);border-radius:12px;display:flex;gap:10px;align-items:flex-start;}
-    .contact-box-text{flex:1;font-size:12px;color:var(--blue);line-height:1.5;}
-    .contact-box-title{font-weight:700;margin-bottom:5px;}
-    .contact-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-    .contact-wa{display:inline-flex;align-items:center;gap:5px;background:var(--green);color:white;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;transition:opacity .2s;}
-    .contact-wa:hover{opacity:.85;}
+    .contact-box {
+      margin: 0 24px 20px;
+      padding: 16px 18px;
+      background: var(--blue-light);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--border-radius-element);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .contact-box-text {
+      flex: 1;
+      font-size: 12px;
+      color: var(--blue);
+      line-height: 1.5;
+    }
+    .contact-box-title {
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .contact-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .contact-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green);
+      color: white;
+      padding: 5px 14px;
+      border-radius: 40px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .contact-wa:hover {
+      opacity: 0.85;
+    }
 
-    /* SUBMIT */
-    .submit-area{padding:0 22px 22px;}
-    .btn-submit{width:100%;padding:14px;border-radius:12px;border:none;background:var(--orange);color:white;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 5px 18px rgba(249,115,22,.4);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:9px;}
-    .btn-submit:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px);}
-    .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-    .btn-back{width:100%;padding:10px;border-radius:12px;border:1.5px solid var(--gray-200);background:transparent;color:var(--gray-500);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px;}
-    .btn-back:hover{border-color:var(--gray-300);color:var(--gray-700);}
-    .security-note{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--gray-400);margin-top:12px;justify-content:center;}
+    /* SUBMIT AREA */
+    .submit-area {
+      padding: 0 24px 24px;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      border-radius: var(--border-radius-element);
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(1, 43, 42, 0.25);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-submit:hover:not(:disabled) {
+      background: #013f3d; /* un peu plus clair */
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(1, 43, 42, 0.3);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-back {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--border-radius-element);
+      border: 1.5px solid var(--gray-200);
+      background: transparent;
+      color: var(--gray-500);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .btn-back:hover {
+      border-color: var(--gray-300);
+      color: var(--gray-700);
+    }
+    .security-note {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: var(--gray-400);
+      margin-top: 12px;
+      justify-content: center;
+    }
+    .security-note svg {
+      stroke: var(--green);
+    }
 
-    /* SUCCESS */
-    .success-wrap{display:none;padding:32px 24px;text-align:center;}
-    .success-icon{width:72px;height:72px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-    .success-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gray-800);margin-bottom:6px;}
-    .success-sub{font-size:13px;color:var(--gray-500);line-height:1.6;margin-bottom:18px;}
-    .success-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--green-light);border:1.5px solid rgba(16,185,129,.3);border-radius:100px;font-size:12px;font-weight:700;color:var(--green);margin-bottom:20px;}
-    .btn-pdf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:12px;border:none;background:var(--orange);color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(249,115,22,.35);transition:all .2s;margin-bottom:8px;}
-    .btn-pdf:hover{background:var(--orange-dark);}
-    .btn-dash{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:12px;border:1.5px solid var(--gray-200);background:transparent;color:var(--gray-600);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
-    .btn-dash:hover{border-color:var(--gray-300);color:var(--gray-800);}
-    .pending-note{display:flex;align-items:flex-start;gap:9px;padding:12px 14px;background:var(--blue-light);border:1.5px solid rgba(59,130,246,.2);border-radius:10px;font-size:12px;color:var(--blue);margin-top:12px;text-align:left;line-height:1.5;}
-    .pending-note svg{flex-shrink:0;margin-top:1px;}
+    /* SUCCESS BLOCK */
+    .success-wrap {
+      display: none;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .success-icon svg {
+      stroke: var(--green);
+    }
+    .success-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gray-800);
+      margin-bottom: 6px;
+    }
+    .success-sub {
+      font-size: 13px;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .success-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      background: var(--green-light);
+      border: 1.5px solid rgba(16, 185, 129, 0.3);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 20px;
+    }
+    .btn-pdf {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 15px;
+      border-radius: var(--border-radius-element);
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(1, 43, 42, 0.25);
+      transition: all 0.2s;
+      margin-bottom: 8px;
+    }
+    .btn-pdf:hover {
+      background: #013f3d;
+    }
+    .btn-dash {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px;
+      border-radius: var(--border-radius-element);
+      border: 1.5px solid var(--gray-200);
+      background: transparent;
+      color: var(--gray-600);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-dash:hover {
+      border-color: var(--gray-300);
+      color: var(--gray-800);
+    }
+    .pending-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 14px 16px;
+      background: var(--blue-light);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
+      border-radius: 10px;
+      font-size: 12px;
+      color: var(--blue);
+      margin-top: 16px;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .pending-note svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+      stroke: var(--blue);
+    }
 
     /* TOAST */
-    .toast{position:fixed;bottom:24px;right:24px;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(0,0,0,.15);animation:toastIn .3s ease;z-index:9999;}
-    .toast.success{background:var(--green);color:white;}
-    .toast.error{background:#EF4444;color:white;}
-    @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn 0.3s ease;
+      z-index: 9999;
+    }
+    .toast.success {
+      background: var(--green);
+      color: white;
+    }
+    .toast.error {
+      background: #EF4444;
+      color: white;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-    @media(max-width:480px){
-      .field-row{grid-template-columns:1fr;}
-      .plan-options{grid-template-columns:1fr;}
+    @media (max-width: 480px) {
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+      .plan-options {
+        grid-template-columns: 1fr;
+      }
+      .pay-method {
+        flex-wrap: wrap;
+      }
+      .copy-btn {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
 <div class="wrap">
 
+  <!-- BANDEAU MARQUE AVEC LOGO -->
   <div class="brand">
-    <div class="brand-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    </div>
-    <div class="brand-name">DevisApp</div>
+    <img src="../public/logo/Logo principal.svg" alt="afrivis.">
+    <div class="brand-name">Paiement</div>
   </div>
 
   <div class="card" id="mainCard">
@@ -156,7 +745,7 @@
           <div class="plan-opt-sub">50 devis · 30 jours</div>
         </div>
         <div class="plan-opt" id="optAnnual">
-          <div class="plan-tag">−20% ✨</div>
+          <div class="plan-tag">−20% </div>
           <div class="plan-opt-name">Annuel</div>
           <div class="plan-opt-price">19 200 XAF</div>
           <div class="plan-opt-sub">50 devis/mois · 365 jours</div>
@@ -179,7 +768,7 @@
     <!-- ③ STEPS -->
     <div class="steps">
       <div class="steps-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Comment procéder
       </div>
       <div class="step">
@@ -188,7 +777,7 @@
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <div><div class="step-title">Envoyez le montant exact</div><div class="step-desc">Envoyez le montant exact. Indiquez "DevisApp" en motif si possible. Gardez le SMS de confirmation.</div></div>
+        <div><div class="step-title">Envoyez le montant exact</div><div class="step-desc">Envoyez le montant exact. Indiquez "Afrivis" en motif si possible. Gardez le SMS de confirmation.</div></div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
@@ -203,11 +792,11 @@
         <div class="pay-check">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="pay-method-icon om">🟠</div>
+        <div class="pay-method-icon om"></div>
         <div class="pay-method-info">
           <div class="pay-method-name">Orange Money</div>
           <div class="pay-method-num">693 421 348</div>
-          <div class="pay-method-recip">Bénéficiaire : DevisApp</div>
+          <div class="pay-method-recip">Bénéficiaire : Afrivis</div>
         </div>
         <button class="copy-btn" id="copyOm">Copier</button>
       </div>
@@ -215,11 +804,11 @@
         <div class="pay-check">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="pay-method-icon momo">💛</div>
+        <div class="pay-method-icon momo"></div>
         <div class="pay-method-info">
           <div class="pay-method-name">MTN Mobile Money</div>
           <div class="pay-method-num">672 475 045</div>
-          <div class="pay-method-recip">Bénéficiaire : DevisApp</div>
+          <div class="pay-method-recip">Bénéficiaire : Afrivis</div>
         </div>
         <button class="copy-btn" id="copyMomo">Copier</button>
       </div>
@@ -228,7 +817,7 @@
     <!-- ⑤ FORMULAIRE -->
     <div class="form-section">
       <div class="form-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Confirmer votre paiement
       </div>
       <div class="field-row">
@@ -268,7 +857,7 @@
       </button>
       <button class="btn-back" id="btnBack">← Retour</button>
       <div class="security-note">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Activation sous 2h · Lun–Ven 8h–20h
       </div>
     </div>
@@ -276,7 +865,7 @@
     <!-- ⑧ SUCCESS -->
     <div class="success-wrap" id="successWrap">
       <div class="success-icon">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <div class="success-title">Demande envoyée !</div>
       <div class="success-sub">Votre demande a bien été enregistrée. Nous allons vérifier votre paiement et activer votre compte sous 2h.</div>
@@ -300,14 +889,10 @@
 
   </div>
 
-  <p style="text-align:center;font-size:11px;color:var(--gray-400);margin-top:4px;">DevisApp · Paiement manuel sécurisé · Cameroun</p>
+  <p style="text-align:center;font-size:11px;color:var(--gray-400);margin-top:4px;">Afrivis · Paiement manuel sécurisé · Cameroun</p>
 </div>
 
-<!-- ══════════════════════════════════════════
-     SCRIPT — PAS de type="module" pour éviter
-     les problèmes de scope avec les onclick
-     On charge Supabase via CDN à la place
-     ══════════════════════════════════════════ -->
+<!-- Scripts inchangés (conservés à l'identique) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (async function() {
@@ -329,7 +914,7 @@
   let selectedPlan  = 'annual'
   let selectedOp    = 'om'
   let submittedData = null
-  let userCompany   = 'DevisApp'
+  let userCompany   = 'Afrivis'  // ← modifié pour correspondre au nouveau nom
   let userLogo      = null
 
   /* ─── TOAST ─── */
@@ -368,7 +953,6 @@
       btn.classList.add('copied')
       setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied') }, 2000)
     }).catch(() => {
-      // Fallback
       const ta = document.createElement('textarea')
       ta.value = num; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove()
       const btn = document.getElementById(btnId)
@@ -420,7 +1004,6 @@
 
     if (error) { toast('Erreur : ' + error.message, 'error'); return }
 
-    /* Notif admin — table optionnelle, on ignore l'erreur */
     sb.from('admin_notifications').insert({
       type:  'new_payment',
       title: '💳 Nouveau paiement — ' + p.label,
@@ -429,9 +1012,8 @@
       read:  false
     }).then(() => {}).catch(() => {})
 
-    /* WhatsApp admin */
     const waMsg = encodeURIComponent(
-      '🔔 Nouveau paiement DevisApp\n\n' +
+      '🔔 Nouveau paiement Afrivis\n\n' +
       '👤 ' + fn + ' ' + ln + '\n' +
       '📱 ' + phone + '\n' +
       '💰 ' + fmt(p.amount) + ' XAF — Plan ' + p.label + '\n' +
@@ -441,7 +1023,6 @@
     )
     window.open('https://wa.me/' + ADMIN_WA + '?text=' + waMsg, '_blank')
 
-    /* Sauvegarder pour PDF */
     submittedData = {
       fn, ln, phone, op: selectedOp, txRef, intRef,
       company:      userCompany,
@@ -455,7 +1036,6 @@
       submittedAt:  new Date()
     }
 
-    /* Afficher succès */
     ;['plan-selector','amount-banner','steps','pay-methods','contact-box','form-section','submit-area'].forEach(cls => {
       const el = document.querySelector('.' + cls)
       if (el) el.style.display = 'none'
@@ -475,29 +1055,29 @@
     const timeStr   = now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' })
     const expiry    = new Date(now.getTime() + d.duration * 864e5)
     const expiryStr = expiry.toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' })
-    const W=210, OG=[249,115,22], G8=[31,41,55], G5=[107,114,128]
+    const W=210, PRIMARY=[1,43,42], ACCENT=[204,170,1], G8=[31,41,55], G5=[107,114,128]
 
-    /* Header orange */
-    doc.setFillColor(...OG)
+    /* Header primary */
+    doc.setFillColor(...PRIMARY)
     doc.rect(0, 0, W, 44, 'F')
 
-    /* Logo entreprise */
+    /* Logo (placeholder si pas d'image) */
     if (d.logo) {
       try { doc.addImage(d.logo, 'PNG', 14, 10, 24, 24) }
       catch(e) {
         doc.setFillColor(255,255,255); doc.roundedRect(14,10,22,22,4,4,'F')
-        doc.setTextColor(...OG); doc.setFont('helvetica','bold'); doc.setFontSize(9)
-        doc.text((d.company||'DA').slice(0,2).toUpperCase(), 25, 24, {align:'center'})
+        doc.setTextColor(...PRIMARY); doc.setFont('helvetica','bold'); doc.setFontSize(9)
+        doc.text((d.company||'AF').slice(0,2).toUpperCase(), 25, 24, {align:'center'})
       }
     } else {
       doc.setFillColor(255,255,255); doc.roundedRect(14,10,22,22,4,4,'F')
-      doc.setTextColor(...OG); doc.setFont('helvetica','bold'); doc.setFontSize(9)
-      doc.text((d.company||'DA').slice(0,2).toUpperCase(), 25, 24, {align:'center'})
+      doc.setTextColor(...PRIMARY); doc.setFont('helvetica','bold'); doc.setFontSize(9)
+      doc.text((d.company||'AF').slice(0,2).toUpperCase(), 25, 24, {align:'center'})
     }
 
     doc.setTextColor(255,255,255)
     doc.setFont('helvetica','bold'); doc.setFontSize(20)
-    doc.text(d.company || 'DevisApp', 42, 21)
+    doc.text(d.company || 'Afrivis', 42, 21)
     doc.setFont('helvetica','normal'); doc.setFontSize(10)
     doc.text("Confirmation de demande d'abonnement", 42, 30)
     doc.setFontSize(9)
@@ -508,24 +1088,23 @@
     doc.setTextColor(146,64,14); doc.setFont('helvetica','bold'); doc.setFontSize(9.5)
     doc.text('En attente de validation', 55, 60, {align:'center'})
 
-    /* Ref interne */
     doc.setTextColor(...G5); doc.setFont('helvetica','normal'); doc.setFontSize(8.5)
-    doc.text('Référence DevisApp :', 100, 56)
-    doc.setFont('helvetica','bold'); doc.setTextColor(...OG)
+    doc.text('Référence Afrivis :', 100, 56)
+    doc.setFont('helvetica','bold'); doc.setTextColor(...ACCENT)
     doc.text(d.intRef, 100, 63)
 
     let y = 76
     const secTitle = (t, yy) => {
-      doc.setFillColor(249,249,249); doc.setDrawColor(...OG); doc.setLineWidth(0.3)
+      doc.setFillColor(249,249,249); doc.setDrawColor(...ACCENT); doc.setLineWidth(0.3)
       doc.rect(14, yy, W-28, 8, 'FD')
-      doc.setTextColor(...OG); doc.setFont('helvetica','bold'); doc.setFontSize(8.5)
+      doc.setTextColor(...ACCENT); doc.setFont('helvetica','bold'); doc.setFontSize(8.5)
       doc.text(t.toUpperCase(), 18, yy+5.5)
       return yy+14
     }
     const row = (lbl, val, yy, hl) => {
       doc.setTextColor(...G5); doc.setFont('helvetica','normal'); doc.setFontSize(10)
       doc.text(lbl, 18, yy)
-      if (hl) { doc.setTextColor(...OG); doc.setFont('helvetica','bold') }
+      if (hl) { doc.setTextColor(...ACCENT); doc.setFont('helvetica','bold') }
       else     { doc.setTextColor(...G8); doc.setFont('helvetica','normal') }
       doc.text(val || '—', 88, yy)
       doc.setDrawColor(229,231,235); doc.setLineWidth(0.2); doc.line(14, yy+3, W-14, yy+3)
@@ -555,21 +1134,18 @@
     y += 30
     doc.setTextColor(...G5); doc.setFontSize(7.5)
     doc.text("* La date d'expiration est estimée à partir de la date de validation effective.", 14, y)
-    doc.setFillColor(...OG); doc.rect(0, 282, W, 15, 'F')
+    doc.setFillColor(...PRIMARY); doc.rect(0, 282, W, 15, 'F')
     doc.setTextColor(255,255,255); doc.setFont('helvetica','normal'); doc.setFontSize(8)
-    doc.text('DevisApp · Outil de facturation pour entrepreneurs africains · Cameroun', W/2, 291, {align:'center'})
+    doc.text('Afrivis · Outil de facturation pour entrepreneurs africains · Cameroun', W/2, 291, {align:'center'})
 
-    doc.save('DevisApp_' + d.planLabel + '_' + now.toISOString().slice(0,10) + '.pdf')
+    doc.save('Afrivis_' + d.planLabel + '_' + now.toISOString().slice(0,10) + '.pdf')
     toast('PDF téléchargé !', 'success')
   }
 
-  /* ─── BIND EVENTS (ici, pas de onclick= dans le HTML) ─── */
-
-  // Plan options
+  /* ─── BIND EVENTS ─── */
   document.getElementById('optMonthly').addEventListener('click', () => selectPlan('monthly'))
   document.getElementById('optAnnual').addEventListener('click',  () => selectPlan('annual'))
 
-  // Operator cards — clic sur la carte entière
   document.getElementById('cardOm').addEventListener('click', (e) => {
     if (e.target.id === 'copyOm' || e.target.closest('#copyOm')) return
     selectOperator('om')
@@ -579,20 +1155,12 @@
     selectOperator('momo')
   })
 
-  // Copy buttons
   document.getElementById('copyOm').addEventListener('click',   (e) => { e.stopPropagation(); copyNum('693421348', 'copyOm') })
   document.getElementById('copyMomo').addEventListener('click',  (e) => { e.stopPropagation(); copyNum('672475045', 'copyMomo') })
 
-  // Submit
   document.getElementById('submitBtn').addEventListener('click', submitPayment)
-
-  // Back
   document.getElementById('btnBack').addEventListener('click', () => history.back())
-
-  // PDF
   document.getElementById('btnPdf').addEventListener('click', generatePDF)
-
-  // Dashboard
   document.getElementById('btnDash').addEventListener('click', () => location.href = 'dashboard.html')
 
   /* ─── AUTH & INIT ─── */
@@ -602,7 +1170,6 @@
     return
   }
   currentUser = session.user
-  /* ── Ban check ── */
   const {data:banChk2} = await sb.from('profiles').select('is_banned').eq('id', currentUser.id).single()
   if(banChk2?.is_banned){
     await sb.auth.signOut()
@@ -610,7 +1177,6 @@
     return
   }
 
-  /* Profil */
   const { data: prof } = await sb.from('profiles')
     .select('first_name, last_name, phone, company, company_logo')
     .eq('id', currentUser.id).single()
@@ -623,13 +1189,9 @@
     if (prof.company_logo) userLogo    = prof.company_logo
   }
 
-  /* Plan depuis URL */
   const urlPlan = new URLSearchParams(location.search).get('plan')
   selectPlan((urlPlan && PLANS[urlPlan]) ? urlPlan : 'annual')
-
-  /* Opérateur OM par défaut */
   selectOperator('om')
-
 })()
 </script>
 </body>
