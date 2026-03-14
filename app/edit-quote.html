@@ -1096,7 +1096,6 @@ document.getElementById('userAvatar').textContent = initials
 document.getElementById('sidebarName').textContent = [data.first_name, data.last_name].filter(Boolean).join(' ') || 'Utilisateur'
 }
 
-<<<<<<< HEAD
 async function loadQuote() {
 const { data, error } = await supabase.from('quotes').select(`*, clients(id, full_name, address), quote_items(*)`).eq('id', quoteId).single()
 if (error || !data) { showToast('Devis introuvable', 'error'); setTimeout(() => window.location.href = 'quotes.html', 2000); return }
