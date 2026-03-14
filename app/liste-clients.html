@@ -3,108 +3,590 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#F97316">
+  <meta name="theme-color" content="#012B2A">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Devis App">
-  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
-  <title>Mes clients - Devis App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-title" content="Afrivis">
+    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+<link rel="icon" href="../icons/favicon.svg" >
+
+  <title>Mes clients — Afrivis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --orange: #F97316;
-      --orange-dark: #EA6C0A;
-      --orange-light: #FEF3E7;
-      --gray-50: #F9FAFB;
-      --gray-100: #F3F4F6;
-      --gray-200: #E5E7EB;
-      --gray-300: #D1D5DB;
-      --gray-400: #9CA3AF;
-      --gray-500: #6B7280;
-      --gray-600: #4B5563;
-      --gray-700: #374151;
-      --gray-800: #1F2937;
-      --gray-900: #111827;
-      --green: #10B981;
-      --green-light: #D1FAE5;
-      --red: #EF4444;
-      --red-light: #FFF1F1;
-      --white: #FFFFFF;
+      --primary:        #012B2A;
+      --primary-hover:  #01403E;
+      --primary-muted:  rgba(1,43,42,0.06);
+      --accent:         #CCAA01;
+      --accent-hover:   #b89801;
+      --accent-light:   rgba(204,170,1,0.10);
+      --accent-border:  rgba(204,170,1,0.28);
+
+      --white:          #FFFFFF;
+      --bg:             #F6F7F5;
+      --surface:        #FFFFFF;
+      --border:         #E4E8E7;
+      --border-strong:  #CBD2D1;
+
+      --text-primary:   #012B2A;
+      --text-secondary: #4A5E5D;
+      --text-muted:     #8DA3A2;
+      --text-disabled:  #B8C8C7;
+
+      --green-bg:       #E6F4F0;
+      --green-text:     #0D7A5F;
+      --red:            #DC3545;
+      --red-light:      #FFF1F2;
+      --red-text:       #C0392B;
+
+      --sidebar-w:      252px;
+      --radius-sm:      8px;
+      --radius-md:      12px;
+      --radius-lg:      16px;
+      --radius-xl:      20px;
+      --shadow-xs:      0 1px 2px rgba(1,43,42,0.04);
+      --shadow-sm:      0 2px 8px rgba(1,43,42,0.06);
+      --shadow-md:      0 6px 20px rgba(1,43,42,0.09);
+      --shadow-focus:   0 0 0 3px rgba(204,170,1,0.22);
     }
+
+    html, body { height: 100%; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--gray-100);
-      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
       display: flex;
+      min-height: 100vh;
+      color: var(--text-primary);
     }
 
-    /* ── Sidebar ── */
+    /* ═══════════════════════════
+       SIDEBAR
+    ═══════════════════════════ */
     .sidebar {
-      width: 260px; min-width: 260px;
-      background: var(--gray-900);
-      display: flex; flex-direction: column;
-      height: 100vh; position: sticky; top: 0;
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--primary);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow: hidden;
     }
+    .sidebar::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 80% 10%, rgba(204,170,1,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 20% 90%, rgba(204,170,1,0.04) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
     .sidebar-logo {
-      padding: 24px 20px;
+      padding: 24px 20px 20px;
       border-bottom: 1px solid rgba(255,255,255,0.07);
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center;
+      position: relative;
     }
-    .sidebar-logo-icon {
-      width: 36px; height: 36px; background: var(--orange); border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
+    .sidebar-logo img {height: 48px; width: auto;
+    max-width: 160px;
+    object-fit: contain; object-position: left center;
+    display: block;
+   }
+
+    .sidebar-nav {
+      flex: 1; padding: 12px 10px;
+      display: flex; flex-direction: column; gap: 2px;
+      overflow-y: auto; position: relative;
     }
-    .sidebar-logo span { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white; }
-    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+
     .nav-section-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: rgba(255,255,255,0.3);
-      padding: 12px 12px 6px;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.11em; text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      padding: 14px 10px 6px;
     }
+
     .nav-link {
       display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: 10px;
-      color: rgba(255,255,255,0.55); text-decoration: none;
-      font-size: 14px; font-weight: 500; transition: all 0.2s;
+      padding: 9px 10px; border-radius: var(--radius-sm);
+      color: rgba(255,255,255,0.52); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: background 0.18s, color 0.18s;
+      position: relative;
     }
-    .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
-    .nav-link.active { background: rgba(249,115,22,0.15); color: var(--orange); }
-    .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-link svg { flex-shrink: 0; opacity: 0.8; }
+    .nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.88); }
+    .nav-link:hover svg { opacity: 1; }
+    .nav-link.active {
+      background: var(--accent-light); color: var(--accent); font-weight: 600;
+    }
+    .nav-link.active svg { opacity: 1; }
+    .nav-link.active::before {
+      content: ''; position: absolute;
+      left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--accent); border-radius: 0 3px 3px 0;
+    }
+
+    .sidebar-footer {
+      padding: 12px 10px 16px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      position: relative;
+    }
     .user-card {
       display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: 10px;
-      margin-bottom: 8px; background: rgba(255,255,255,0.05);
+      padding: 10px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.05); margin-bottom: 8px;
     }
     .user-avatar {
       width: 34px; height: 34px; border-radius: 50%;
-      background: var(--orange);
+      background: var(--accent);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-      color: white; flex-shrink: 0;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--primary); flex-shrink: 0;
     }
-    .user-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .user-role { font-size: 11px; color: rgba(255,255,255,0.4); }
-    .btn-logout {
-      width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 9px; border-radius: 10px;
-      background: rgba(239,68,68,0.1); color: #F87171;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
-      border: 1px solid rgba(239,68,68,0.2); cursor: pointer; transition: all 0.2s;
+    .user-name {
+      font-size: 13px; font-weight: 600; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
     }
-    .btn-logout:hover { background: rgba(239,68,68,0.2); color: #FCA5A5; }
+    .user-role { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 1px; }
 
-    /* ── Mobile bottom nav ── */
+    .btn-logout {
+      width: 100%; display: flex; align-items: center;
+      justify-content: center; gap: 7px; padding: 9px;
+      border-radius: var(--radius-sm);
+      background: rgba(220,53,69,0.08); color: rgba(248,113,113,0.85);
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      border: 1px solid rgba(220,53,69,0.18); cursor: pointer; transition: all 0.18s;
+    }
+    .btn-logout:hover { background: rgba(220,53,69,0.15); color: #FCA5A5; }
+
+    /* ═══════════════════════════
+       MAIN
+    ═══════════════════════════ */
+    .main { flex: 1; overflow-y: auto; padding: 36px 40px 48px; display: flex; flex-direction: column; }
+
+    /* ── Page header ── */
+    .page-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 14px;
+    }
+
+    .page-title-wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    .page-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 28px; font-weight: 700;
+      color: var(--primary); letter-spacing: -0.5px;
+    }
+
+    .count-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+    .count-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+
+    .page-subtitle {
+      font-size: 13px; color: var(--text-secondary);
+      margin-top: 5px; font-weight: 400;
+    }
+
+    .btn-primary-sm {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: var(--radius-md); border: none;
+      background: var(--primary); color: var(--white);
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 14px rgba(1,43,42,0.22);
+      transition: all 0.18s; letter-spacing: -0.1px;
+      white-space: nowrap;
+    }
+    .btn-primary-sm:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(1,43,42,0.28); }
+    .btn-primary-sm .btn-icon-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    }
+
+    /* ═══════════════════════════
+       CARD
+    ═══════════════════════════ */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: 0;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      animation: fadeUp 0.3s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Toolbar ── */
+    .table-toolbar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .toolbar-left {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toolbar-icon {
+      width: 34px; height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .toolbar-icon svg { color: var(--accent); }
+
+    .toolbar-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px; font-weight: 700; color: var(--text-primary);
+    }
+
+    .search-wrap { position: relative; }
+    .search-wrap .search-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+      transition: color 0.18s;
+    }
+    .search-input {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 9px 14px 9px 36px;
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: var(--text-primary); background: var(--bg);
+      outline: none; transition: all 0.18s; width: 240px;
+    }
+    .search-input:focus {
+      border-color: var(--accent); background: var(--white);
+      box-shadow: var(--shadow-focus);
+    }
+    .search-wrap:focus-within .search-icon { color: var(--accent); }
+
+    /* ═══════════════════════════
+       TABLE
+    ═══════════════════════════ */
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead tr { background: #FAFAF9; border-bottom: 1px solid var(--border); }
+    thead th {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 10px 16px; text-align: left; white-space: nowrap;
+    }
+    thead th:first-child { padding-left: 24px; }
+    thead th:last-child  { padding-right: 24px; text-align: right; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.14s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #FAFAF9; }
+
+    tbody td {
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text-secondary);
+      vertical-align: middle;
+    }
+    tbody td:first-child { padding-left: 24px; }
+    tbody td:last-child  { padding-right: 24px; }
+
+    /* ── Client avatar cell ── */
+    .client-name-cell {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .client-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: 1.5px solid var(--accent-border);
+    }
+    .client-name {
+      font-weight: 600; color: var(--text-primary);
+      font-size: 14px; line-height: 1.3;
+    }
+    .client-company {
+      font-size: 11px; color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    /* ── Email link ── */
+    .email-link {
+      color: var(--primary); text-decoration: none;
+      font-size: 13px; transition: color 0.18s;
+    }
+    .email-link:hover { color: var(--accent); }
+
+    /* ── Empty cell badge ── */
+    .cell-empty {
+      display: inline-flex; align-items: center;
+      padding: 2px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 500;
+      background: var(--bg); color: var(--text-disabled);
+      border: 1px solid var(--border);
+    }
+
+    /* ── City chip ── */
+    .city-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--text-secondary);
+    }
+    .city-chip svg { color: var(--text-muted); flex-shrink: 0; }
+
+    /* ── Actions cell ── */
+    .actions-cell {
+      display: flex; align-items: center; gap: 8px; justify-content: flex-end;
+    }
+
+    .btn-devis {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius-sm); border: none;
+      background: var(--accent-light);
+      color: var(--primary);
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      border: 1px solid var(--accent-border);
+      transition: all 0.18s; white-space: nowrap;
+    }
+    .btn-devis:hover { background: var(--accent); color: var(--primary); border-color: var(--accent); }
+
+    .btn-delete {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      border: 1px solid rgba(220,53,69,0.2);
+      background: var(--red-light); color: var(--red);
+      cursor: pointer; transition: all 0.18s; flex-shrink: 0;
+    }
+    .btn-delete:hover { background: var(--red); color: white; border-color: var(--red); }
+
+    /* ═══════════════════════════
+       MOBILE CARDS
+    ═══════════════════════════ */
+    .client-cards {
+      display: none; gap: 10px; flex-direction: column;
+      padding: 16px;
+    }
+
+    .client-card {
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .client-card:hover { border-color: var(--accent-border); box-shadow: var(--shadow-xs); }
+
+    .client-card-top {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+    }
+    .client-card-info { flex: 1; min-width: 0; }
+    .client-card-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px; font-weight: 700; color: var(--text-primary);
+    }
+    .client-card-company { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .client-card-meta {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;
+    }
+    .client-card-meta-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--text-secondary);
+    }
+    .client-card-meta-item svg { flex-shrink: 0; color: var(--text-muted); }
+
+    .client-card-actions { display: flex; gap: 8px; }
+
+    .btn-devis-mobile {
+      flex: 1; display: inline-flex; align-items: center;
+      justify-content: center; gap: 6px;
+      padding: 10px 14px; border-radius: var(--radius-md); border: none;
+      background: var(--primary); color: white;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none; transition: all 0.18s;
+    }
+    .btn-devis-mobile:hover { background: var(--primary-hover); }
+
+    .btn-delete-mobile {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 42px; height: 42px; border-radius: var(--radius-md);
+      border: 1px solid rgba(220,53,69,0.2);
+      background: var(--red-light); color: var(--red);
+      cursor: pointer; transition: all 0.18s; flex-shrink: 0;
+    }
+    .btn-delete-mobile:hover { background: var(--red); color: white; border-color: var(--red); }
+
+    /* ═══════════════════════════
+       EMPTY STATE
+    ═══════════════════════════ */
+    .empty-state {
+      text-align: center; padding: 64px 20px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
+    }
+    .empty-icon {
+      width: 60px; height: 60px;
+      background: var(--accent-light);
+      border: 2px solid var(--accent-border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+      color: var(--accent);
+    }
+    .empty-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+    }
+    .empty-desc {
+      font-size: 13px; color: var(--text-muted);
+      margin-bottom: 22px; line-height: 1.6;
+      max-width: 280px;
+    }
+
+    /* ═══════════════════════════
+       SKELETON
+    ═══════════════════════════ */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg) 25%, var(--border) 50%, var(--bg) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to   { background-position: -200% 0; }
+    }
+
+    /* ═══════════════════════════
+       MODAL
+    ═══════════════════════════ */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(1,43,42,0.35);
+      backdrop-filter: blur(5px);
+      z-index: 100; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 28px 28px 24px;
+      max-width: 400px; width: 100%;
+      box-shadow: 0 24px 64px rgba(1,43,42,0.2);
+      animation: fadeUp 0.22s ease;
+      border: 1px solid var(--border);
+    }
+
+    .modal-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--red-light);
+      border: 2px solid rgba(220,53,69,0.15);
+      color: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+    }
+    .modal-body {
+      font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 24px; line-height: 1.6;
+    }
+    .modal-body strong { color: var(--text-primary); font-weight: 600; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+    .btn-modal-cancel {
+      padding: 9px 18px; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border); background: var(--bg);
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.18s;
+    }
+    .btn-modal-cancel:hover { background: var(--border); color: var(--text-primary); }
+
+    .btn-modal-confirm {
+      padding: 9px 18px; border-radius: var(--radius-md); border: none;
+      background: var(--red); color: white;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.18s;
+      display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 4px 12px rgba(220,53,69,0.25);
+    }
+    .btn-modal-confirm:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+    /* ═══════════════════════════
+       TOAST
+    ═══════════════════════════ */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      padding: 13px 18px; border-radius: var(--radius-md);
+      font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+      animation: toastIn 0.28s cubic-bezier(.4,0,.2,1);
+      z-index: 999; max-width: 360px;
+    }
+    .toast.success {
+      background: var(--primary); color: white;
+      border: 1px solid rgba(204,170,1,0.3);
+    }
+    .toast.success .toast-accent {
+      width: 3px; height: 26px;
+      background: var(--accent); border-radius: 2px; flex-shrink: 0;
+    }
+    .toast.error { background: #1a0505; color: #fca5a5; border: 1px solid rgba(220,53,69,0.3); }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ═══════════════════════════
+       MOBILE NAV
+    ═══════════════════════════ */
     .mobile-nav {
-      display: none;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--gray-900);
+      display: none; position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--primary);
       padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
       z-index: 50;
       border-top: 1px solid rgba(255,255,255,0.07);
@@ -112,344 +594,142 @@
     .mobile-nav-inner { display: flex; justify-content: space-around; }
     .mobile-nav-link {
       display: flex; flex-direction: column; align-items: center; gap: 4px;
-      color: rgba(255,255,255,0.45); text-decoration: none;
-      font-size: 10px; font-weight: 600; padding: 4px 12px;
-      border-radius: 10px; transition: all 0.2s;
+      color: rgba(255,255,255,0.42); text-decoration: none;
+      font-size: 10px; font-weight: 600; padding: 4px 14px;
+      border-radius: var(--radius-sm); transition: all 0.18s;
     }
-    .mobile-nav-link.active { color: var(--orange); }
+    .mobile-nav-link.active { color: var(--accent); }
+    .mobile-nav-link svg { flex-shrink: 0; }
 
-    /* ── Main ── */
-    .main { flex: 1; overflow-y: auto; padding: 32px 36px; }
-
-    /* ── Page header ── */
-    .page-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
-    }
-    .page-header-left { display: flex; flex-direction: column; gap: 4px; }
-    .back-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 600; color: var(--gray-400);
-      text-decoration: none; transition: color 0.2s;
-    }
-    .back-link:hover { color: var(--orange); }
-    .page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--gray-800); }
-
-    .header-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--orange-light); color: var(--orange);
-      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 6px 14px; border-radius: 100px;
-    }
-    .btn-add-client {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 20px; border-radius: 10px; border: none;
-      background: var(--orange); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; text-decoration: none;
-      box-shadow: 0 4px 12px rgba(249,115,22,0.3); transition: all 0.2s;
-    }
-    .btn-add-client:hover { background: var(--orange-dark); transform: translateY(-1px); }
-
-    /* ── Card ── */
-    .card {
-      background: var(--white); border-radius: 16px; padding: 28px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
-      animation: slideUp 0.35s ease both;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .card-title {
-      font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
-      color: var(--gray-700);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .card-title svg { color: var(--orange); }
-
-    /* ── Table toolbar ── */
-    .table-toolbar {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-    }
-    .search-wrap { position: relative; }
-    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
-    .search-input {
-      border: 1.5px solid var(--gray-200); border-radius: 10px;
-      padding: 9px 14px 9px 36px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px;
-      color: var(--gray-800); background: var(--gray-50);
-      outline: none; transition: all 0.2s; width: 240px;
-    }
-    .search-input:focus { border-color: var(--orange); background: var(--white); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
-
-    /* ── Desktop table ── */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    thead tr { border-bottom: 2px solid var(--gray-100); }
-    thead th {
-      font-size: 11px; font-weight: 700; color: var(--gray-500);
-      letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 8px 12px; text-align: left; white-space: nowrap;
-    }
-    tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
-    tbody tr:hover { background: var(--gray-50); }
-    tbody td { padding: 12px; font-size: 14px; color: var(--gray-700); vertical-align: middle; }
-    .client-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--orange-light); color: var(--orange);
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .client-name-cell { display: flex; align-items: center; gap: 10px; }
-    .client-name { font-weight: 600; color: var(--gray-800); }
-    .client-company { font-size: 12px; color: var(--gray-400); }
-    .badge-gray {
-      display: inline-flex; align-items: center;
-      padding: 3px 10px; border-radius: 100px;
-      font-size: 11px; font-weight: 600;
-      background: var(--gray-100); color: var(--gray-500);
-    }
-
-    /* Action buttons */
-    .actions-cell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
-    .btn-quote {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 14px; border-radius: 8px; border: none;
-      background: var(--orange-light); color: var(--orange);
-      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700;
-      cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap;
-    }
-    .btn-quote:hover { background: var(--orange); color: white; }
-    .btn-delete {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 32px; height: 32px; border-radius: 8px;
-      border: none; background: var(--red-light); color: var(--red);
-      cursor: pointer; transition: all 0.2s; flex-shrink: 0;
-    }
-    .btn-delete:hover { background: var(--red); color: white; }
-
-    /* ── Mobile card list ── */
-    .client-cards { display: none; gap: 12px; flex-direction: column; }
-    .client-card {
-      background: var(--gray-50); border-radius: 12px;
-      padding: 14px 16px;
-      border: 1.5px solid var(--gray-200);
-      transition: border-color 0.2s;
-    }
-    .client-card:hover { border-color: var(--orange); }
-    .client-card-top {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
-    }
-    .client-card-info { flex: 1; min-width: 0; }
-    .client-card-name { font-weight: 700; color: var(--gray-800); font-size: 15px; }
-    .client-card-company { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
-    .client-card-meta {
-      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
-    }
-    .client-card-meta-item {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 12px; color: var(--gray-500);
-    }
-    .client-card-meta-item svg { flex-shrink: 0; color: var(--gray-400); }
-    .client-card-actions { display: flex; gap: 8px; }
-    .btn-quote-mobile {
-      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 9px 14px; border-radius: 9px; border: none;
-      background: var(--orange); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; text-decoration: none; transition: all 0.2s;
-    }
-    .btn-quote-mobile:hover { background: var(--orange-dark); }
-    .btn-delete-mobile {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; border-radius: 9px;
-      border: none; background: var(--red-light); color: var(--red);
-      cursor: pointer; transition: all 0.2s; flex-shrink: 0;
-    }
-    .btn-delete-mobile:hover { background: var(--red); color: white; }
-
-    /* ── Empty state ── */
-    .empty-state {
-      text-align: center; padding: 56px 20px;
-    }
-    .empty-icon {
-      width: 64px; height: 64px; background: var(--orange-light);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px; color: var(--orange);
-    }
-    .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; }
-    .empty-state p { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
-    .btn-empty-add {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 22px; border-radius: 10px; border: none;
-      background: var(--orange); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
-      cursor: pointer; text-decoration: none;
-      box-shadow: 0 4px 12px rgba(249,115,22,0.25); transition: all 0.2s;
-    }
-    .btn-empty-add:hover { background: var(--orange-dark); }
-
-    /* ── Skeleton ── */
-    .skeleton {
-      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
-      background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px;
-    }
-    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-
-    /* ── Modal ── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
-      z-index: 100; align-items: center; justify-content: center; padding: 20px;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal {
-      background: var(--white); border-radius: 16px;
-      padding: 28px; max-width: 400px; width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-      animation: slideUp 0.25s ease;
-    }
-    .modal-icon {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: var(--red-light); color: var(--red);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
-    }
-    .modal h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; }
-    .modal p { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.55; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
-    .btn-modal-cancel {
-      padding: 9px 18px; border-radius: 10px;
-      border: 1.5px solid var(--gray-200); background: var(--gray-100);
-      color: var(--gray-600); font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-modal-cancel:hover { background: var(--gray-200); }
-    .btn-modal-confirm {
-      padding: 9px 18px; border-radius: 10px; border: none;
-      background: var(--red); color: white;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .btn-modal-confirm:hover { filter: brightness(1.1); }
-
-    /* ── Toast ── */
-    .toast {
-      position: fixed; bottom: 80px; right: 20px;
-      padding: 14px 20px; border-radius: 12px;
-      font-size: 14px; font-weight: 600;
-      display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      animation: toastIn 0.3s ease; z-index: 999; max-width: calc(100vw - 40px);
-    }
-    .toast.success { background: var(--green); color: white; }
-    .toast.error   { background: var(--red);   color: white; }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
+    /* ═══════════════════════════
+       RESPONSIVE
+    ═══════════════════════════ */
+    @media (max-width: 920px) {
       .sidebar { display: none; }
       .mobile-nav { display: block; }
       .main { padding: 20px 16px 90px; }
       .table-wrap { display: none; }
-      .client-cards { display: flex; }
-      .page-title { font-size: 22px; }
-      .card { padding: 18px 16px; }
+      .client-cards { display: flex !important; }
+      .page-title { font-size: 24px; }
       .search-input { width: 100%; }
       .search-wrap { width: 100%; }
       .table-toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar-left { order: 0; }
+      .search-wrap { order: 1; }
       .page-header { flex-direction: column; align-items: flex-start; }
-      .btn-add-client { width: 100%; justify-content: center; }
-      .toast { bottom: 90px; }
+      .btn-primary-sm { width: 100%; justify-content: center; }
+      .toast { bottom: 90px; right: 16px; left: 16px; max-width: none; }
     }
-    @media (min-width: 901px) {
+    @media (min-width: 921px) {
       .client-cards { display: none !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar desktop -->
+  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      </div>
-      <span>Devis App</span>
+      <img src="../public/logo/Logo secondaire.svg" alt="afrivis." style="filter:brightness(0) invert(1);">
     </div>
+
     <nav class="sidebar-nav">
       <span class="nav-section-label">Menu</span>
+
       <a href="dashboard.html" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+        </svg>
         Dashboard
       </a>
+
       <a href="create-quote.html" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
         Devis
       </a>
+
       <a href="clients.html" class="nav-link active">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+        </svg>
         Clients
       </a>
+
       <span class="nav-section-label" style="margin-top:8px;">Compte</span>
+
       <a href="settings.html" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
         Paramètres
       </a>
     </nav>
+
     <div class="sidebar-footer">
       <div class="user-card">
         <div class="user-avatar" id="userAvatar">?</div>
-        <div>
-          <div class="user-name" id="sidebarName">Chargement...</div>
+        <div style="min-width:0;">
+          <div class="user-name" id="sidebarName">Chargement…</div>
           <div class="user-role" id="sidebarCompany">—</div>
         </div>
       </div>
       <button class="btn-logout" id="logoutBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
         Déconnexion
       </button>
     </div>
   </aside>
 
-  <!-- Main -->
+  <!-- ══ MAIN ══ -->
   <main class="main">
 
     <div class="page-header">
-      <div class="page-header-left">
-        <a href="clients.html" class="back-link">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Ajouter un client
-        </a>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px;">
+      <div>
+        <div class="page-title-wrap">
           <h1 class="page-title">Mes clients</h1>
-          <div class="header-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+          <div class="count-badge">
+            <span class="count-badge-dot"></span>
             <span id="clientCountBadge">0 client</span>
           </div>
         </div>
+        <p class="page-subtitle">Gérez et consultez tous vos contacts clients.</p>
       </div>
-      <a href="clients.html" class="btn-add-client">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <a href="clients.html" class="btn-primary-sm">
+        <div class="btn-icon-dot"></div>
         Nouveau client
       </a>
     </div>
 
+    <!-- Card tableau -->
     <div class="card">
       <div class="table-toolbar">
-        <div class="card-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-          Liste des clients
+        <div class="toolbar-left">
+          <div class="toolbar-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+              <path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <span class="toolbar-title">Liste des clients</span>
         </div>
         <div class="search-wrap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un client...">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un client…">
         </div>
       </div>
 
@@ -462,280 +742,310 @@
               <th>Email</th>
               <th>Téléphone</th>
               <th>Ville</th>
-              <th style="text-align:right;">Actions</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="clientsTable">
-            <tr><td colspan="5"><div class="skeleton" style="height:44px;margin:6px 0;"></div></td></tr>
-            <tr><td colspan="5"><div class="skeleton" style="height:44px;margin:6px 0;"></div></td></tr>
-            <tr><td colspan="5"><div class="skeleton" style="height:44px;margin:6px 0;"></div></td></tr>
+            <tr><td colspan="5" style="padding:10px 24px;"><div class="skeleton" style="height:40px;"></div></td></tr>
+            <tr><td colspan="5" style="padding:6px 24px;"><div class="skeleton" style="height:40px;"></div></td></tr>
+            <tr><td colspan="5" style="padding:6px 24px 10px;"><div class="skeleton" style="height:40px;"></div></td></tr>
           </tbody>
         </table>
       </div>
 
       <!-- Mobile cards -->
       <div class="client-cards" id="clientCards">
-        <div class="skeleton" style="height:120px;border-radius:12px;"></div>
-        <div class="skeleton" style="height:120px;border-radius:12px;"></div>
-        <div class="skeleton" style="height:120px;border-radius:12px;"></div>
+        <div class="skeleton" style="height:130px;border-radius:var(--radius-lg);"></div>
+        <div class="skeleton" style="height:130px;border-radius:var(--radius-lg);"></div>
+        <div class="skeleton" style="height:130px;border-radius:var(--radius-lg);"></div>
       </div>
     </div>
+
   </main>
 
-  <!-- Mobile bottom nav -->
+  <!-- ══ MOBILE NAV ══ -->
   <nav class="mobile-nav">
     <div class="mobile-nav-inner">
       <a href="dashboard.html" class="mobile-nav-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
         Dashboard
       </a>
       <a href="create-quote.html" class="mobile-nav-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
         Devis
       </a>
       <a href="clients.html" class="mobile-nav-link active">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+        </svg>
         Clients
       </a>
       <a href="settings.html" class="mobile-nav-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        Réglages
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+        Paramètres
       </a>
     </div>
   </nav>
 
-  <!-- Modal suppression -->
+  <!-- ══ MODAL SUPPRESSION ══ -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal">
       <div class="modal-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4h6v2"/>
+        </svg>
       </div>
-      <h3>Supprimer ce client ?</h3>
-      <p id="modalDeleteText">Cette action est irréversible.</p>
+      <div class="modal-title">Supprimer ce client ?</div>
+      <div class="modal-body" id="modalDeleteText">Cette action est irréversible.</div>
       <div class="modal-actions">
         <button class="btn-modal-cancel" id="cancelDelete">Annuler</button>
         <button class="btn-modal-confirm" id="confirmDelete">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+          </svg>
           Supprimer
         </button>
       </div>
     </div>
   </div>
 
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+  <!-- ══ SCRIPT ══ -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
-const supabase = createClient(
-  'https://xeezdzbotsblzclnmnxg.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
-)
+    const supabase = createClient(
+      'https://xeezdzbotsblzclnmnxg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+    )
 
-let currentUserId = null
-let allClients = []
-let clientToDelete = null
+    let currentUserId = null
+    let allClients = []
+    let clientToDelete = null
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
-function showToast(message, type = "success") {
-  const existing = document.querySelector(".toast")
-  if (existing) existing.remove()
-  const toast = document.createElement("div")
-  toast.className = `toast ${type}`
-  toast.innerHTML = type === "success"
-    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ${message}`
-    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${message}`
-  document.body.appendChild(toast)
-  setTimeout(() => toast.remove(), 3500)
-}
+    // ── Toast ──
+    function showToast(message, type = 'success') {
+      document.querySelector('.toast')?.remove()
+      const t = document.createElement('div')
+      t.className = `toast ${type}`
+      if (type === 'success') {
+        t.innerHTML = `<span class="toast-accent"></span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          ${message}`
+      } else {
+        t.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${message}`
+      }
+      document.body.appendChild(t)
+      setTimeout(() => t.remove(), 3500)
+    }
 
-// ─── Check URL params (redirect after creation) ───────────────────────────────
-function checkCreatedParam() {
-  const params = new URLSearchParams(window.location.search)
-  const name = params.get("created")
-  if (name) {
-    setTimeout(() => showToast(`${name} créé avec succès !`), 400)
-    window.history.replaceState({}, "", "liste-clients.html")
-  }
-}
+    // ── URL params ──
+    function checkCreatedParam() {
+      const params = new URLSearchParams(window.location.search)
+      const name = params.get('created')
+      if (name) {
+        setTimeout(() => showToast(`${name} ajouté avec succès !`), 400)
+        window.history.replaceState({}, '', 'liste-clients.html')
+      }
+    }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) { window.location.href = "login.html"; return }
-  currentUserId = session.user.id
-  checkCreatedParam()
-  await loadUserProfile(session.user.id)
-  await loadClients()
-}
+    // ── Init ──
+    async function init() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { window.location.href = 'login.html'; return }
+      currentUserId = session.user.id
+      checkCreatedParam()
+      await loadProfile(session.user.id)
+      await loadClients()
+    }
 
-async function loadUserProfile(userId) {
-  const { data } = await supabase.from("profiles").select("first_name, last_name, company").eq("id", userId).single()
-  if (data) {
-    const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join("").toUpperCase() || "U"
-    document.getElementById("userAvatar").textContent = initials
-    document.getElementById("sidebarName").textContent = [data.first_name, data.last_name].filter(Boolean).join(" ") || "Utilisateur"
-    document.getElementById("sidebarCompany").textContent = data.company || "Mon entreprise"
-  }
-}
+    async function loadProfile(userId) {
+      const { data } = await supabase.from('profiles').select('first_name, last_name, company').eq('id', userId).single()
+      if (data) {
+        const initials = [data.first_name?.[0], data.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'U'
+        document.getElementById('userAvatar').textContent = initials
+        document.getElementById('sidebarName').textContent = [data.first_name, data.last_name].filter(Boolean).join(' ') || 'Utilisateur'
+        document.getElementById('sidebarCompany').textContent = data.company || 'Mon entreprise'
+      }
+    }
 
-async function loadClients() {
-  const { data, error } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("user_id", currentUserId)
-    .order("created_at", { ascending: false })
+    async function loadClients() {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('created_at', { ascending: false })
 
-  if (error) { showToast("Erreur chargement clients", "error"); return }
-  allClients = data || []
-  renderClients(allClients)
-}
+      if (error) { showToast('Erreur chargement clients', 'error'); return }
+      allClients = data || []
+      renderClients(allClients)
+    }
 
-// ─── Render ───────────────────────────────────────────────────────────────────
-function renderClients(clients) {
-  const tbody = document.getElementById("clientsTable")
-  const cardsEl = document.getElementById("clientCards")
-  const count = clients.length
-  document.getElementById("clientCountBadge").textContent = `${count} client${count > 1 ? "s" : ""}`
+    // ── Render ──
+    function renderClients(clients) {
+      const tbody   = document.getElementById('clientsTable')
+      const cardsEl = document.getElementById('clientCards')
+      const count   = clients.length
+      document.getElementById('clientCountBadge').textContent = `${count} client${count > 1 ? 's' : ''}`
 
-  if (!count) {
-    const empty = `
-      <div class="empty-state">
-        <div class="empty-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        </div>
-        <h3>Aucun client pour l'instant</h3>
-        <p>Créez votre premier client pour commencer à gérer vos devis.</p>
-        <a href="clients.html" class="btn-empty-add">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter un client
-        </a>
-      </div>`
-    tbody.innerHTML = `<tr><td colspan="5">${empty}</td></tr>`
-    cardsEl.innerHTML = empty
-    return
-  }
-
-  // Desktop table rows
-  tbody.innerHTML = clients.map(c => {
-    const initials = c.full_name?.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "?"
-    const quoteUrl = `create-quote.html?client_id=${c.id}&client_name=${encodeURIComponent(c.full_name)}`
-    return `
-      <tr>
-        <td>
-          <div class="client-name-cell">
-            <div class="client-avatar">${initials}</div>
-            <div>
-              <div class="client-name">${escHtml(c.full_name)}</div>
-              ${c.company_name ? `<div class="client-company">${escHtml(c.company_name)}</div>` : ""}
+      if (!count) {
+        const empty = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              </svg>
             </div>
-          </div>
-        </td>
-        <td>${c.email ? `<a href="mailto:${c.email}" style="color:var(--orange);text-decoration:none;">${escHtml(c.email)}</a>` : '<span class="badge-gray">—</span>'}</td>
-        <td>${c.phone ? escHtml(c.phone) : '<span class="badge-gray">—</span>'}</td>
-        <td>${c.city ? escHtml(c.city) : '<span class="badge-gray">—</span>'}</td>
-        <td>
-          <div class="actions-cell">
-            <a href="${quoteUrl}" class="btn-quote">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Nouveau devis
+            <div class="empty-title">Aucun client pour l'instant</div>
+            <p class="empty-desc">Créez votre premier client pour commencer à générer des devis.</p>
+            <a href="clients.html" class="btn-primary-sm" style="text-decoration:none;">
+              <div class="btn-icon-dot"></div> Ajouter un client
             </a>
-            <button class="btn-delete" data-id="${c.id}" data-name="${escAttr(c.full_name)}" title="Supprimer">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-            </button>
-          </div>
-        </td>
-      </tr>`
-  }).join("")
+          </div>`
+        tbody.innerHTML = `<tr><td colspan="5" style="padding:0;">${empty}</td></tr>`
+        cardsEl.innerHTML = empty
+        return
+      }
 
-  // Mobile cards
-  cardsEl.innerHTML = clients.map(c => {
-    const initials = c.full_name?.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "?"
-    const quoteUrl = `create-quote.html?client_id=${c.id}&client_name=${encodeURIComponent(c.full_name)}`
-    return `
-      <div class="client-card">
-        <div class="client-card-top">
-          <div class="client-avatar">${initials}</div>
-          <div class="client-card-info">
-            <div class="client-card-name">${escHtml(c.full_name)}</div>
-            ${c.company_name ? `<div class="client-card-company">${escHtml(c.company_name)}</div>` : ""}
-          </div>
-        </div>
-        <div class="client-card-meta">
-          ${c.email ? `<div class="client-card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${escHtml(c.email)}</div>` : ""}
-          ${c.phone ? `<div class="client-card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${escHtml(c.phone)}</div>` : ""}
-          ${c.city ? `<div class="client-card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(c.city)}</div>` : ""}
-        </div>
-        <div class="client-card-actions">
-          <a href="${quoteUrl}" class="btn-quote-mobile">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
-            Nouveau devis
-          </a>
-          <button class="btn-delete-mobile" data-id="${c.id}" data-name="${escAttr(c.full_name)}" title="Supprimer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-          </button>
-        </div>
-      </div>`
-  }).join("")
+      // Desktop rows
+      tbody.innerHTML = clients.map(c => {
+        const initials = c.full_name?.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '?'
+        const quoteUrl = `create-quote.html?client_id=${c.id}&client_name=${encodeURIComponent(c.full_name)}`
+        return `
+          <tr>
+            <td>
+              <div class="client-name-cell">
+                <div class="client-avatar">${initials}</div>
+                <div>
+                  <div class="client-name">${esc(c.full_name)}</div>
+                  ${c.company_name ? `<div class="client-company">${esc(c.company_name)}</div>` : ''}
+                </div>
+              </div>
+            </td>
+            <td>${c.email
+              ? `<a href="mailto:${c.email}" class="email-link">${esc(c.email)}</a>`
+              : '<span class="cell-empty">—</span>'}</td>
+            <td>${c.phone ? `<span style="font-size:13px;">${esc(c.phone)}</span>` : '<span class="cell-empty">—</span>'}</td>
+            <td>${c.city
+              ? `<span class="city-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(c.city)}</span>`
+              : '<span class="cell-empty">—</span>'}</td>
+            <td>
+              <div class="actions-cell">
+                <a href="${quoteUrl}" class="btn-devis">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                  Nouveau devis
+                </a>
+                <button class="btn-delete" data-id="${c.id}" data-name="${escAttr(c.full_name)}" title="Supprimer">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>`
+      }).join('')
 
-  // Attach delete listeners
-  document.querySelectorAll(".btn-delete, .btn-delete-mobile").forEach(btn => {
-    btn.addEventListener("click", () => {
-      clientToDelete = { id: btn.dataset.id, name: btn.dataset.name }
-      document.getElementById("modalDeleteText").textContent =
-        `Voulez-vous vraiment supprimer "${clientToDelete.name}" ? Cette action est irréversible.`
-      document.getElementById("deleteModal").classList.add("show")
+      // Mobile cards
+      cardsEl.innerHTML = clients.map(c => {
+        const initials = c.full_name?.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '?'
+        const quoteUrl = `create-quote.html?client_id=${c.id}&client_name=${encodeURIComponent(c.full_name)}`
+        return `
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-avatar">${initials}</div>
+              <div class="client-card-info">
+                <div class="client-card-name">${esc(c.full_name)}</div>
+                ${c.company_name ? `<div class="client-card-company">${esc(c.company_name)}</div>` : ''}
+              </div>
+            </div>
+            <div class="client-card-meta">
+              ${c.email ? `<div class="client-card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</div>` : ''}
+              ${c.phone ? `<div class="client-card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${esc(c.phone)}</div>` : ''}
+              ${c.city ? `<div class="client-card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(c.city)}</div>` : ''}
+            </div>
+            <div class="client-card-actions">
+              <a href="${quoteUrl}" class="btn-devis-mobile">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                Nouveau devis
+              </a>
+              <button class="btn-delete-mobile" data-id="${c.id}" data-name="${escAttr(c.full_name)}" title="Supprimer">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              </button>
+            </div>
+          </div>`
+      }).join('')
+
+      // Delete listeners
+      document.querySelectorAll('.btn-delete, .btn-delete-mobile').forEach(btn => {
+        btn.addEventListener('click', () => {
+          clientToDelete = { id: btn.dataset.id, name: btn.dataset.name }
+          document.getElementById('modalDeleteText').innerHTML =
+            `Voulez-vous vraiment supprimer <strong>${esc(clientToDelete.name)}</strong> ? Cette action est irréversible.`
+          document.getElementById('deleteModal').classList.add('show')
+        })
+      })
+    }
+
+    // ── Helpers ──
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    }
+    function escAttr(s) { return String(s).replace(/"/g,'&quot;') }
+
+    // ── Search ──
+    document.getElementById('searchInput').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase()
+      renderClients(allClients.filter(c =>
+        c.full_name?.toLowerCase().includes(q) ||
+        c.email?.toLowerCase().includes(q) ||
+        c.company_name?.toLowerCase().includes(q) ||
+        c.city?.toLowerCase().includes(q)
+      ))
     })
-  })
-}
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function escHtml(str) {
-  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
-}
-function escAttr(str) {
-  return String(str).replace(/"/g,"&quot;")
-}
+    // ── Delete ──
+    document.getElementById('confirmDelete').addEventListener('click', async () => {
+      if (!clientToDelete) return
+      document.getElementById('deleteModal').classList.remove('show')
+      const { error } = await supabase.from('clients').delete().eq('id', clientToDelete.id)
+      if (error) { showToast('Erreur lors de la suppression.', 'error'); return }
+      showToast(`${clientToDelete.name} supprimé.`)
+      clientToDelete = null
+      await loadClients()
+    })
 
-// ─── Search ───────────────────────────────────────────────────────────────────
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  const q = e.target.value.toLowerCase()
-  const filtered = allClients.filter(c =>
-    c.full_name?.toLowerCase().includes(q) ||
-    c.email?.toLowerCase().includes(q) ||
-    c.company_name?.toLowerCase().includes(q) ||
-    c.city?.toLowerCase().includes(q)
-  )
-  renderClients(filtered)
-})
+    document.getElementById('cancelDelete').addEventListener('click', () => {
+      document.getElementById('deleteModal').classList.remove('show')
+      clientToDelete = null
+    })
 
-// ─── Delete ───────────────────────────────────────────────────────────────────
-document.getElementById("confirmDelete").addEventListener("click", async () => {
-  if (!clientToDelete) return
-  document.getElementById("deleteModal").classList.remove("show")
-  const { error } = await supabase.from("clients").delete().eq("id", clientToDelete.id)
-  if (error) { showToast("Erreur lors de la suppression.", "error"); return }
-  showToast(`${clientToDelete.name} supprimé.`)
-  clientToDelete = null
-  await loadClients()
-})
-document.getElementById("cancelDelete").addEventListener("click", () => {
-  document.getElementById("deleteModal").classList.remove("show")
-  clientToDelete = null
-})
-document.getElementById("deleteModal").addEventListener("click", (e) => {
-  if (e.target === e.currentTarget) {
-    e.currentTarget.classList.remove("show")
-    clientToDelete = null
-  }
-})
+    document.getElementById('deleteModal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) {
+        e.currentTarget.classList.remove('show')
+        clientToDelete = null
+      }
+    })
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await supabase.auth.signOut()
-  window.location.href = "login.html"
-})
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut()
+      window.location.href = 'login.html'
+    })
 
-init()
-</script>
+    init()
+  </script>
 
+  <!-- PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', async () => {
@@ -744,9 +1054,7 @@ init()
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing
             nw.addEventListener('statechange', () => {
-              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-                showPWAUpdate()
-              }
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) showPWAUpdate()
             })
           })
         } catch(e) { console.warn('[SW]', e) }
@@ -755,21 +1063,13 @@ init()
     function showPWAUpdate() {
       const b = document.createElement('div')
       b.id = 'pwa-banner'
-      b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1F2937;color:white;border-radius:14px;padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3);z-index:9999;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.08);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#012B2A;color:white;border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(0,0,0,.25);z-index:9999;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(204,170,1,0.25);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#CCAA01" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Mise à jour disponible
-        <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#F97316;color:white;border:none;border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
-        <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;">×</button>
+        <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#CCAA01;color:#012B2A;border:none;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
+        <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;">×</button>
       </div>`
       document.body.appendChild(b)
-    }
-    let _deferredPrompt = null
-    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e })
-    window.installPWA = async () => {
-      if (!_deferredPrompt) return
-      _deferredPrompt.prompt()
-      await _deferredPrompt.userChoice
-      _deferredPrompt = null
     }
   </script>
 </body>

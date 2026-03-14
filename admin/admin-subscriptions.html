@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin — Abonnements</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --orange:#F97316;--orange-dark:#EA6C0A;--orange-light:#FEF3E7;
+      --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;
+      --gray-300:#D1D5DB;--gray-400:#9CA3AF;--gray-500:#6B7280;
+      --gray-600:#4B5563;--gray-700:#374151;--gray-800:#1F2937;--gray-900:#111827;
+      --green:#10B981;--green-light:#D1FAE5;
+      --red:#EF4444;--red-light:#FEE2E2;
+      --yellow:#F59E0B;--yellow-light:#FEF3C7;
+      --blue:#3B82F6;--blue-light:#EFF6FF;
+      --white:#FFFFFF;
+    }
+    body{font-family:'DM Sans',sans-serif;background:var(--gray-100);min-height:100vh;display:flex;-webkit-font-smoothing:antialiased;}
+
+    /* SIDEBAR */
+    .sidebar{width:240px;min-width:240px;background:var(--gray-900);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;}
+    .sidebar-logo{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
+    .sidebar-logo-icon{width:34px;height:34px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .sidebar-logo-text{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:white;}
+    .sidebar-badge{display:inline-block;padding:2px 8px;background:rgba(249,115,22,.2);border:1px solid rgba(249,115,22,.3);border-radius:100px;font-size:9px;font-weight:800;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+    .sidebar-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;}
+    .nav-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:10px 10px 5px;}
+    .nav-link{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;color:rgba(255,255,255,.5);text-decoration:none;font-size:13px;font-weight:500;transition:all .2s;}
+    .nav-link:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9);}
+    .nav-link.active{background:rgba(249,115,22,.15);color:var(--orange);}
+    .nav-link svg{flex-shrink:0;}
+    .sidebar-footer{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07);}
+    .admin-card{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;background:rgba(255,255,255,.05);margin-bottom:8px;}
+    .admin-avatar{width:30px;height:30px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+    .admin-name{font-size:12px;font-weight:600;color:white;}
+    .admin-role{font-size:10px;color:rgba(255,255,255,.35);}
+    .btn-logout{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;border-radius:9px;background:rgba(239,68,68,.1);color:#F87171;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;border:1px solid rgba(239,68,68,.2);cursor:pointer;transition:all .2s;}
+    .btn-logout:hover{background:rgba(239,68,68,.2);}
+
+    /* MAIN */
+    .main{flex:1;overflow-y:auto;padding:28px 32px 48px;min-width:0;}
+    .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+    .page-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gray-800);}
+    .page-sub{font-size:12px;color:var(--gray-500);margin-top:3px;}
+
+    /* TABS */
+    .tabs-bar{display:flex;gap:2px;background:var(--white);border-radius:11px;padding:4px;border:1.5px solid var(--gray-200);width:fit-content;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+    .tab-btn{padding:7px 16px;border-radius:8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--gray-500);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+    .tab-btn.active{background:var(--orange);color:white;box-shadow:0 2px 8px rgba(249,115,22,.3);}
+    .tab-btn:hover:not(.active){background:var(--gray-50);color:var(--gray-700);}
+    .tab-cnt{background:rgba(255,255,255,.3);padding:1px 6px;border-radius:100px;font-size:10px;font-weight:700;}
+    .tab-btn:not(.active) .tab-cnt{background:var(--gray-200);color:var(--gray-600);}
+
+    /* ALERT CARDS */
+    .alert-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+    .alert-card{padding:14px 16px;border-radius:12px;border:1.5px solid;}
+    .alert-card.red{background:#FFFAFA;border-color:rgba(239,68,68,.25);}
+    .alert-card.yellow{background:#FFFBF0;border-color:rgba(245,158,11,.25);}
+    .alert-card.orange{background:var(--orange-light);border-color:rgba(249,115,22,.25);}
+    .alert-card.green{background:#F0FDF8;border-color:rgba(16,185,129,.25);}
+    .ac-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;}
+    .alert-card.red .ac-val{color:var(--red);}
+    .alert-card.yellow .ac-val{color:var(--yellow);}
+    .alert-card.orange .ac-val{color:var(--orange);}
+    .alert-card.green .ac-val{color:var(--green);}
+    .ac-lbl{font-size:11px;font-weight:600;color:var(--gray-500);margin-top:3px;}
+
+    /* SECTION TITLE */
+    .section-hdr{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+    .section-hdr svg{color:var(--orange);}
+
+    /* FILTERS */
+    .filters-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+    .search-wrap{position:relative;flex:1;min-width:200px;}
+    .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray-400);pointer-events:none;}
+    .search-input{width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:8px 12px 8px 34px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray-800);background:var(--white);outline:none;transition:all .2s;}
+    .search-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.1);}
+    .filter-select{border:1.5px solid var(--gray-200);border-radius:10px;padding:8px 30px 8px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray-700);background:var(--white);cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;}
+    .filter-select:focus{border-color:var(--orange);}
+
+    /* TABLE */
+    .table-wrap{background:var(--white);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);overflow:hidden;}
+    table{width:100%;border-collapse:collapse;}
+    thead tr{background:var(--gray-50);}
+    th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400);padding:10px 14px;text-align:left;border-bottom:1.5px solid var(--gray-100);white-space:nowrap;}
+    td{padding:11px 14px;font-size:12px;border-bottom:1px solid var(--gray-50);vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:var(--gray-50);}
+
+    .user-cell{display:flex;align-items:center;gap:8px;}
+    .u-av{width:30px;height:30px;border-radius:50%;background:var(--orange-light);color:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;flex-shrink:0;}
+    .u-nm{font-weight:600;color:var(--gray-800);}
+    .u-co{font-size:11px;color:var(--gray-400);}
+
+    .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700;}
+    .badge.free   {background:var(--gray-100);color:var(--gray-500);}
+    .badge.monthly{background:var(--blue-light);color:var(--blue);}
+    .badge.annual {background:var(--green-light);color:var(--green);}
+    .badge.active {background:var(--green-light);color:var(--green);}
+    .badge.expired{background:var(--red-light);color:var(--red);}
+    .badge.expiring{background:var(--yellow-light);color:var(--yellow);}
+    .badge.banned {background:var(--red-light);color:var(--red);}
+
+    .exp-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:700;}
+    .exp-pill.d0{background:var(--red-light);color:var(--red);}
+    .exp-pill.d3{background:var(--yellow-light);color:var(--yellow);}
+    .exp-pill.d7{background:var(--orange-light);color:var(--orange);}
+    .exp-pill.ok{background:var(--green-light);color:var(--green);}
+    .exp-pill.past{background:var(--red-light);color:var(--red);}
+
+    .btn-sm{padding:5px 10px;border-radius:7px;border:none;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:4px;}
+    .btn-sm.renew{background:var(--orange-light);color:var(--orange);}
+    .btn-sm.renew:hover{background:var(--orange);color:white;}
+    .btn-sm.deact{background:var(--red-light);color:var(--red);}
+    .btn-sm.deact:hover{background:var(--red);color:white;}
+    .btn-sm.act{background:var(--green-light);color:var(--green);}
+    .btn-sm.act:hover{background:var(--green);color:white;}
+    .btn-sm.free{background:var(--gray-100);color:var(--gray-600);}
+    .btn-sm.free:hover{background:var(--gray-200);}
+
+    .empty-state{text-align:center;padding:40px;color:var(--gray-400);font-size:13px;}
+
+    /* Modal */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:20px;}
+    .modal-bg.open{display:flex;}
+    .modal{background:var(--white);border-radius:18px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .25s ease both;}
+    @keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+    .modal-header{padding:20px 22px 14px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
+    .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--gray-800);}
+    .modal-close{background:none;border:none;color:var(--gray-400);cursor:pointer;padding:4px;border-radius:7px;}
+    .modal-close:hover{background:var(--gray-100);}
+    .modal-body{padding:20px 22px;}
+    .m-field{margin-bottom:14px;}
+    .m-label{font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+    .m-select,.m-input{width:100%;border:1.5px solid var(--gray-200);border-radius:9px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray-800);background:var(--gray-50);outline:none;transition:border-color .2s;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+    .m-input{background-image:none;padding-right:12px;}
+    .m-select:focus,.m-input:focus{border-color:var(--orange);background:var(--white);box-shadow:0 0 0 3px rgba(249,115,22,.1);}
+    .modal-footer{padding:0 22px 20px;display:flex;gap:8px;flex-wrap:wrap;}
+    .btn-modal-action{padding:10px 18px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px;}
+    .btn-modal-action.apply{background:var(--orange);color:white;box-shadow:0 4px 12px rgba(249,115,22,.3);}
+    .btn-modal-action.apply:hover{background:var(--orange-dark);}
+    .btn-modal-action.cancel{background:var(--gray-100);color:var(--gray-600);}
+    .btn-modal-action.cancel:hover{background:var(--gray-200);}
+
+    /* Toast */
+    .toast{position:fixed;bottom:24px;right:24px;padding:13px 18px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:0 8px 32px rgba(0,0,0,.15);animation:toastIn .3s ease;z-index:999;}
+    .toast.success{background:var(--green);color:white;}
+    .toast.error  {background:var(--red);color:white;}
+    @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;}
+
+    @media(max-width:768px){.sidebar{display:none;}.main{padding:14px;}.alert-cards{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div><div class="sidebar-logo-text">Devis App</div><div class="sidebar-badge">⚡ Super Admin</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-label">Navigation</span>
+    <a href="admin-dashboard.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="admin-users.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Utilisateurs</a>
+    <a href="admin-subscriptions.html" class="nav-link active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Abonnements</a>
+    <a href="admin-logs.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Logs paiements</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="admin-card"><div class="admin-avatar" id="adminAvatar">A</div><div><div class="admin-name" id="adminName">Admin</div><div class="admin-role">Super Administrateur</div></div></div>
+    <button class="btn-logout" id="logoutBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Déconnexion</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-header">
+    <div><h1 class="page-title">Gestion des abonnements</h1><p class="page-sub">Activez, renouvelez ou désactivez les abonnements manuellement</p></div>
+  </div>
+
+  <!-- Alert cards -->
+  <div class="alert-cards">
+    <div class="alert-card red"><div class="ac-val" id="acExpired">—</div><div class="ac-lbl">Expirés</div></div>
+    <div class="alert-card yellow"><div class="ac-val" id="acD3">—</div><div class="ac-lbl">Expirent dans 3 jours</div></div>
+    <div class="alert-card orange"><div class="ac-val" id="acD7">—</div><div class="ac-lbl">Expirent dans 7 jours</div></div>
+    <div class="alert-card green"><div class="ac-val" id="acActive">—</div><div class="ac-lbl">Abonnements actifs</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-filter="all">Tous <span class="tab-cnt" id="cntAll">—</span></button>
+    <button class="tab-btn" data-filter="expired">⛔ Expirés <span class="tab-cnt" id="cntExpired">—</span></button>
+    <button class="tab-btn" data-filter="expiring">⚠️ Expirent bientôt <span class="tab-cnt" id="cntExpiring">—</span></button>
+    <button class="tab-btn" data-filter="active">✅ Actifs <span class="tab-cnt" id="cntActive">—</span></button>
+    <button class="tab-btn" data-filter="free">Gratuit <span class="tab-cnt" id="cntFree">—</span></button>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-wrap">
+      <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" placeholder="Rechercher un utilisateur...">
+    </div>
+    <select class="filter-select" id="filterPlan">
+      <option value="">Tous les plans</option>
+      <option value="free">Gratuit</option>
+      <option value="monthly">Mensuel</option>
+      <option value="annual">Annuel</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Utilisateur</th><th>Plan</th><th>Statut</th><th>Début</th><th>Expire le</th><th>Délai</th><th>Quota</th><th>Actions</th>
+      </tr></thead>
+      <tbody id="subsBody"><tr><td colspan="8" class="empty-state">Chargement...</td></tr></tbody>
+    </table>
+  </div>
+</main>
+
+<!-- ══ MODAL RENOUVELLEMENT ══ -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Modifier l'abonnement</div>
+      <button class="modal-close" id="modalClose"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="m-field">
+        <div class="m-label">Plan</div>
+        <select class="m-select" id="mPlan">
+          <option value="free">Gratuit (0 XAF)</option>
+          <option value="monthly">Mensuel (2 000 XAF/mois)</option>
+          <option value="annual">Annuel (19 200 XAF/an)</option>
+        </select>
+      </div>
+      <div class="m-field">
+        <div class="m-label">Durée (jours à partir d'aujourd'hui)</div>
+        <input class="m-input" type="number" id="mDays" value="30" min="1" max="999" placeholder="Nombre de jours">
+      </div>
+      <div class="m-field">
+        <div class="m-label">Raison / Note interne</div>
+        <input class="m-input" type="text" id="mNote" placeholder="Ex: Renouvellement manuel, offre promotionnelle...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-action apply" id="mApplyBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Appliquer le changement
+      </button>
+      <button class="btn-modal-action cancel" id="modalCloseBtn">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+const supabase = createClient(
+  'https://xeezdzbotsblzclnmnxg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+)
+
+const {data:{session}}=await supabase.auth.getSession()
+if(!session){window.location.href='admin-login.html'}
+else{
+  const {data:adm}=await supabase.from('admins').select('id').eq('id',session.user.id).single()
+  if(!adm){await supabase.auth.signOut();window.location.href='admin-login.html'}
+  else{const e=session.user.email||'admin';document.getElementById('adminName').textContent=e.split('@')[0];document.getElementById('adminAvatar').textContent=(e[0]||'A').toUpperCase()}
+}
+
+let allUsers=[], currentFilter='all', currentModalUid=null
+
+function showToast(msg,type='success'){
+  document.querySelector('.toast')?.remove()
+  const t=document.createElement('div');t.className=`toast ${type}`;t.textContent=msg
+  document.body.appendChild(t);setTimeout(()=>t.remove(),3500)
+}
+function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})}
+function daysUntil(d){if(!d)return null;return Math.ceil((new Date(d)-Date.now())/(1000*60*60*24))}
+
+async function load(){
+  const {data}=await supabase.from('profiles').select('*').order('plan_expires_at',{ascending:true,nullsFirst:false}).range(0,9999)
+  allUsers=data||[]
+
+  /* Alert counts */
+  const expired=allUsers.filter(u=>{const d=daysUntil(u.plan_expires_at);return d!==null&&d<0&&u.plan!=='free'})
+  const d3=allUsers.filter(u=>{const d=daysUntil(u.plan_expires_at);return d!==null&&d>=0&&d<=3&&u.plan!=='free'})
+  const d7=allUsers.filter(u=>{const d=daysUntil(u.plan_expires_at);return d!==null&&d>=0&&d<=7&&u.plan!=='free'})
+  const active=allUsers.filter(u=>{const d=daysUntil(u.plan_expires_at);return u.plan!=='free'&&d!==null&&d>0})
+  document.getElementById('acExpired').textContent=expired.length
+  document.getElementById('acD3').textContent=d3.length
+  document.getElementById('acD7').textContent=d7.length
+  document.getElementById('acActive').textContent=active.length
+
+  /* Tab counts */
+  document.getElementById('cntAll').textContent=allUsers.length
+  document.getElementById('cntExpired').textContent=expired.length
+  document.getElementById('cntExpiring').textContent=d7.length
+  document.getElementById('cntActive').textContent=active.length
+  document.getElementById('cntFree').textContent=allUsers.filter(u=>u.plan==='free').length
+
+  renderTable()
+}
+
+function renderTable(){
+  const q=document.getElementById('searchInput').value.toLowerCase()
+  const planF=document.getElementById('filterPlan').value
+  let rows=allUsers.filter(u=>{
+    const name=[u.first_name,u.last_name,u.company].filter(Boolean).join(' ').toLowerCase()
+    if(q&&!name.includes(q))return false
+    if(planF&&u.plan!==planF)return false
+    if(currentFilter==='expired'){const d=daysUntil(u.plan_expires_at);return d!==null&&d<0&&u.plan!=='free'}
+    if(currentFilter==='expiring'){const d=daysUntil(u.plan_expires_at);return d!==null&&d>=0&&d<=7&&u.plan!=='free'}
+    if(currentFilter==='active'){const d=daysUntil(u.plan_expires_at);return u.plan!=='free'&&d!==null&&d>0}
+    if(currentFilter==='free')return u.plan==='free'
+    return true
+  })
+
+  if(!rows.length){document.getElementById('subsBody').innerHTML=`<tr><td colspan="8" class="empty-state">Aucun résultat pour ce filtre.</td></tr>`;return}
+
+  document.getElementById('subsBody').innerHTML=rows.map(u=>{
+    const name=[u.first_name,u.last_name].filter(Boolean).join(' ')||u.company||'—'
+    const ini=(name[0]||'?').toUpperCase()
+    const d=daysUntil(u.plan_expires_at)
+    let pillCls='ok', pillLbl='—'
+    if(u.plan==='free'){pillCls='';pillLbl='—'}
+    else if(d===null){pillCls='ok';pillLbl='—'}
+    else if(d<0){pillCls='past';pillLbl=`Exp. il y a ${Math.abs(d)}j`}
+    else if(d===0){pillCls='d0';pillLbl='Expire auj.'}
+    else if(d<=3){pillCls='d3';pillLbl=`J−${d}`}
+    else if(d<=7){pillCls='d7';pillLbl=`J−${d}`}
+    else{pillCls='ok';pillLbl=`J−${d}`}
+    const limit=u.plan==='free'?5:50
+    const qc=u.quotes_count||0
+    /* Status badge */
+    let stCls='free',stLbl='Gratuit'
+    if(u.is_banned){stCls='banned';stLbl='Banni'}
+    else if(u.plan!=='free'){
+      if(d!==null&&d<0){stCls='expired';stLbl='Expiré'}
+      else if(d!==null&&d<=7){stCls='expiring';stLbl='Bientôt'}
+      else{stCls='active';stLbl='Actif'}
+    }
+    return`<tr>
+      <td><div class="user-cell"><div class="u-av">${ini}</div><div><div class="u-nm">${name}</div><div class="u-co">${u.company||'—'}</div></div></div></td>
+      <td><span class="badge ${u.plan}">${u.plan==='free'?'Gratuit':u.plan==='monthly'?'Mensuel':'Annuel'}</span></td>
+      <td><span class="badge ${stCls}">${stLbl}</span></td>
+      <td style="font-size:11px;color:var(--gray-500);">${fmtDate(u.plan_started_at)}</td>
+      <td style="font-size:11px;color:var(--gray-600);font-weight:600;">${fmtDate(u.plan_expires_at)}</td>
+      <td>${pillCls?`<span class="exp-pill ${pillCls}">${pillLbl}</span>`:'—'}</td>
+      <td style="font-size:11px;color:var(--gray-500);">${qc} / ${limit}</td>
+      <td style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="btn-sm renew" onclick="openModal('${u.id}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Modifier
+        </button>
+        ${u.plan!=='free'?`<button class="btn-sm free" onclick="resetToFree('${u.id}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Désactiver
+        </button>`:''}
+      </td>
+    </tr>`
+  }).join('')
+}
+
+/* Tabs */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'))
+    btn.classList.add('active')
+    currentFilter=btn.dataset.filter
+    renderTable()
+  })
+})
+document.getElementById('searchInput').addEventListener('input',renderTable)
+document.getElementById('filterPlan').addEventListener('change',renderTable)
+
+/* Modal */
+window.openModal=function(uid){
+  const u=allUsers.find(x=>x.id===uid);if(!u)return
+  currentModalUid=uid
+  const name=[u.first_name,u.last_name].filter(Boolean).join(' ')||u.company||'Utilisateur'
+  document.getElementById('modalTitle').textContent=`Modifier — ${name}`
+  document.getElementById('mPlan').value=u.plan
+  document.getElementById('mDays').value=u.plan==='annual'?365:30
+  document.getElementById('mNote').value=''
+  document.getElementById('modalBg').classList.add('open')
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('open');currentModalUid=null}
+document.getElementById('modalClose').addEventListener('click',closeModal)
+document.getElementById('modalCloseBtn').addEventListener('click',closeModal)
+document.getElementById('modalBg').addEventListener('click',e=>{if(e.target===document.getElementById('modalBg'))closeModal()})
+
+document.getElementById('mApplyBtn').addEventListener('click',async()=>{
+  if(!currentModalUid)return
+  const plan=document.getElementById('mPlan').value
+  const days=parseInt(document.getElementById('mDays').value)||30
+  const expires=plan==='free'?null:new Date(Date.now()+days*24*60*60*1000).toISOString()
+  const btn=document.getElementById('mApplyBtn')
+  btn.disabled=true;btn.innerHTML=`<span class="spinner"></span> Application...`
+  const {error}=await supabase.from('profiles').update({
+    plan, plan_started_at:new Date().toISOString(), plan_expires_at:expires, quotes_count:0, quotes_reset_at:new Date().toISOString()
+  }).eq('id',currentModalUid)
+  btn.disabled=false;btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Appliquer le changement`
+  if(error){showToast('Erreur : '+error.message,'error');return}
+  const u=allUsers.find(x=>x.id===currentModalUid)
+  if(u){u.plan=plan;u.plan_expires_at=expires;u.plan_started_at=new Date().toISOString();u.quotes_count=0}
+  closeModal();renderTable()
+  showToast(`Plan mis à jour → ${plan==='free'?'Gratuit':plan==='monthly'?'Mensuel':'Annuel'}${plan!=='free'?' · '+days+' jours':''}`)
+})
+
+window.resetToFree=async function(uid){
+  const u=allUsers.find(x=>x.id===uid)
+  const name=[u?.first_name,u?.last_name].filter(Boolean).join(' ')||'cet utilisateur'
+  if(!confirm(`Désactiver l'abonnement de ${name} et repasser en Gratuit ?`))return
+  const {error}=await supabase.from('profiles').update({plan:'free',plan_expires_at:null,plan_started_at:null}).eq('id',uid)
+  if(error){showToast('Erreur : '+error.message,'error');return}
+  if(u){u.plan='free';u.plan_expires_at=null}
+  renderTable();load()
+  showToast(`${name} repassé en plan Gratuit.`)
+}
+
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await supabase.auth.signOut();window.location.href='admin-login.html'})
+load()
+</script>
+</body>
+</html>
