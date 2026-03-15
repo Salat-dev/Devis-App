@@ -1,1192 +1,1031 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#012B2A">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="afrivis.">
-    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
-    <meta name="description" content="afrivis. — Créez vos devis professionnels en quelques minutes. Gestion clients, export PDF, envoi WhatsApp.">
-    <title>afrivis. | Facturation Professionnelle</title>
-    <link rel="icon" href="./icons/favicon.svg" >
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-/* =============================================
-   DESIGN SYSTEM — afrivis. Fluent Design
-   Primary: #012B2A  Accent: #CCAA01  BG: #FFFFFF
-   H1: Manrope Bold 28px
-   H2: Manrope Medium 20px
-   Menu: Inter Medium 14px
-   Tables: Inter Regular 14px
-   Small: Inter Regular 12px
-   ============================================= */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#012B2A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="afrivis.">
+<meta name="description" content="afrivis. — Créez vos devis professionnels en quelques minutes. Gestion clients, export PDF, envoi WhatsApp.">
+<title>afrivis. | Facturation Professionnelle</title>
+<link rel="icon" href="./icons/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   AFRIVIS. — Landing page
+   Direction : Raffinement éditorial. Autorité calme.
+   Confiance africaine moderne. Luxe sobre.
+   Primary #012B2A | Accent #CCAA01 | BG #FFFFFF
+   Manrope: display | Inter: body
+═══════════════════════════════════════════════════ */
 :root {
-    --primary: #012B2A;
-    --primary-90: rgba(1,43,42,0.90);
-    --primary-60: rgba(1,43,42,0.60);
-    --primary-30: rgba(1,43,42,0.30);
-    --primary-12: rgba(1,43,42,0.12);
-    --primary-06: rgba(1,43,42,0.06);
-    --accent: #CCAA01;
-    --accent-dark: #B09600;
-    --accent-light: #FAF5D7;
-    --accent-soft: rgba(204,170,1,0.15);
-    --white: #FFFFFF;
-    --surface: #F8F9F7;
-    --surface-2: #F2F4F1;
-    --border: rgba(1,43,42,0.10);
-    --border-medium: rgba(1,43,42,0.18);
-    --text-primary: #012B2A;
-    --text-secondary: rgba(1,43,42,0.62);
-    --text-tertiary: rgba(1,43,42,0.42);
-    --green-ok: #0D7A5F;
-    --green-ok-bg: #E6F5F1;
-    --red-err: #C53030;
-    --red-err-bg: #FEF2F2;
+  --primary:    #012B2A;
+  --primary-90: rgba(1,43,42,0.90);
+  --primary-30: rgba(1,43,42,0.30);
+  --primary-12: rgba(1,43,42,0.12);
+  --primary-08: rgba(1,43,42,0.08);
+  --primary-06: rgba(1,43,42,0.06);
+  --primary-03: rgba(1,43,42,0.03);
+  --accent:     #CCAA01;
+  --accent-d:   #B09600;
+  --accent-l:   #FAF5D7;
+  --accent-15:  rgba(204,170,1,0.15);
+  --accent-30:  rgba(204,170,1,0.30);
+  --white:      #FFFFFF;
+  --surface:    #F8F9F7;
+  --surface-2:  #F2F4F0;
+  --border:     rgba(1,43,42,0.09);
+  --border-md:  rgba(1,43,42,0.16);
+  --t1: #012B2A;
+  --t2: rgba(1,43,42,0.62);
+  --t3: rgba(1,43,42,0.40);
+  --t4: rgba(1,43,42,0.24);
+  --green:    #0D7A5F;
+  --green-bg: #E6F5F1;
+  --red:      #C53030;
 
-    /* Typography */
-    --font-display: 'Manrope', sans-serif;
-    --font-body: 'Inter', sans-serif;
+  --fd: 'Manrope', sans-serif;
+  --fb: 'Inter', sans-serif;
 
-    /* Fluent elevation */
-    --shadow-sm: 0 1px 2px rgba(1,43,42,0.04), 0 2px 8px rgba(1,43,42,0.04);
-    --shadow-md: 0 2px 4px rgba(1,43,42,0.04), 0 8px 24px rgba(1,43,42,0.07);
-    --shadow-lg: 0 4px 8px rgba(1,43,42,0.05), 0 16px 48px rgba(1,43,42,0.09);
-    --shadow-accent: 0 4px 20px rgba(204,170,1,0.25);
+  --sh-sm:     0 1px 2px rgba(1,43,42,0.04), 0 3px 10px rgba(1,43,42,0.05);
+  --sh-md:     0 2px 4px rgba(1,43,42,0.04), 0 10px 28px rgba(1,43,42,0.08);
+  --sh-lg:     0 4px 8px rgba(1,43,42,0.05), 0 20px 52px rgba(1,43,42,0.10);
+  --sh-accent: 0 6px 28px rgba(204,170,1,0.28);
 
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-pill: 100px;
-
-    --ease: cubic-bezier(0.16,1,0.3,1);
-    --transition: all 0.24s var(--ease);
-
-    --section-pad: 88px;
-    --container-max: 1200px;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-pill: 100px;
+  --ease: cubic-bezier(0.16,1,0.3,1);
+  --tr: all 0.26s var(--ease);
+  --max-w: 1200px;
+  --sec-pad: 100px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-    font-family: var(--font-body);
-    background: var(--white);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+  font-family: var(--fb);
+  background: var(--white); color: var(--t1);
+  overflow-x: hidden; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 48px; }
+section { padding: var(--sec-pad) 0; }
 
-.container { max-width: var(--container-max); margin: 0 auto; padding: 0 40px; }
-section { padding: var(--section-pad) 0; }
-
-/* ---- TYPOGRAPHY ---- */
-h1 { font-family: var(--font-display); font-weight: 700; font-size: 28px; line-height: 1.22; letter-spacing: -0.02em; }
-h2 { font-family: var(--font-display); font-weight: 500; font-size: 20px; line-height: 1.3; letter-spacing: -0.01em; }
-h3 { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.4; }
-.hero h1 { font-size: clamp(32px, 5vw, 52px); }
-.section-h2 { font-size: clamp(22px, 3.5vw, 36px); }
-.menu-text { font-family: var(--font-body); font-weight: 500; font-size: 14px; }
-.table-text { font-family: var(--font-body); font-weight: 400; font-size: 14px; }
-.small-text { font-family: var(--font-body); font-weight: 400; font-size: 12px; }
-
-/* ---- FLUENT COMPONENTS ---- */
-.tag {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--accent-light); color: var(--primary);
-    border: 1px solid rgba(204,170,1,0.3);
-    padding: 5px 12px; border-radius: var(--radius-pill);
-    font-family: var(--font-body); font-size: 12px; font-weight: 600;
-    letter-spacing: 0.02em; margin-bottom: 16px;
+/* ── Typographie ── */
+.sec-label {
+  font-family: var(--fb); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--t3);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
 }
-.tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.sec-label::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); }
+.sec-h2 {
+  font-family: var(--fd); font-weight: 700;
+  font-size: clamp(26px, 3.8vw, 44px);
+  line-height: 1.12; letter-spacing: -0.025em; color: var(--t1);
+}
+.sec-sub { font-family: var(--fb); font-size: 16px; color: var(--t2); max-width: 500px; line-height: 1.8; margin-top: 12px; }
+.text-accent { color: var(--accent); }
+.text-center { text-align: center; }
 
+/* ── Boutons ── */
 .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 11px 22px; border-radius: var(--radius-pill);
-    font-family: var(--font-body); font-weight: 500; font-size: 14px;
-    text-decoration: none; border: 1.5px solid transparent;
-    cursor: pointer; transition: var(--transition); white-space: nowrap;
-    letter-spacing: -0.01em;
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--fb); font-weight: 500; font-size: 14px;
+  padding: 12px 24px; border-radius: var(--r-pill);
+  text-decoration: none; border: 1.5px solid transparent;
+  cursor: pointer; transition: var(--tr); white-space: nowrap; letter-spacing: -0.01em;
 }
-.btn-primary {
-    background: var(--primary); color: var(--white);
-    border-color: var(--primary);
-    box-shadow: 0 2px 12px rgba(1,43,42,0.18);
-}
-.btn-primary:hover { background: #013534; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(1,43,42,0.22); }
-.btn-primary:active { transform: translateY(0); }
-
-.btn-accent {
-    background: var(--accent); color: var(--primary);
-    border-color: var(--accent);
-    box-shadow: var(--shadow-accent);
-    font-weight: 600;
-}
-.btn-accent:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(204,170,1,0.35); }
-
-.btn-outline {
-    background: var(--white); color: var(--primary);
-    border-color: var(--border-medium);
-    box-shadow: var(--shadow-sm);
-}
-.btn-outline:hover { border-color: var(--primary-30); background: var(--surface); transform: translateY(-1px); }
-
-.btn-lg { padding: 14px 28px; font-size: 15px; }
+.btn-primary { background: var(--primary); color: var(--white); border-color: var(--primary); box-shadow: 0 2px 14px rgba(1,43,42,0.22); }
+.btn-primary:hover { background: #013534; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(1,43,42,0.26); }
+.btn-accent  { background: var(--accent); color: var(--primary); border-color: var(--accent); box-shadow: var(--sh-accent); font-weight: 600; }
+.btn-accent:hover  { background: var(--accent-d); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(204,170,1,0.36); }
+.btn-outline { background: var(--white); color: var(--primary); border-color: var(--border-md); }
+.btn-outline:hover { border-color: var(--primary); background: var(--surface); transform: translateY(-1px); }
+.btn-lg   { padding: 14px 30px; font-size: 15px; }
 .btn-full { width: 100%; justify-content: center; }
+.btn-arrow {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: transform 0.2s;
+}
+.btn:hover .btn-arrow { transform: translateX(3px); }
+.btn-accent .btn-arrow { background: rgba(1,43,42,0.14); }
 
-/* ---- NAVIGATION (Fluent Acrylic) ---- */
+/* ══════════════════════════════
+   NAVIGATION
+══════════════════════════════ */
 nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    padding: 14px 0;
-    background: rgba(255,255,255,0.88);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid var(--border);
-    transition: var(--transition);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 0;
+  transition: var(--tr);
 }
-nav.scrolled {
-    padding: 10px 0;
-    background: rgba(255,255,255,0.96);
-    box-shadow: 0 1px 0 var(--border), 0 4px 24px rgba(1,43,42,0.06);
+nav::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid transparent; transition: var(--tr);
 }
-.nav-flex { display: flex; justify-content: space-between; align-items: center; }
-
-/* Logo SVG — inline brand mark */
-.logo {
-    display: flex; align-items: center; gap: 0;
-    text-decoration: none;
+nav.scrolled::before {
+  background: rgba(255,255,255,0.96);
+  border-color: var(--border);
+  box-shadow: 0 1px 0 var(--border), 0 6px 28px rgba(1,43,42,0.06);
 }
-.logo-img {
-    height: 48px; width: auto;
-    max-width: 160px;
-    object-fit: contain; object-position: left center;
-    display: block;
-}
-/* Version footer (fond sombre) — filtre blanc */
-.logo-img-white {
-    height: 44px; width: auto;
-    max-width: 150px;
-    object-fit: contain; object-position: left center;
-    filter: brightness(0) invert(1);
-}
-
+nav.scrolled { padding: 11px 0; }
+.nav-flex { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; }
+.logo { display: flex; align-items: center; text-decoration: none; }
+.logo-img { height: 40px; width: auto; max-width: 160px; object-fit: contain; display: block; }
+.logo-img-white { height: 40px; width: auto; max-width: 160px; object-fit: contain; filter: brightness(0) invert(1); }
 .nav-links { display: flex; align-items: center; gap: 2px; }
 .nav-link {
-    font-family: var(--font-body); font-weight: 500; font-size: 14px;
-    color: var(--text-secondary); text-decoration: none;
-    padding: 6px 14px; border-radius: var(--radius-pill);
-    transition: var(--transition);
+  font-family: var(--fb); font-weight: 500; font-size: 14px; color: var(--t2);
+  text-decoration: none; padding: 7px 16px; border-radius: var(--r-pill); transition: var(--tr);
 }
-.nav-link:hover { color: var(--primary); background: var(--surface); }
+.nav-link:hover { color: var(--t1); background: var(--surface); }
 .nav-actions { display: flex; gap: 8px; align-items: center; }
-
 .menu-toggle {
-    display: none; background: none; border: 1.5px solid var(--border-medium);
-    border-radius: var(--radius-sm); cursor: pointer; padding: 0;
-    width: 38px; height: 38px; align-items: center; justify-content: center;
-    color: var(--text-secondary); transition: var(--transition);
+  display: none; background: none; border: 1.5px solid var(--border-md);
+  border-radius: var(--r-sm); cursor: pointer; width: 40px; height: 40px;
+  align-items: center; justify-content: center; color: var(--t2); transition: var(--tr); padding: 0;
 }
-.menu-toggle:hover { border-color: var(--primary); color: var(--primary); background: var(--surface); }
-
+.menu-toggle:hover { border-color: var(--primary); color: var(--t1); background: var(--surface); }
 .mobile-menu {
-    display: none; position: fixed; inset: 0; top: 60px;
-    background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
-    z-index: 999; flex-direction: column; padding: 16px 20px; gap: 4px;
-    border-top: 1px solid var(--border);
+  display: none; position: fixed; inset: 0; top: 64px;
+  background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+  z-index: 999; flex-direction: column; padding: 20px 24px; gap: 4px;
+  border-top: 1px solid var(--border);
 }
 .mobile-menu.open { display: flex; }
-.mobile-menu .nav-link { font-size: 16px; padding: 12px 16px; border-radius: var(--radius-md); }
-.mobile-menu .divider { height: 1px; background: var(--border); margin: 8px 0; }
+.mobile-menu .nav-link { font-size: 16px; padding: 13px 16px; border-radius: var(--r-md); }
+.mobile-divider { height: 1px; background: var(--border); margin: 8px 0; }
 .mobile-menu .btn { justify-content: center; }
 
-/* ---- HERO ---- */
-.hero {
-    padding: 148px 0 80px;
-    position: relative; overflow: hidden;
-    background: var(--white);
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero { padding: 154px 0 100px; position: relative; overflow: hidden; background: var(--white); }
+
+.hero-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.hero-bg-c1 {
+  position: absolute; top: -160px; right: -180px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(ellipse at 40% 40%, rgba(204,170,1,0.07) 0%, rgba(1,43,42,0.03) 45%, transparent 70%);
 }
-/* Subtle geometric accent — Fluent depth */
-.hero::before {
-    content: '';
-    position: absolute; top: -80px; right: -120px;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse at center, rgba(204,170,1,0.07) 0%, transparent 70%);
-    pointer-events: none;
+.hero-bg-c2 {
+  position: absolute; bottom: -80px; left: -120px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(ellipse at 60% 60%, rgba(1,43,42,0.04) 0%, transparent 65%);
 }
-.hero::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(1,43,42,0.028) 1px, transparent 1px), linear-gradient(90deg, rgba(1,43,42,0.028) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 65% 70% at 70% 35%, black 10%, transparent 75%);
 }
-.hero-grid-pattern {
-    position: absolute; inset: 0; pointer-events: none; opacity: 0.025;
-    background-image:
-        linear-gradient(var(--primary) 1px, transparent 1px),
-        linear-gradient(90deg, var(--primary) 1px, transparent 1px);
-    background-size: 40px 40px;
-    mask-image: radial-gradient(ellipse 70% 60% at 60% 30%, black 20%, transparent 80%);
+.hero-line {
+  position: absolute; top: 0; right: 15%; width: 1px; height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(204,170,1,0.2) 30%, rgba(204,170,1,0.12) 70%, transparent);
+  transform: skewX(-8deg);
 }
 .hero-content {
-    position: relative; z-index: 2;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 64px; align-items: center;
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
 }
-.hero-left { max-width: 540px; }
-.hero h1 { margin-bottom: 18px; color: var(--primary); }
-.hero h1 .accent { color: var(--accent); }
+.hero-left { max-width: 560px; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: var(--r-pill);
+  font-family: var(--fb); font-size: 12px; font-weight: 500; color: var(--t2);
+  margin-bottom: 24px; animation: fadeUp .6s var(--ease) .1s both;
+}
+.eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+.hero h1 {
+  font-family: var(--fd); font-weight: 800;
+  font-size: clamp(34px, 4.8vw, 58px); line-height: 1.08; letter-spacing: -0.03em;
+  color: var(--primary); margin-bottom: 22px; animation: fadeUp .6s var(--ease) .18s both;
+}
+.hero h1 em { font-style: normal; color: var(--accent); position: relative; }
+.hero h1 em::after {
+  content: ''; position: absolute; bottom: 2px; left: 0; right: 0;
+  height: 3px; background: var(--accent); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  animation: lineIn .5s var(--ease) .8s both;
+}
+@keyframes lineIn { to { transform: scaleX(1); } }
+
 .hero-sub {
-    font-size: 16px; color: var(--text-secondary);
-    line-height: 1.75; margin-bottom: 32px;
-    font-family: var(--font-body); font-weight: 400;
+  font-family: var(--fb); font-size: 17px; font-weight: 400;
+  color: var(--t2); line-height: 1.75; margin-bottom: 36px; max-width: 480px;
+  animation: fadeUp .6s var(--ease) .26s both;
 }
-.hero-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 52px; animation: fadeUp .6s var(--ease) .34s both; }
+
 .social-proof {
-    display: flex; align-items: center; gap: 16px;
-    padding: 14px 18px; background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    width: fit-content;
+  display: flex; align-items: center; gap: 18px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  width: fit-content; animation: fadeUp .6s var(--ease) .42s both;
 }
 .avatars { display: flex; }
 .avatars span {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--primary); border: 2px solid var(--white);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700; color: var(--white);
-    margin-left: -8px; font-family: var(--font-display);
+  width: 34px; height: 34px; border-radius: 50%; border: 2.5px solid var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fd); font-size: 10px; font-weight: 700;
+  margin-left: -9px; flex-shrink: 0; color: var(--white); background: var(--primary);
 }
 .avatars span:first-child { margin-left: 0; background: var(--accent); color: var(--primary); }
 .avatars span:nth-child(2) { background: #1a4a49; }
 .avatars span:nth-child(3) { background: #024038; }
 .avatars span:nth-child(4) { background: #036b5f; }
-.avatars span:nth-child(5) { background: var(--primary); }
+.avatars span:nth-child(5) { background: #012B2A; }
+.proof-strong { font-family: var(--fd); font-size: 15px; font-weight: 700; color: var(--t1); }
+.proof-small  { font-family: var(--fb); font-size: 12px; color: var(--t3); margin-top: 2px; }
+.stars-row    { color: var(--accent); font-size: 11px; letter-spacing: 1.5px; margin-bottom: 2px; }
 
-.proof-text { font-size: 13px; color: var(--text-secondary); }
-.proof-text strong { color: var(--primary); font-weight: 600; }
-.stars { color: var(--accent); font-size: 12px; letter-spacing: 1px; margin-bottom: 2px; }
-
-/* Hero visual — floating cards */
-.hero-right { position: relative; height: 480px; }
+.hero-right { position: relative; height: 520px; animation: fadeUp .7s var(--ease) .22s both; }
 .hero-visual { position: relative; width: 100%; height: 100%; }
 .h-card {
-    position: absolute;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    transition: all 0.4s var(--ease);
-    animation: floatCard 6s ease-in-out infinite;
-    overflow: hidden;
+  position: absolute; background: var(--white);
+  border: 1px solid rgba(1,43,42,0.08); border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg); overflow: hidden; transition: all 0.5s var(--ease);
 }
-.h-card:hover { box-shadow: var(--shadow-lg), 0 0 0 2px var(--accent); transform: translateY(-8px) scale(1.02) !important; z-index: 10; animation-play-state: paused; }
-@keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.h-card:hover {
+  box-shadow: var(--sh-lg), 0 0 0 2px var(--accent);
+  transform: translateY(-10px) scale(1.025) !important;
+  z-index: 10; animation-play-state: paused;
 }
-.h-card:nth-child(1) { top: 0; left: 8%; width: 52%; animation-delay: 0s; z-index: 4; }
-.h-card:nth-child(2) { top: 10%; right: 0; width: 48%; animation-delay: 0.8s; z-index: 3; }
-.h-card:nth-child(3) { bottom: 12%; left: 2%; width: 44%; animation-delay: 1.5s; z-index: 5; }
-.h-card:nth-child(4) { bottom: 5%; right: 4%; width: 50%; animation-delay: 2s; z-index: 2; }
-.h-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.h-card:nth-child(1) { top:0;    left:4%;  width:54%; height:215px; animation:float1 7s ease-in-out infinite; z-index:4; }
+.h-card:nth-child(2) { top:8%;  right:0;  width:46%; height:190px; animation:float2 8s ease-in-out .6s infinite; z-index:3; }
+.h-card:nth-child(3) { bottom:10%;left:0;  width:46%; height:175px; animation:float1 6.5s ease-in-out 1.2s infinite; z-index:5; }
+.h-card:nth-child(4) { bottom:4%;right:2%; width:52%; height:185px; animation:float2 7.5s ease-in-out 1.8s infinite; z-index:2; }
+.h-card img { width:100%; height:100%; object-fit:cover; display:block; }
+@keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-/* Status badge on card */
-.h-card-inner { padding: 14px; }
-.status-pill {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 4px 10px; border-radius: var(--radius-pill);
-    font-size: 11px; font-weight: 600;
-    font-family: var(--font-body);
+.card-badge {
+  position: absolute; bottom: 10px; left: 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.95); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: var(--r-pill);
+  font-family: var(--fb); font-size: 11px; font-weight: 600;
+  box-shadow: var(--sh-sm); backdrop-filter: blur(8px);
 }
-.status-pill.ok { background: var(--green-ok-bg); color: var(--green-ok); }
-.status-pill.pending { background: var(--accent-light); color: #7A6600; }
-.status-pill .dot-live { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.bd-green { background: var(--green); }
+.bd-gold  { background: var(--accent); }
 
-/* ---- TRUST BAR ---- */
-.trust-bar {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    padding: 28px 0;
-}
-.trust-label {
-    text-align: center; font-size: 11px; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--text-tertiary); margin-bottom: 20px;
-    font-family: var(--font-body);
-}
-.logos-row { display: flex; align-items: center; justify-content: center; gap: 36px; flex-wrap: wrap; }
-.logo-item {
-    display: flex; align-items: center; gap: 7px;
-    font-family: var(--font-body); font-weight: 500; font-size: 13px;
-    color: var(--text-tertiary); transition: var(--transition);
-}
-.logo-item:hover { color: var(--primary); }
-.logo-item svg { opacity: 0.5; flex-shrink: 0; }
-.logo-item:hover svg { opacity: 1; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-/* ---- MARQUEE ---- */
-.marquee-bar {
-    background: var(--primary); padding: 12px 0; overflow: hidden; position: relative;
+/* ══════════════════════════════
+   BANDE STATS
+══════════════════════════════ */
+.stats-band { background: var(--primary); position: relative; overflow: hidden; }
+.stats-band::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(204,170,1,0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
-.marquee-bar::before, .marquee-bar::after {
-    content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+.stats-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-left: 1px solid rgba(255,255,255,0.06);
 }
-.marquee-bar::before { left: 0; background: linear-gradient(90deg, var(--primary), transparent); }
-.marquee-bar::after { right: 0; background: linear-gradient(-90deg, var(--primary), transparent); }
-.marquee-track { display: flex; animation: marquee 28s linear infinite; white-space: nowrap; }
+.stat-item {
+  padding: 36px 32px; border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  text-align: center; transition: background 0.3s;
+}
+.stat-item:hover { background: rgba(255,255,255,0.03); }
+.stat-num {
+  font-family: var(--fd); font-size: 38px; font-weight: 800;
+  color: var(--white); letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px;
+}
+.stat-num em { color: var(--accent); font-style: normal; }
+.stat-lbl { font-family: var(--fb); font-size: 12px; color: rgba(255,255,255,0.42); letter-spacing: 0.02em; }
+
+/* ══════════════════════════════
+   MARQUEE
+══════════════════════════════ */
+.marquee-wrap {
+  background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 14px 0; overflow: hidden; position: relative;
+}
+.marquee-wrap::before, .marquee-wrap::after {
+  content:''; position:absolute; top:0; bottom:0; width:100px; z-index:2; pointer-events:none;
+}
+.marquee-wrap::before { left:0;  background:linear-gradient(90deg,var(--surface),transparent); }
+.marquee-wrap::after  { right:0; background:linear-gradient(-90deg,var(--surface),transparent); }
+.marquee-track { display: flex; animation: marquee 36s linear infinite; white-space: nowrap; }
 .marquee-item {
-    display: inline-flex; align-items: center; gap: 8px; padding: 0 24px;
-    font-family: var(--font-body); font-size: 11px; font-weight: 500;
-    letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.42);
+  display: inline-flex; align-items: center; gap: 8px; padding: 0 28px;
+  font-family: var(--fb); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--t3);
 }
-.marquee-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.m-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-/* ---- VS SECTION ---- */
+/* ══════════════════════════════
+   VS SECTION
+══════════════════════════════ */
 .vs-section { background: var(--white); }
-.vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+.vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
 .vs-card {
-    padding: 32px 28px; border-radius: var(--radius-xl);
-    border: 1px solid var(--border); background: var(--surface);
-    transition: var(--transition); position: relative;
+  border-radius: var(--r-xl); padding: 36px; border: 1px solid var(--border);
+  position: relative; overflow: hidden; transition: var(--tr);
 }
-.vs-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-.vs-card.bad { border-top: 3px solid rgba(197,48,48,0.3); }
-.vs-card.good { border-top: 3px solid var(--accent); background: linear-gradient(180deg, rgba(204,170,1,0.03), var(--surface)); }
-.vs-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; margin-bottom: 8px; display: block;
-    font-family: var(--font-body);
+.vs-card:hover { transform: translateY(-4px); }
+.vs-card.bad { background: var(--surface); }
+.vs-card.bad::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, rgba(197,48,48,0.3), rgba(197,48,48,0.1));
 }
-.vs-card.bad .vs-label { color: var(--red-err); }
-.vs-card.good .vs-label { color: var(--accent-dark); }
-.vs-card h3 { font-size: 16px; margin-bottom: 20px; color: var(--primary); }
-.vs-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.vs-card.good { background: linear-gradient(145deg, rgba(1,43,42,0.02), var(--surface)); border-color: rgba(204,170,1,0.18); }
+.vs-card.good::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), rgba(204,170,1,0.3));
+}
+.vs-tag {
+  font-family: var(--fb); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-bottom: 10px;
+}
+.vs-card.bad  .vs-tag { color: var(--red); }
+.vs-card.good .vs-tag { color: var(--accent-d); }
+.vs-card h3 { font-family: var(--fd); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+.vs-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .vs-item {
-    display: flex; align-items: center; gap: 10px;
-    font-family: var(--font-body); font-size: 14px;
-    padding: 9px 12px; border-radius: var(--radius-sm);
-    background: var(--white); border: 1px solid var(--border);
-    color: var(--text-secondary); transition: var(--transition);
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--fb); font-size: 14px;
+  padding: 11px 14px; border-radius: var(--r-md);
+  background: var(--white); border: 1px solid var(--border); color: var(--t2); transition: var(--tr);
 }
-.vs-item:hover { border-color: var(--border-medium); color: var(--primary); }
-.icon-bad { color: #C53030; flex-shrink: 0; }
-.icon-good { color: var(--accent-dark); flex-shrink: 0; }
+.vs-item:hover { border-color: var(--border-md); color: var(--t1); }
+.icon-bad  { color: var(--red); flex-shrink: 0; }
+.icon-good { color: var(--accent-d); flex-shrink: 0; }
 
-/* ---- FEATURES ---- */
-.features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 48px; }
+/* ══════════════════════════════
+   FEATURES
+══════════════════════════════ */
+.features-section { background: var(--surface); }
+.features-header { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; margin-bottom: 56px; }
+.features-header-right { display: flex; align-items: flex-end; justify-content: flex-end; padding-bottom: 4px; }
+.features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+
 .feat-card {
-    padding: 26px 24px; background: var(--white);
-    border: 1px solid var(--border); border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm); transition: var(--transition);
-    position: relative; overflow: hidden;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 30px 28px;
+  box-shadow: var(--sh-sm); transition: var(--tr);
+  position: relative; overflow: hidden;
 }
-.feat-card::after {
-    content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--accent-soft) 0%, transparent 60%);
-    opacity: 0; transition: opacity 0.3s var(--ease);
-    pointer-events: none;
-}
-.feat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); border-color: rgba(204,170,1,0.25); }
-.feat-card:hover::after { opacity: 1; }
-.feat-num {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--accent-dark); opacity: 0.6;
-    margin-bottom: 14px; display: block; font-family: var(--font-body);
-}
+.feat-card:hover { box-shadow: var(--sh-md); transform: translateY(-5px); border-color: var(--primary-12); }
+.feat-num { font-family: var(--fb); font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--accent-d); opacity: .65; display: block; margin-bottom: 18px; }
 .feat-icon {
-    width: 42px; height: 42px;
-    background: var(--primary-06); color: var(--primary);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: var(--radius-md); margin-bottom: 16px;
-    border: 1px solid var(--primary-12);
-    transition: var(--transition); flex-shrink: 0;
+  width: 44px; height: 44px; background: var(--primary-06); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-md); margin-bottom: 18px; border: 1px solid var(--primary-12); transition: var(--tr); flex-shrink: 0;
 }
-.feat-card:hover .feat-icon {
-    background: var(--primary); color: var(--white);
-    box-shadow: 0 4px 16px rgba(1,43,42,0.2);
-}
-.feat-card h3 { font-size: 15px; margin-bottom: 7px; color: var(--primary); }
-.feat-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+.feat-card:hover .feat-icon { background: var(--primary); color: var(--white); box-shadow: 0 6px 20px rgba(1,43,42,0.22); }
+.feat-card h3 { font-family: var(--fd); font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--t1); }
+.feat-card p  { font-family: var(--fb); font-size: 13px; color: var(--t2); line-height: 1.75; }
 
-/* ---- HOW IT WORKS ---- */
-.how-section { background: var(--primary); }
-.how-section .tag { background: rgba(204,170,1,0.15); border-color: rgba(204,170,1,0.3); color: rgba(255,255,255,0.8); }
-.how-section .tag .dot { background: var(--accent); }
-.how-section .section-h2 { color: var(--white); }
-.how-section .section-sub { color: rgba(255,255,255,0.5); }
-.how-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 52px; position: relative; }
+.feat-card.feat-large {
+  grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 36px;
+  background: linear-gradient(135deg, rgba(1,43,42,0.02), var(--white));
+}
+.feat-content { display: flex; flex-direction: column; }
+.feat-visual { background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; min-height: 140px; overflow: hidden; }
+.feat-visual-inner { display: flex; flex-direction: column; gap: 6px; padding: 16px; width: 100%; }
+.fv-row { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 8px 12px; }
+.fv-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.fv-line { height: 6px; border-radius: 3px; background: var(--surface-2); flex: 1; }
+.fv-tag { font-family: var(--fb); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: var(--r-pill); flex-shrink: 0; }
+
+/* ══════════════════════════════
+   HOW IT WORKS
+══════════════════════════════ */
+.how-section { background: var(--primary); position: relative; overflow: hidden; }
+.how-section::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.how-section::after {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(204,170,1,0.08) 0%, transparent 65%);
+}
+.how-inner { position: relative; z-index: 1; }
+.how-section .sec-label { color: rgba(255,255,255,0.38); }
+.how-section .sec-label::before { background: var(--accent); }
+
+.how-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 64px; position: relative; }
 .how-steps::before {
-    content: ''; position: absolute; top: 24px;
-    left: calc(16.666% + 14px); right: calc(16.666% + 14px);
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(204,170,1,0.3), transparent);
+  content: ''; position: absolute; top: 28px;
+  left: calc(16.666% + 20px); right: calc(16.666% + 20px); height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(204,170,1,0.25) 20%, rgba(204,170,1,0.25) 80%, transparent);
 }
-.how-step { text-align: center; }
+.how-step { padding: 0 28px; text-align: center; border-right: 1px solid rgba(255,255,255,0.06); }
+.how-step:last-child { border-right: none; }
 .step-num {
-    width: 48px; height: 48px; border-radius: 50%;
-    background: rgba(204,170,1,0.12);
-    border: 1px solid rgba(204,170,1,0.25);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 18px; position: relative; z-index: 1;
-    transition: var(--transition);
-    font-family: var(--font-display); font-weight: 700; font-size: 17px;
-    color: var(--accent);
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(204,170,1,0.10); border: 1px solid rgba(204,170,1,0.22);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px; position: relative; z-index: 1; transition: var(--tr);
+  font-family: var(--fd); font-weight: 700; font-size: 18px; color: var(--accent);
 }
-.how-step:hover .step-num { background: var(--accent); color: var(--primary); border-color: var(--accent); box-shadow: var(--shadow-accent); }
-.how-step h3 { color: var(--white); margin-bottom: 8px; font-size: 15px; }
-.how-step p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.75; max-width: 200px; margin: 0 auto; }
+.how-step:hover .step-num { background: var(--accent); color: var(--primary); border-color: var(--accent); box-shadow: var(--sh-accent); transform: scale(1.1); }
+.how-step h3 { font-family: var(--fd); color: var(--white); font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+.how-step p  { font-family: var(--fb); font-size: 13px; color: rgba(255,255,255,0.42); line-height: 1.75; max-width: 220px; margin: 0 auto; }
 
-/* ---- PRICING ---- */
-.pricing-section { background: var(--surface); }
-.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 40px; }
-.pricing-toggle {
-    display: flex; background: var(--white); border: 1px solid var(--border);
-    border-radius: var(--radius-pill); padding: 4px; gap: 2px;
-    box-shadow: var(--shadow-sm);
-}
+/* ══════════════════════════════
+   PRICING
+══════════════════════════════ */
+.pricing-section { background: var(--white); }
+.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 40px; margin-bottom: 44px; }
+.pricing-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 4px; gap: 2px; }
 .toggle-btn {
-    padding: 7px 18px; border-radius: var(--radius-pill); border: none;
-    background: none; font-family: var(--font-body); font-size: 13px;
-    font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+  padding: 8px 20px; border-radius: var(--r-pill); border: none;
+  background: none; font-family: var(--fb); font-size: 13px; font-weight: 500;
+  color: var(--t3); cursor: pointer; transition: var(--tr);
 }
-.toggle-btn.active { background: var(--primary); color: var(--white); }
-.save-badge {
-    background: var(--green-ok-bg); color: var(--green-ok);
-    font-family: var(--font-body); font-size: 11px; font-weight: 600;
-    padding: 4px 10px; border-radius: var(--radius-pill);
-    border: 1px solid rgba(13,122,95,0.2);
-}
-.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; max-width: 800px; margin: 0 auto; }
+.toggle-btn.active { background: var(--primary); color: var(--white); box-shadow: 0 2px 8px rgba(1,43,42,0.20); }
+.save-badge { background: var(--green-bg); color: var(--green); font-family: var(--fb); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: var(--r-pill); border: 1px solid rgba(13,122,95,0.18); }
+
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 780px; margin: 0 auto; }
 .pricing-card {
-    background: var(--white); padding: 36px 32px;
-    border-radius: var(--radius-xl); border: 1px solid var(--border);
-    transition: var(--transition); box-shadow: var(--shadow-sm);
-    position: relative;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 36px 32px;
+  transition: var(--tr); box-shadow: var(--sh-sm); position: relative;
 }
-.pricing-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-.pricing-card.popular {
-    border: 1.5px solid var(--primary);
-    box-shadow: 0 0 0 4px var(--primary-06), var(--shadow-md);
-}
+.pricing-card:hover { box-shadow: var(--sh-md); transform: translateY(-4px); }
+.pricing-card.popular { border: 1.5px solid var(--primary); box-shadow: 0 0 0 5px rgba(1,43,42,0.05), var(--sh-md); }
 .popular-badge {
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    background: var(--primary); color: var(--white);
-    font-family: var(--font-body); font-size: 10px; font-weight: 700;
-    padding: 4px 14px; border-radius: var(--radius-pill);
-    letter-spacing: 0.05em; white-space: nowrap;
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--primary); color: var(--white);
+  font-family: var(--fb); font-size: 10px; font-weight: 700;
+  padding: 4px 16px; border-radius: var(--r-pill); letter-spacing: 0.06em; white-space: nowrap;
 }
-.plan-name { font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 14px; }
-.plan-name.pro { color: var(--primary); }
-.price { font-family: var(--font-display); font-size: 40px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; display: inline; color: var(--primary); }
-.price-currency { font-family: var(--font-body); font-size: 16px; font-weight: 500; color: var(--text-secondary); vertical-align: top; display: inline-block; margin-top: 4px; }
-.price-period { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; margin-bottom: 18px; }
-.pricing-sep { height: 1px; background: var(--border); margin: 16px 0; }
-.pricing-list { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 1px; }
-.pricing-list li {
-    display: flex; align-items: center; gap: 9px;
-    font-family: var(--font-body); font-size: 14px;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    color: var(--text-secondary);
-}
+.plan-lbl { font-family: var(--fb); font-size: 11px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--t4); margin-bottom: 16px; }
+.plan-lbl.pro { color: var(--primary); }
+.price-big { font-family: var(--fd); font-size: 44px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--t1); display: inline; }
+.price-cur { font-family: var(--fb); font-size: 16px; font-weight: 500; color: var(--t3); vertical-align: top; display: inline-block; margin-top: 6px; }
+.price-period { font-family: var(--fb); font-size: 12px; color: var(--t4); margin-top: 5px; margin-bottom: 20px; }
+.pricing-sep { height: 1px; background: var(--border); margin: 18px 0; }
+.pricing-list { list-style: none; display: flex; flex-direction: column; margin-bottom: 26px; }
+.pricing-list li { display: flex; align-items: center; gap: 10px; font-family: var(--fb); font-size: 14px; padding: 9px 0; border-bottom: 1px solid var(--border); color: var(--t2); }
 .pricing-list li:last-child { border-bottom: none; }
-.check-icon { color: var(--accent-dark); flex-shrink: 0; }
-.payment-methods { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 24px; flex-wrap: wrap; }
-.pay-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--white); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 6px 12px;
-    font-family: var(--font-body); font-size: 12px; font-weight: 500;
-    color: var(--text-secondary); transition: var(--transition);
-}
-.pay-badge:hover { border-color: var(--border-medium); }
-.dot-mtn { width: 7px; height: 7px; border-radius: 50%; background: #F59E0B; }
+.check-ico { color: var(--accent-d); flex-shrink: 0; }
+.payment-strip { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+.pay-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 7px 14px; font-family: var(--fb); font-size: 12px; font-weight: 500; color: var(--t2); }
+.dot-mtn    { width: 7px; height: 7px; border-radius: 50%; background: #F59E0B; }
 .dot-orange { width: 7px; height: 7px; border-radius: 50%; background: #FF6600; }
 
-/* ---- TESTIMONIALS ---- */
-.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 48px; }
+/* ══════════════════════════════
+   TÉMOIGNAGES
+══════════════════════════════ */
+.testi-section { background: var(--surface); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 56px; }
 .testi-card {
-    background: var(--white); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 24px 22px;
-    transition: var(--transition); box-shadow: var(--shadow-sm);
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 28px 26px;
+  transition: var(--tr); box-shadow: var(--sh-sm); position: relative;
 }
-.testi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--border-medium); }
-.testi-stars { color: var(--accent); font-size: 12px; margin-bottom: 10px; }
-.testi-text {
-    font-family: var(--font-body); font-size: 14px;
-    color: var(--text-secondary); line-height: 1.75;
-    margin-bottom: 16px; font-style: italic;
+.testi-card:hover { box-shadow: var(--sh-md); transform: translateY(-4px); border-color: var(--primary-12); }
+.testi-card::before {
+  content: '"'; position: absolute; top: 18px; right: 24px;
+  font-family: var(--fd); font-size: 72px; font-weight: 800;
+  color: rgba(204,170,1,0.10); line-height: 1; pointer-events: none;
 }
-.testi-text::before { content: '"'; color: var(--accent); font-size: 20px; font-style: normal; margin-right: 1px; }
-.testi-author { display: flex; align-items: center; gap: 10px; }
-.testi-avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--primary); color: var(--white);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-size: 11px; font-weight: 700;
-    flex-shrink: 0;
-}
+.testi-stars { color: var(--accent); font-size: 13px; letter-spacing: 1px; margin-bottom: 14px; }
+.testi-text { font-family: var(--fb); font-size: 14px; color: var(--t2); line-height: 1.8; margin-bottom: 20px; font-style: italic; position: relative; z-index: 1; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--fd); font-size: 12px; font-weight: 700; flex-shrink: 0; }
 .testi-avatar.accent { background: var(--accent); color: var(--primary); }
-.testi-name { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--primary); }
-.testi-role { font-family: var(--font-body); font-size: 11px; color: var(--text-tertiary); }
+.testi-name { font-family: var(--fb); font-size: 13px; font-weight: 600; color: var(--t1); }
+.testi-role { font-family: var(--fb); font-size: 11px; color: var(--t4); margin-top: 1px; }
 
-/* ---- FAQ ---- */
-.faq-wrap { max-width: 640px; margin: 0 auto; }
-.faq-item {
-    background: var(--white); border: 1px solid var(--border);
-    border-radius: var(--radius-md); margin-bottom: 6px;
-    transition: var(--transition); box-shadow: var(--shadow-sm);
-}
-.faq-item.open { border-color: var(--border-medium); box-shadow: var(--shadow-md); }
-.faq-q {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 14px; padding: 16px 18px; cursor: pointer;
-    font-family: var(--font-body); font-weight: 500; font-size: 14px;
-    color: var(--primary); user-select: none;
-}
-.faq-icon {
-    width: 24px; height: 24px; border-radius: var(--radius-sm);
-    background: var(--surface); display: flex; align-items: center;
-    justify-content: center; flex-shrink: 0; transition: var(--transition);
-    color: var(--text-secondary);
-}
-.faq-item.open .faq-icon { background: var(--primary); color: var(--white); transform: rotate(45deg); }
-.faq-a {
-    font-family: var(--font-body); font-size: 14px; color: var(--text-secondary);
-    line-height: 1.75; padding: 0 18px; max-height: 0;
-    overflow: hidden; transition: max-height .32s var(--ease), padding .32s var(--ease);
-}
-.faq-item.open .faq-a { max-height: 200px; padding: 0 18px 16px; }
+/* ══════════════════════════════
+   FAQ — layout 2 colonnes
+══════════════════════════════ */
+.faq-section { background: var(--white); }
+.faq-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; }
+.faq-sticky { position: sticky; top: 100px; }
+.faq-left-cta { margin-top: 32px; }
+.faq-list { display: flex; flex-direction: column; gap: 8px; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; transition: var(--tr); box-shadow: var(--sh-sm); }
+.faq-item.open { border-color: var(--border-md); box-shadow: var(--sh-md); background: var(--white); }
+.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; cursor: pointer; font-family: var(--fb); font-weight: 500; font-size: 14px; color: var(--t1); user-select: none; }
+.faq-icon { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--tr); color: var(--t3); }
+.faq-item.open .faq-icon { background: var(--primary); color: var(--white); border-color: var(--primary); transform: rotate(45deg); }
+.faq-a { font-family: var(--fb); font-size: 14px; color: var(--t2); line-height: 1.75; padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height .35s var(--ease), padding .35s var(--ease); }
+.faq-item.open .faq-a { max-height: 220px; padding: 0 20px 18px; }
 
-/* ---- CTA ---- */
-.cta-section {
-    background: var(--primary);
-    padding: 88px 0; text-align: center; position: relative; overflow: hidden;
-}
+/* ══════════════════════════════
+   CTA FINAL
+══════════════════════════════ */
+.cta-section { background: var(--primary); padding: 110px 0; text-align: center; position: relative; overflow: hidden; }
 .cta-section::before {
-    content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
-    width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(204,170,1,0.1) 0%, transparent 65%);
+  content: ''; position: absolute; top: -250px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(204,170,1,0.09) 0%, transparent 65%);
 }
 .cta-section::after {
-    content: ''; position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 32px 32px;
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
 }
+.cta-line { position: absolute; width: 1px; background: linear-gradient(180deg, transparent, rgba(204,170,1,0.15), transparent); top: 0; bottom: 0; }
+.cta-line-1 { left: 20%; } .cta-line-2 { right: 20%; }
 .cta-content { position: relative; z-index: 1; }
-.cta-section .section-h2 { color: var(--white); margin-bottom: 12px; }
-.cta-section p { color: rgba(255,255,255,0.48); font-size: 16px; max-width: 400px; margin: 0 auto 32px; line-height: 1.75; }
-.cta-trust { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
-.cta-trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.38); font-family: var(--font-body); }
+.cta-section .sec-label { justify-content: center; color: rgba(255,255,255,0.32); }
+.cta-section .sec-label::before { background: var(--accent); }
+.cta-btns { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+.cta-trust { display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; }
+.cta-trust-item { display: flex; align-items: center; gap: 7px; font-family: var(--fb); font-size: 12px; color: rgba(255,255,255,0.35); }
 
-/* ---- FOOTER ---- */
-footer {
-    background: var(--primary); color: var(--white);
-    padding: 60px 0 28px; border-top: 1px solid rgba(255,255,255,0.08);
-}
-.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 44px; }
-.footer-logo {
-    display: flex; align-items: center; gap: 0;
-    text-decoration: none; margin-bottom: 12px;
-}
-.footer-logo { display: flex; align-items: center; text-decoration: none; margin-bottom: 12px; }
-.footer-desc { color: rgba(255,255,255,0.35); font-size: 13px; line-height: 1.75; max-width: 240px; margin-bottom: 16px; }
-.footer-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(13,122,95,0.12); border: 1px solid rgba(13,122,95,0.25);
-    color: #4ECCA3; font-family: var(--font-body); font-size: 11px; font-weight: 600;
-    padding: 5px 12px; border-radius: var(--radius-pill);
-}
-.footer-col h4 {
-    font-family: var(--font-body); font-size: 10px; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(255,255,255,0.28); margin-bottom: 14px;
-}
-.footer-link {
-    display: block; color: rgba(255,255,255,0.45); text-decoration: none;
-    font-family: var(--font-body); font-size: 13px; margin-bottom: 9px;
-    transition: var(--transition);
-}
-.footer-link:hover { color: var(--white); transform: translateX(2px); }
-.footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.07);
-    padding-top: 22px; display: flex; justify-content: space-between;
-    align-items: center; flex-wrap: wrap; gap: 10px;
-}
-.footer-bottom p { color: rgba(255,255,255,0.22); font-size: 12px; font-family: var(--font-body); }
-.footer-socials { display: flex; gap: 6px; }
-.social-btn {
-    width: 32px; height: 32px; border-radius: var(--radius-sm);
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.35); transition: var(--transition); text-decoration: none;
-}
-.social-btn:hover { background: rgba(204,170,1,0.15); border-color: rgba(204,170,1,0.3); color: var(--accent); transform: translateY(-1px); }
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer { background: var(--primary); color: var(--white); border-top: 1px solid rgba(255,255,255,0.07); padding: 64px 0 32px; }
+.footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 52px; }
+.footer-logo-wrap { display: flex; align-items: center; text-decoration: none; margin-bottom: 14px; }
+.footer-desc { color: rgba(255,255,255,0.32); font-family: var(--fb); font-size: 13px; line-height: 1.75; max-width: 250px; margin-bottom: 18px; }
+.footer-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(13,122,95,0.12); border: 1px solid rgba(13,122,95,0.22); color: #4ECCA3; font-family: var(--fb); font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: var(--r-pill); }
+.footer-col h4 { font-family: var(--fb); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 16px; }
+.footer-link { display: block; color: rgba(255,255,255,0.42); text-decoration: none; font-family: var(--fb); font-size: 13px; margin-bottom: 10px; transition: var(--tr); }
+.footer-link:hover { color: rgba(255,255,255,0.82); transform: translateX(3px); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { color: rgba(255,255,255,0.20); font-family: var(--fb); font-size: 12px; }
+.footer-socials { display: flex; gap: 8px; }
+.social-btn { width: 34px; height: 34px; border-radius: var(--r-sm); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.32); transition: var(--tr); text-decoration: none; }
+.social-btn:hover { background: var(--accent-15); border-color: var(--accent-30); color: var(--accent); transform: translateY(-2px); }
 
-/* ---- SECTION COMMONS ---- */
-.section-center { text-align: center; }
-.section-h2 { color: var(--primary); }
-.section-sub { font-family: var(--font-body); font-size: 15px; color: var(--text-secondary); max-width: 480px; margin: 10px auto 0; line-height: 1.75; }
-.section-sub a { color: var(--accent-dark); font-weight: 500; }
-.text-accent { color: var(--accent); }
-
-/* ---- REVEAL ---- */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+/* ══════════════════════════════
+   REVEAL
+══════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s var(--ease), transform .65s var(--ease); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-delay-1 { transition-delay: .06s; }
-.reveal-delay-2 { transition-delay: .12s; }
-.reveal-delay-3 { transition-delay: .18s; }
-.reveal-delay-4 { transition-delay: .24s; }
-.reveal-delay-5 { transition-delay: .30s; }
-.reveal-delay-6 { transition-delay: .36s; }
+.reveal-delay-1{transition-delay:.07s} .reveal-delay-2{transition-delay:.14s} .reveal-delay-3{transition-delay:.21s}
+.reveal-delay-4{transition-delay:.28s} .reveal-delay-5{transition-delay:.35s} .reveal-delay-6{transition-delay:.42s}
+.sec-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent); }
 
-/* ---- DIVIDER ---- */
-.section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0; }
-
-/* ---- RESPONSIVE ---- */
-@media (max-width:1024px) {
-    .features-grid { grid-template-columns: repeat(2,1fr); }
-    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-    .hero-content { grid-template-columns: 1fr; gap: 40px; }
-    .hero-right { height: 360px; }
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media (max-width:1100px) {
+  .features-grid { grid-template-columns: repeat(2,1fr); }
+  .feat-card.feat-large { grid-column: span 2; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
-@media (max-width:900px) {
-    .testi-grid { grid-template-columns: repeat(2,1fr); }
-    .how-steps { grid-template-columns: 1fr; gap: 24px; }
-    .how-steps::before { display: none; }
-    .vs-grid { grid-template-columns: 1fr; }
+@media (max-width:960px) {
+  .hero-content { grid-template-columns: 1fr; gap: 48px; }
+  .hero-right { height: 380px; }
+  .vs-grid { grid-template-columns: 1fr; }
+  .features-header { grid-template-columns: 1fr; }
+  .features-header-right { justify-content: flex-start; }
+  .testi-grid { grid-template-columns: repeat(2,1fr); }
+  .how-steps { grid-template-columns: 1fr; gap: 32px; }
+  .how-steps::before { display: none; }
+  .how-step { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 28px; }
+  .how-step:last-child { border-bottom: none; }
+  .faq-layout { grid-template-columns: 1fr; gap: 40px; }
+  .faq-sticky { position: static; }
+  .stats-inner { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width:768px) {
-    :root { --section-pad: 60px; }
-    .container { padding: 0 18px; }
-    .nav-links, .nav-actions { display: none; }
-    .menu-toggle { display: flex; }
-    .hero { padding: 120px 0 56px; }
-    .hero h1 { font-size: 28px; }
-    .hero-right { height: 300px; }
-    .features-grid { grid-template-columns: 1fr; }
-    .pricing-grid { grid-template-columns: 1fr; }
-    .testi-grid { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr; gap: 20px; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; }
-    .hero-cta { flex-direction: column; }
-    .hero-cta .btn { justify-content: center; }
+  :root { --sec-pad: 64px; }
+  .container { padding: 0 20px; }
+  .nav-links, .nav-actions { display: none; }
+  .menu-toggle { display: flex; }
+  .hero { padding: 120px 0 60px; }
+  .hero h1 { font-size: clamp(28px, 8vw, 40px); }
+  .hero-right { height: 280px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feat-card.feat-large { grid-column: span 1; grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 440px; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .hero-cta { flex-direction: column; }
+  .hero-cta .btn { justify-content: center; }
+  .stats-inner { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width:480px) { .hero-right { height: 240px; } }
-    </style>
+@media (max-width:480px) {
+  .hero-right { height: 220px; }
+  .stats-inner { grid-template-columns: 1fr; }
+  .stat-num { font-size: 30px; }
+}
+</style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav id="navbar">
-    <div class="container nav-flex">
-        <a href="#" class="logo" aria-label="afrivis.">
-            <img src="./public/logo/Logo principal.svg" alt="afrivis." class="logo-img">
-        </a>
-        <div class="nav-links">
-            <a href="#features" class="nav-link menu-text">Fonctionnalités</a>
-            <a href="#how" class="nav-link menu-text">Comment ça marche</a>
-            <a href="#pricing" class="nav-link menu-text">Tarifs</a>
-            <a href="#faq" class="nav-link menu-text">FAQ</a>
-        </div>
-        <div class="nav-actions">
-            <a href="app/login.html" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Connexion</a>
-            <a href="app/register.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Démarrer gratuitement
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-        </div>
-        <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
+  <div class="container nav-flex">
+    <a href="#" class="logo" aria-label="afrivis.">
+      <img src="./public/logo/Logo principal.svg" alt="afrivis." class="logo-img">
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Fonctionnalités</a>
+      <a href="#how"      class="nav-link">Comment ça marche</a>
+      <a href="#pricing"  class="nav-link">Tarifs</a>
+      <a href="#faq"      class="nav-link">FAQ</a>
     </div>
+    <div class="nav-actions">
+      <a href="app/login.html"    class="btn btn-outline"  style="padding:8px 20px;font-size:13px;">Connexion</a>
+      <a href="app/register.html" class="btn btn-primary"  style="padding:8px 20px;font-size:13px;">
+        Démarrer gratuitement
+        <span class="btn-arrow"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
 </nav>
 
-<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-    <a href="#features" class="nav-link">Fonctionnalités</a>
-    <a href="#how" class="nav-link">Comment ça marche</a>
-    <a href="#pricing" class="nav-link">Tarifs</a>
-    <a href="#faq" class="nav-link">FAQ</a>
-    <div class="divider"></div>
-    <a href="app/login.html" class="btn btn-outline">Connexion</a>
-    <a href="app/register.html" class="btn btn-primary">Démarrer gratuitement</a>
+  <a href="#features" class="nav-link">Fonctionnalités</a>
+  <a href="#how"      class="nav-link">Comment ça marche</a>
+  <a href="#pricing"  class="nav-link">Tarifs</a>
+  <a href="#faq"      class="nav-link">FAQ</a>
+  <div class="mobile-divider"></div>
+  <a href="app/login.html"    class="btn btn-outline">Connexion</a>
+  <a href="app/register.html" class="btn btn-primary">Démarrer gratuitement</a>
 </div>
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-grid-pattern"></div>
-    <div class="container hero-content">
-        <div class="hero-left">
-            <div class="tag"><span class="dot"></span>Nouveau : Envoi direct via WhatsApp</div>
-            <h1>Créez des devis professionnels <span class="text-accent">en quelques minutes.</span></h1>
-            <p class="hero-sub">Le seul outil de facturation pensé pour la simplicité. Gérez vos clients, générez vos PDF et suivez vos paiements sans effort.</p>
-            <div class="hero-cta">
-                <a href="app/register.html" class="btn btn-primary btn-lg">
-                    Créer mon premier devis
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-                <a href="#how" class="btn btn-outline btn-lg">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-                    Voir comment ça marche
-                </a>
-            </div>
-            <div class="social-proof">
-                <div class="avatars">
-                    <span>KD</span><span>ML</span><span>SK</span><span>AR</span><span>BN</span>
-                </div>
-                <div>
-                    <div class="stars">★★★★★</div>
-                    <div class="proof-text"><strong>+2 400</strong> entrepreneurs font confiance à afrivis.</div>
-                </div>
-            </div>
+  <div class="hero-bg">
+    <div class="hero-bg-c1"></div>
+    <div class="hero-bg-c2"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-line"></div>
+  </div>
+  <div class="container hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Nouveau — Envoi direct via WhatsApp
+      </div>
+      <h1>Vos devis professionnels,<br>créés en <em>quelques minutes.</em></h1>
+      <p class="hero-sub">L'outil de facturation conçu pour les entrepreneurs africains. PDF impeccables, envoi WhatsApp &amp; Email, suivi en temps réel — sans effort.</p>
+      <div class="hero-cta">
+        <a href="app/register.html" class="btn btn-primary btn-lg">
+          Créer mon compte gratuit
+          <span class="btn-arrow"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a href="#how" class="btn btn-outline btn-lg">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Voir la démo
+        </a>
+      </div>
+      <div class="social-proof">
+        <div class="avatars">
+          <span>KD</span><span>ML</span><span>SK</span><span>AR</span><span>BN</span>
         </div>
-        <div class="hero-right">
-            <div class="hero-visual">
-                <div class="h-card" style="height:210px;">
-                    <img src="./public/img/Dashboard copy.png" alt="Dashboard afrivis." onerror="this.closest('.h-card').style.background='var(--surface)'">
-                </div>
-                <div class="h-card" style="height:180px;">
-                    <img src="./public/img/Mes-devis.png" alt="Mes Devis" onerror="this.closest('.h-card').style.background='var(--surface)'">
-                </div>
-                <div class="h-card" style="height:160px;">
-                    <img src="./public/img/Nouveau-Devis.png" alt="Ajouter devis" onerror="this.closest('.h-card').style.background='var(--surface)'">
-                </div>
-                <div class="h-card" style="height:175px;">
-                    <img src="./public/img/Voir-Devis copy.png" alt="Voir devis" onerror="this.closest('.h-card').style.background='var(--surface)'">
-                </div>
-            </div>
+        <div>
+          <div class="stars-row">★★★★★</div>
+          <div class="proof-strong">+2 400 entrepreneurs</div>
+          <div class="proof-small">font confiance à afrivis. chaque jour</div>
         </div>
+      </div>
     </div>
+    <div class="hero-right">
+      <div class="hero-visual">
+        <div class="h-card"><img src="./public/img/Dashboard copy.png" alt="Dashboard" onerror="this.closest('.h-card').style.background='var(--surface)'"><div class="card-badge"><span class="badge-dot bd-green"></span>Tableau de bord</div></div>
+        <div class="h-card"><img src="./public/img/Mes-devis.png" alt="Mes Devis" onerror="this.closest('.h-card').style.background='var(--surface)'"><div class="card-badge"><span class="badge-dot bd-gold"></span>Mes devis</div></div>
+        <div class="h-card"><img src="./public/img/Nouveau-Devis.png" alt="Nouveau devis" onerror="this.closest('.h-card').style.background='var(--surface)'"><div class="card-badge"><span class="badge-dot bd-green"></span>Nouveau devis</div></div>
+        <div class="h-card"><img src="./public/img/Voir-Devis copy.png" alt="Voir devis" onerror="this.closest('.h-card').style.background='var(--surface)'"><div class="card-badge"><span class="badge-dot bd-gold"></span>Aperçu PDF</div></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<div class="section-divider"></div>
-
-<!-- TRUST BAR -->
-<div class="trust-bar">
-    <div class="container">
-        <p class="trust-label">Ils utilisent afrivis. au quotidien</p>
-        <div class="logos-row">
-            <div class="logo-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Artisanat & BTP</div>
-            <div class="logo-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>Freelances Web</div>
-            <div class="logo-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Consultants</div>
-            <div class="logo-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Agences Marketing</div>
-            <div class="logo-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Coaching & Bien-être</div>
-            <div class="logo-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Photographes</div>
-        </div>
-    </div>
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item reveal"><div class="stat-num">2<em>400</em><span style="color:var(--accent);font-size:28px;font-family:var(--fd);font-weight:800;">+</span></div><div class="stat-lbl">Entrepreneurs actifs</div></div>
+    <div class="stat-item reveal reveal-delay-1"><div class="stat-num"><em>3</em> <span style="font-size:20px;color:rgba(255,255,255,0.5)">min</span></div><div class="stat-lbl">Pour créer un devis</div></div>
+    <div class="stat-item reveal reveal-delay-2"><div class="stat-num"><em>5</em> pays</div><div class="stat-lbl">Présence en Afrique</div></div>
+    <div class="stat-item reveal reveal-delay-3"><div class="stat-num"><em>4.9</em>/5</div><div class="stat-lbl">Note moyenne clients</div></div>
+  </div>
 </div>
 
-<!-- MARQUEE -->
-<div class="marquee-bar"><div class="marquee-track" id="marqueeTrack"></div></div>
+<div class="marquee-wrap"><div class="marquee-track" id="marqueeTrack"></div></div>
 
 <!-- VS SECTION -->
 <section class="vs-section">
-    <div class="container">
-        <div class="reveal">
-            <div class="tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Pourquoi changer ?</div>
-            <h2 class="section-h2" style="max-width:500px;">L'ancienne méthode vous coûte du temps <span class="text-accent">et de l'argent.</span></h2>
-        </div>
-        <div class="vs-grid">
-            <div class="vs-card bad reveal reveal-delay-1">
-                <span class="vs-label">Avant</span>
-                <h3>L'ancienne méthode</h3>
-                <ul class="vs-list">
-                    <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Des heures perdues sur Excel ou Word</li>
-                    <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Erreurs de calcul TVA ou totaux</li>
-                    <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Devis peu professionnels et mal formatés</li>
-                    <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Relances manuelles oubliées</li>
-                    <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Aucune visibilité sur vos paiements</li>
-                </ul>
-            </div>
-            <div class="vs-card good reveal reveal-delay-2">
-                <span class="vs-label">Après</span>
-                <h3>La méthode afrivis.</h3>
-                <ul class="vs-list">
-                    <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Devis créé en moins de 3 minutes</li>
-                    <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Calculs automatiques et précis à 100%</li>
-                    <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>PDF ultra-professionnel avec votre logo</li>
-                    <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Envoi direct par Email ou WhatsApp</li>
-                    <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Tableau de bord de suivi en temps réel</li>
-                </ul>
-            </div>
-        </div>
+  <div class="container">
+    <div class="reveal">
+      <div class="sec-label">Pourquoi afrivis.</div>
+      <h2 class="sec-h2">L'ancienne méthode vous coûte<br>du temps <em class="text-accent">et de l'argent.</em></h2>
     </div>
+    <div class="vs-grid">
+      <div class="vs-card bad reveal reveal-delay-1">
+        <span class="vs-tag">Avant</span><h3>L'ancienne méthode</h3>
+        <ul class="vs-list">
+          <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Des heures perdues sur Excel ou Word</li>
+          <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Erreurs de calcul TVA ou totaux</li>
+          <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Devis peu professionnels et mal formatés</li>
+          <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Relances manuelles oubliées</li>
+          <li class="vs-item"><svg class="icon-bad" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Aucune visibilité sur vos paiements</li>
+        </ul>
+      </div>
+      <div class="vs-card good reveal reveal-delay-2">
+        <span class="vs-tag">Après — avec afrivis.</span><h3>La méthode afrivis.</h3>
+        <ul class="vs-list">
+          <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Devis créé en moins de 3 minutes</li>
+          <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Calculs automatiques et précis à 100%</li>
+          <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>PDF ultra-professionnel avec votre logo</li>
+          <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Envoi direct par Email ou WhatsApp</li>
+          <li class="vs-item"><svg class="icon-good" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Tableau de bord de suivi en temps réel</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sec-divider"></div>
 
 <!-- FEATURES -->
-<section id="features">
-    <div class="container">
-        <div class="section-center reveal">
-            <div class="tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Fonctionnalités</div>
-            <h2 class="section-h2">Tout ce dont vous avez besoin,<br><span class="text-accent">rien de plus.</span></h2>
-            <p class="section-sub">Des outils pensés pour vous faire gagner du temps, chaque jour.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feat-card reveal reveal-delay-1">
-                <span class="feat-num">01</span>
-                <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                <h3>Création intuitive</h3>
-                <p>Interface ultra-fluide pour saisir vos prestations en un clin d'œil. Aucune formation nécessaire.</p>
-            </div>
-            <div class="feat-card reveal reveal-delay-2">
-                <span class="feat-num">02</span>
-                <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-                <h3>Gestion clients</h3>
-                <p>Retrouvez l'historique de chaque client et ses devis en cours en quelques secondes.</p>
-            </div>
-            <div class="feat-card reveal reveal-delay-3">
-                <span class="feat-num">03</span>
-                <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                <h3>PDF sur-mesure</h3>
-                <p>Générez des documents impeccables avec votre logo, couleurs et mentions légales.</p>
-            </div>
-            <div class="feat-card reveal reveal-delay-4">
-                <span class="feat-num">04</span>
-                <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-                <h3>Envoi multi-canal</h3>
-                <p>Envoyez vos devis directement par Email ou via WhatsApp Business en un clic.</p>
-            </div>
-            <div class="feat-card reveal reveal-delay-5">
-                <span class="feat-num">05</span>
-                <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
-                <h3>Suivi en temps réel</h3>
-                <p>Tableau de bord pour visualiser vos devis en attente, acceptés et votre chiffre d'affaires.</p>
-            </div>
-            <div class="feat-card reveal reveal-delay-6">
-                <span class="feat-num">06</span>
-                <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-                <h3>Cloud sécurisé</h3>
-                <p>Sauvegarde automatique et accès depuis n'importe quel appareil, à tout moment.</p>
-            </div>
-        </div>
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="features-header">
+      <div class="reveal">
+        <div class="sec-label">Fonctionnalités</div>
+        <h2 class="sec-h2">Tout ce dont vous avez besoin,<br><em class="text-accent">rien de superflu.</em></h2>
+      </div>
+      <div class="features-header-right reveal reveal-delay-1">
+        <p class="sec-sub" style="max-width:300px;margin-top:0;font-size:14px;">Des outils pensés pour les entrepreneurs africains qui veulent aller à l'essentiel.</p>
+      </div>
     </div>
+    <div class="features-grid">
+      <div class="feat-card feat-large reveal">
+        <div class="feat-content">
+          <span class="feat-num">01</span>
+          <div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+          <h3>Création intuitive en 3 minutes</h3>
+          <p style="font-size:13px;color:var(--t2);line-height:1.75;margin-top:6px;">Interface ultra-fluide pour saisir vos prestations en un clin d'œil. Aucune formation nécessaire.</p>
+        </div>
+        <div class="feat-visual">
+          <div class="feat-visual-inner">
+            <div class="fv-row"><span class="fv-dot" style="background:var(--accent)"></span><div class="fv-line" style="width:60%"></div><span class="fv-tag" style="background:var(--green-bg);color:var(--green)">Accepté</span></div>
+            <div class="fv-row"><span class="fv-dot" style="background:var(--primary)"></span><div class="fv-line" style="width:80%"></div><span class="fv-tag" style="background:var(--accent-l);color:var(--accent-d)">En attente</span></div>
+            <div class="fv-row"><span class="fv-dot" style="background:var(--green)"></span><div class="fv-line" style="width:45%"></div><span class="fv-tag" style="background:var(--green-bg);color:var(--green)">Accepté</span></div>
+            <div class="fv-row"><span class="fv-dot" style="background:rgba(1,43,42,0.3)"></span><div class="fv-line" style="width:70%"></div><span class="fv-tag" style="background:var(--surface-2);color:var(--t3)">Brouillon</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-card reveal reveal-delay-2"><span class="feat-num">02</span><div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Gestion clients</h3><p>Retrouvez l'historique complet de chaque client et ses devis en quelques secondes.</p></div>
+      <div class="feat-card reveal reveal-delay-3"><span class="feat-num">03</span><div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>PDF sur-mesure</h3><p>Documents impeccables avec votre logo, couleurs et mentions légales automatiques.</p></div>
+      <div class="feat-card reveal reveal-delay-4"><span class="feat-num">04</span><div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Envoi multi-canal</h3><p>WhatsApp Business ou Email — envoyez vos devis directement depuis l'application.</p></div>
+      <div class="feat-card reveal reveal-delay-5"><span class="feat-num">05</span><div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Suivi en temps réel</h3><p>Tableau de bord : devis en attente, acceptés, chiffre d'affaires — tout en un coup d'œil.</p></div>
+      <div class="feat-card reveal reveal-delay-6"><span class="feat-num">06</span><div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><h3>Cloud sécurisé</h3><p>Sauvegarde automatique, accès universel depuis mobile ou desktop, données protégées.</p></div>
+    </div>
+  </div>
 </section>
 
-<!-- HOW -->
+<!-- HOW IT WORKS -->
 <section id="how" class="how-section">
-    <div class="container">
-        <div class="section-center reveal">
-            <div class="tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Comment ça marche</div>
-            <h2 class="section-h2">Simple comme <span class="text-accent">1, 2, 3.</span></h2>
-            <p class="section-sub" style="color:rgba(255,255,255,0.45);">Votre premier devis professionnel en moins de 5 minutes.</p>
-        </div>
-        <div class="how-steps">
-            <div class="how-step reveal reveal-delay-1">
-                <div class="step-num">1</div>
-                <h3>Créez votre compte</h3>
-                <p>Inscription gratuite en 30 secondes. Renseignez votre entreprise et votre logo.</p>
-            </div>
-            <div class="how-step reveal reveal-delay-2">
-                <div class="step-num">2</div>
-                <h3>Rédigez votre devis</h3>
-                <p>Ajoutez vos prestations, vos tarifs et personnalisez le document à votre image.</p>
-            </div>
-            <div class="how-step reveal reveal-delay-3">
-                <div class="step-num">3</div>
-                <h3>Envoyez et signez</h3>
-                <p>Partagez par Email ou WhatsApp. Suivez les réponses depuis votre tableau de bord.</p>
-            </div>
-        </div>
+  <div class="container how-inner">
+    <div class="text-center reveal">
+      <div class="sec-label" style="justify-content:center;">Comment ça marche</div>
+      <h2 class="sec-h2" style="color:var(--white);">Simple comme <em class="text-accent">1, 2, 3.</em></h2>
+      <p style="color:rgba(255,255,255,0.42);font-size:16px;max-width:440px;margin:14px auto 0;font-family:var(--fb);">Votre premier devis professionnel en moins de 5 minutes.</p>
     </div>
+    <div class="how-steps">
+      <div class="how-step reveal reveal-delay-1"><div class="step-num">1</div><h3>Créez votre compte</h3><p>Inscription gratuite en 30 secondes. Renseignez votre entreprise et uploadez votre logo.</p></div>
+      <div class="how-step reveal reveal-delay-2"><div class="step-num">2</div><h3>Rédigez votre devis</h3><p>Ajoutez vos prestations, vos tarifs et personnalisez le document à votre image de marque.</p></div>
+      <div class="how-step reveal reveal-delay-3"><div class="step-num">3</div><h3>Envoyez &amp; suivez</h3><p>Partagez par Email ou WhatsApp. Suivez les réponses depuis votre tableau de bord.</p></div>
+    </div>
+  </div>
 </section>
 
 <!-- PRICING -->
 <section id="pricing" class="pricing-section">
-    <div class="container">
-        <div class="section-center reveal">
-            <div class="tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Tarifs</div>
-            <h2 class="section-h2">Simple et transparent,<br><span class="text-accent">sans surprise.</span></h2>
-            <p class="section-sub">Commencez gratuitement, évoluez quand vous êtes prêt.</p>
-        </div>
-        <div class="pricing-toggle-wrap reveal">
-            <div class="pricing-toggle">
-                <button class="toggle-btn active" id="btnMonthly" onclick="switchPricing('monthly')">Mensuel</button>
-                <button class="toggle-btn" id="btnAnnual" onclick="switchPricing('annual')">Annuel</button>
-            </div>
-            <span class="save-badge">Économisez 33%</span>
-        </div>
-        <div class="pricing-grid" style="margin-top:14px;">
-            <div class="pricing-card reveal reveal-delay-1">
-                <div class="plan-name">Gratuit</div>
-                <div><span class="price">0</span><span class="price-currency"> XAF</span></div>
-                <div class="price-period">Pour toujours · sans CB</div>
-                <div class="pricing-sep"></div>
-                <ul class="pricing-list">
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>5 devis par mois</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>3 clients maximum</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Export PDF standard</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Support par email</li>
-                </ul>
-                <a href="app/register.html" class="btn btn-outline btn-full">Démarrer gratuitement</a>
-            </div>
-            <div class="pricing-card popular reveal reveal-delay-2">
-                <div class="popular-badge">Le plus populaire</div>
-                <div class="plan-name pro">Plan Pro</div>
-                <div id="priceMonthly">
-                    <span class="price">2 000</span><span class="price-currency"> XAF</span>
-                    <div class="price-period">par mois · sans engagement</div>
-                </div>
-                <div id="priceAnnual" style="display:none;">
-                    <span class="price">19 200</span><span class="price-currency"> XAF</span>
-                    <div class="price-period">par an · soit 1 600 XAF/mois</div>
-                    <div style="display:inline-flex;align-items:center;gap:5px;background:var(--green-ok-bg);color:var(--green-ok);font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--radius-pill);margin-top:4px;font-family:var(--font-body);">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        Vous économisez 4 800 XAF
-                    </div>
-                </div>
-                <div class="pricing-sep"></div>
-                <ul class="pricing-list">
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>50 devis par mois</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Clients illimités</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Envoi WhatsApp & Email direct</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Logo & personnalisation totale</li>
-                    <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Support prioritaire 24/7</li>
-                </ul>
-                <a href="app/register.html" class="btn btn-primary btn-full">Prendre le plan Pro</a>
-            </div>
-        </div>
-        <div style="text-align:center;margin-top:24px;" class="reveal">
-            <p style="font-size:12px;color:var(--text-tertiary);margin-bottom:10px;font-family:var(--font-body);">Paiement sécurisé via</p>
-            <div class="payment-methods">
-                <div class="pay-badge"><span class="dot-mtn"></span>MTN Mobile Money</div>
-                <div class="pay-badge"><span class="dot-orange"></span>Orange Money</div>
-            </div>
-            <p style="margin-top:12px;font-size:12px;color:var(--text-tertiary);font-family:var(--font-body);">✓ Pas de carte bancaire requise &nbsp;·&nbsp; ✓ Résiliable à tout moment &nbsp;·&nbsp; ✓ Données sécurisées</p>
-        </div>
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="sec-label" style="justify-content:center;">Tarifs</div>
+      <h2 class="sec-h2">Simple et transparent,<br><em class="text-accent">sans mauvaise surprise.</em></h2>
+      <p class="sec-sub" style="margin:12px auto 0;text-align:center;">Commencez gratuitement — évoluez quand vous êtes prêt.</p>
     </div>
+    <div class="pricing-toggle-wrap reveal">
+      <div class="pricing-toggle">
+        <button class="toggle-btn active" id="btnMonthly" onclick="switchPricing('monthly')">Mensuel</button>
+        <button class="toggle-btn" id="btnAnnual" onclick="switchPricing('annual')">Annuel</button>
+      </div>
+      <span class="save-badge">Économisez 33%</span>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal reveal-delay-1">
+        <div class="plan-lbl">Gratuit</div>
+        <div><span class="price-big">0</span><span class="price-cur"> XAF</span></div>
+        <div class="price-period">Pour toujours · aucune carte bancaire</div>
+        <div class="pricing-sep"></div>
+        <ul class="pricing-list">
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>5 devis par mois</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>3 clients maximum</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Export PDF standard</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Support par email</li>
+        </ul>
+        <a href="app/register.html" class="btn btn-outline btn-full">Démarrer gratuitement</a>
+      </div>
+      <div class="pricing-card popular reveal reveal-delay-2">
+        <div class="popular-badge">Le plus populaire</div>
+        <div class="plan-lbl pro">Plan Pro</div>
+        <div id="priceMonthly"><span class="price-big">2 000</span><span class="price-cur"> XAF</span><div class="price-period">par mois · sans engagement</div></div>
+        <div id="priceAnnual" style="display:none;">
+          <span class="price-big">19 200</span><span class="price-cur"> XAF</span>
+          <div class="price-period">par an · soit 1 600 XAF/mois</div>
+          <div style="display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);color:var(--green);font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--r-pill);margin-top:4px;font-family:var(--fb);">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Vous économisez 4 800 XAF
+          </div>
+        </div>
+        <div class="pricing-sep"></div>
+        <ul class="pricing-list">
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>50 devis par mois</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Clients illimités</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Envoi WhatsApp &amp; Email direct</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Logo &amp; personnalisation totale</li>
+          <li><svg class="check-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Support prioritaire 24/7</li>
+        </ul>
+        <a href="app/register.html" class="btn btn-primary btn-full">Prendre le plan Pro</a>
+      </div>
+    </div>
+    <div class="text-center reveal" style="margin-top:30px;">
+      <p style="font-family:var(--fb);font-size:12px;color:var(--t4);margin-bottom:12px;">Paiement sécurisé via</p>
+      <div class="payment-strip">
+        <div class="pay-pill"><span class="dot-mtn"></span>MTN Mobile Money</div>
+        <div class="pay-pill"><span class="dot-orange"></span>Orange Money</div>
+      </div>
+      <p style="font-family:var(--fb);font-size:12px;color:var(--t4);margin-top:14px;">✓ Aucune carte bancaire requise &nbsp;·&nbsp; ✓ Résiliable à tout moment &nbsp;·&nbsp; ✓ Données sécurisées</p>
+    </div>
+  </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sec-divider"></div>
 
-<!-- TESTIMONIALS -->
-<section>
-    <div class="container">
-        <div class="section-center reveal">
-            <div class="tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Témoignages</div>
-            <h2 class="section-h2">Ils ne jurent plus que<br><span class="text-accent">par afrivis.</span></h2>
-            <p class="section-sub">Plus de 2 400 entrepreneurs ont déjà franchi le pas.</p>
-        </div>
-        <div class="testi-grid">
-            <div class="testi-card reveal reveal-delay-1">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">J'ai envoyé mon premier devis en 4 minutes chrono. Avant il m'en fallait 45 avec Word. Le client a signé dans la journée.</p>
-                <div class="testi-author"><div class="testi-avatar accent">KD</div><div><div class="testi-name">Kouadio Diallo</div><div class="testi-role">Plombier indépendant · Abidjan</div></div></div>
-            </div>
-            <div class="testi-card reveal reveal-delay-2">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">L'envoi WhatsApp est une révolution. Mes clients répondent 10 fois plus vite qu'avec un email. Le taux d'acceptation a explosé.</p>
-                <div class="testi-author"><div class="testi-avatar">SM</div><div><div class="testi-name">Sophie Mensah</div><div class="testi-role">Graphiste freelance · Dakar</div></div></div>
-            </div>
-            <div class="testi-card reveal reveal-delay-3">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Interface claire, PDF magnifique. Mes clients me demandent souvent quel logiciel j'utilise. Je gagne 3 heures par semaine.</p>
-                <div class="testi-author"><div class="testi-avatar">AB</div><div><div class="testi-name">Arnaud Bamba</div><div class="testi-role">Consultant IT · Yaoundé</div></div></div>
-            </div>
-            <div class="testi-card reveal reveal-delay-4">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Le tableau de bord m'a permis de réaliser que j'avais 6 devis non relancés. J'ai récupéré plus de 800 000 FCFA en une semaine.</p>
-                <div class="testi-author"><div class="testi-avatar accent">MK</div><div><div class="testi-name">Marie Koné</div><div class="testi-role">Architecte d'intérieur · Lomé</div></div></div>
-            </div>
-            <div class="testi-card reveal reveal-delay-5">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">J'utilise afrivis. depuis 6 mois. Plus jamais d'erreur de TVA, plus de devis perdus. C'est devenu indispensable pour mon agence.</p>
-                <div class="testi-author"><div class="testi-avatar">PN</div><div><div class="testi-name">Patrick Nkosi</div><div class="testi-role">Agence marketing · Douala</div></div></div>
-            </div>
-            <div class="testi-card reveal reveal-delay-6">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Le support répond en moins d'une heure. Une vraie équipe derrière le produit. Je recommande à tous mes partenaires freelances.</p>
-                <div class="testi-author"><div class="testi-avatar">FL</div><div><div class="testi-name">Fatoumata Ly</div><div class="testi-role">Coach business · Bamako</div></div></div>
-            </div>
-        </div>
+<!-- TÉMOIGNAGES -->
+<section class="testi-section">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="sec-label" style="justify-content:center;">Témoignages</div>
+      <h2 class="sec-h2">Ils ne jurent plus que<br><em class="text-accent">par afrivis.</em></h2>
+      <p class="sec-sub" style="margin:12px auto 0;text-align:center;">Plus de 2 400 entrepreneurs ont déjà franchi le pas.</p>
     </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal reveal-delay-1"><div class="testi-stars">★★★★★</div><p class="testi-text">J'ai envoyé mon premier devis en 4 minutes chrono. Avant il m'en fallait 45 avec Word. Le client a signé dans la journée.</p><div class="testi-author"><div class="testi-avatar accent">KD</div><div><div class="testi-name">Kouadio Diallo</div><div class="testi-role">Plombier indépendant · Abidjan</div></div></div></div>
+      <div class="testi-card reveal reveal-delay-2"><div class="testi-stars">★★★★★</div><p class="testi-text">L'envoi WhatsApp est une révolution. Mes clients répondent 10 fois plus vite. Le taux d'acceptation a explosé.</p><div class="testi-author"><div class="testi-avatar">SM</div><div><div class="testi-name">Sophie Mensah</div><div class="testi-role">Graphiste freelance · Dakar</div></div></div></div>
+      <div class="testi-card reveal reveal-delay-3"><div class="testi-stars">★★★★★</div><p class="testi-text">Interface claire, PDF magnifique. Mes clients me demandent souvent quel logiciel j'utilise. Je gagne 3 heures par semaine.</p><div class="testi-author"><div class="testi-avatar">AB</div><div><div class="testi-name">Arnaud Bamba</div><div class="testi-role">Consultant IT · Yaoundé</div></div></div></div>
+      <div class="testi-card reveal reveal-delay-4"><div class="testi-stars">★★★★★</div><p class="testi-text">Le tableau de bord m'a permis de réaliser que j'avais 6 devis non relancés. J'ai récupéré plus de 800 000 FCFA en une semaine.</p><div class="testi-author"><div class="testi-avatar accent">MK</div><div><div class="testi-name">Marie Koné</div><div class="testi-role">Architecte d'intérieur · Lomé</div></div></div></div>
+      <div class="testi-card reveal reveal-delay-5"><div class="testi-stars">★★★★★</div><p class="testi-text">J'utilise afrivis. depuis 6 mois. Plus jamais d'erreur de TVA. C'est devenu indispensable pour mon agence.</p><div class="testi-author"><div class="testi-avatar">PN</div><div><div class="testi-name">Patrick Nkosi</div><div class="testi-role">Agence marketing · Douala</div></div></div></div>
+      <div class="testi-card reveal reveal-delay-6"><div class="testi-stars">★★★★★</div><p class="testi-text">Le support répond en moins d'une heure. Une vraie équipe derrière le produit. Je recommande à tous mes partenaires.</p><div class="testi-author"><div class="testi-avatar">FL</div><div><div class="testi-name">Fatoumata Ly</div><div class="testi-role">Coach business · Bamako</div></div></div></div>
+    </div>
+  </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sec-divider"></div>
 
 <!-- FAQ -->
-<section id="faq" style="background:var(--surface);">
-    <div class="container">
-        <div class="section-center reveal">
-            <div class="tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>FAQ</div>
-            <h2 class="section-h2">Les questions<br>qu'on nous pose <span class="text-accent">souvent.</span></h2>
-            <p class="section-sub">Pas trouvé votre réponse ? <a href="./contact.html">Contactez-nous</a></p>
+<section id="faq" class="faq-section">
+  <div class="container">
+    <div class="faq-layout">
+      <div class="faq-sticky">
+        <div class="sec-label">FAQ</div>
+        <h2 class="sec-h2" style="font-size:clamp(24px,3vw,38px);">Les questions<br>que vous<br><em class="text-accent">vous posez.</em></h2>
+        <p class="sec-sub" style="font-size:14px;margin-top:14px;">Pas trouvé votre réponse ?</p>
+        <div class="faq-left-cta">
+          <a href="./contact.html" class="btn btn-outline" style="padding:10px 20px;font-size:13px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Nous contacter
+          </a>
         </div>
-        <div class="faq-wrap" style="margin-top:44px;">
-            <div class="faq-item reveal">
-                <div class="faq-q">Est-ce vraiment gratuit pour commencer ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-                <div class="faq-a">Oui, absolument. Le plan gratuit vous permet de créer 5 devis par mois, sans carte bancaire requise. Vous pouvez passer au plan Pro à tout moment pour débloquer les fonctionnalités illimitées.</div>
-            </div>
-            <div class="faq-item reveal reveal-delay-1">
-                <div class="faq-q">Comment se passe le paiement de l'abonnement ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-                <div class="faq-a">Le paiement s'effectue via MTN Mobile Money ou Orange Money, directement depuis votre téléphone. Pas besoin de carte bancaire. Confirmation immédiate, plan activé en quelques secondes.</div>
-            </div>
-            <div class="faq-item reveal reveal-delay-2">
-                <div class="faq-q">Mes données sont-elles sécurisées ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-                <div class="faq-a">Vos données sont hébergées sur des serveurs sécurisés avec chiffrement SSL. Sauvegardes automatiques toutes les heures. Vous restez propriétaire de vos données à tout moment.</div>
-            </div>
-            <div class="faq-item reveal reveal-delay-3">
-                <div class="faq-q">Puis-je personnaliser le PDF avec mon logo ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-                <div class="faq-a">Oui, avec le plan Pro vous pouvez ajouter votre logo, choisir vos couleurs, modifier les polices et ajouter vos mentions légales personnalisées. Rendu 100% professionnel à votre image.</div>
-            </div>
-            <div class="faq-item reveal reveal-delay-4">
-                <div class="faq-q">Puis-je annuler mon abonnement Pro à tout moment ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
-                <div class="faq-a">Absolument. Aucun engagement de durée. Annulez depuis vos paramètres quand vous voulez. Vous conservez l'accès Pro jusqu'à la fin de la période payée.</div>
-            </div>
-        </div>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal"><div class="faq-q">Est-ce vraiment gratuit pour commencer ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-a">Oui, absolument. Le plan gratuit vous permet de créer 5 devis par mois, sans carte bancaire requise. Vous pouvez passer au plan Pro à tout moment pour débloquer les fonctionnalités illimitées.</div></div>
+        <div class="faq-item reveal reveal-delay-1"><div class="faq-q">Comment se passe le paiement de l'abonnement ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-a">Le paiement s'effectue via MTN Mobile Money ou Orange Money, directement depuis votre téléphone. Pas besoin de carte bancaire. Confirmation immédiate, plan activé en quelques secondes.</div></div>
+        <div class="faq-item reveal reveal-delay-2"><div class="faq-q">Mes données sont-elles sécurisées ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-a">Vos données sont hébergées sur des serveurs sécurisés avec chiffrement SSL. Sauvegardes automatiques toutes les heures. Vous restez propriétaire de vos données à tout moment.</div></div>
+        <div class="faq-item reveal reveal-delay-3"><div class="faq-q">Puis-je personnaliser le PDF avec mon logo ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-a">Oui, avec le plan Pro vous pouvez ajouter votre logo, choisir vos couleurs et ajouter vos mentions légales personnalisées. Rendu 100% professionnel à votre image.</div></div>
+        <div class="faq-item reveal reveal-delay-4"><div class="faq-q">Puis-je annuler mon abonnement Pro à tout moment ?<div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-a">Absolument. Aucun engagement de durée. Annulez depuis vos paramètres quand vous voulez. Vous conservez l'accès Pro jusqu'à la fin de la période payée.</div></div>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- CTA -->
+<!-- CTA FINAL -->
 <section class="cta-section">
-    <div class="container">
-        <div class="cta-content reveal">
-            <div class="tag" style="background:rgba(204,170,1,0.12);border-color:rgba(204,170,1,0.25);color:rgba(255,255,255,0.7);">
-                <span class="dot"></span>Gratuit pour commencer
-            </div>
-            <h2 class="section-h2">Prêt à professionnaliser<br>votre facturation ?</h2>
-            <p>Rejoignez plus de 2 400 entrepreneurs qui gagnent du temps chaque jour avec afrivis.</p>
-            <a href="app/register.html" class="btn btn-accent btn-lg">
-                Créer mon compte gratuitement
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-            <div class="cta-trust">
-                <div class="cta-trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Paiement MTN & Orange Money</div>
-                <div class="cta-trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Résiliable à tout moment</div>
-                <div class="cta-trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Installation en 30 secondes</div>
-            </div>
-        </div>
+  <div class="cta-line cta-line-1"></div>
+  <div class="cta-line cta-line-2"></div>
+  <div class="container">
+    <div class="cta-content reveal">
+      <div class="sec-label" style="justify-content:center;color:rgba(255,255,255,0.32);">Gratuit pour commencer</div>
+      <h2 class="sec-h2" style="color:var(--white);margin-bottom:14px;">Prêt à professionnaliser<br>votre facturation ?</h2>
+      <p style="color:rgba(255,255,255,0.46);font-size:17px;font-family:var(--fb);max-width:440px;margin:0 auto 40px;line-height:1.75;">Rejoignez plus de 2 400 entrepreneurs qui gagnent du temps chaque jour avec afrivis.</p>
+      <div class="cta-btns">
+        <a href="app/register.html" class="btn btn-accent btn-lg">
+          Créer mon compte gratuitement
+          <span class="btn-arrow"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a href="app/login.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.22);color:rgba(255,255,255,0.72);background:rgba(255,255,255,0.06);">J'ai déjà un compte</a>
+      </div>
+      <div class="cta-trust">
+        <div class="cta-trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Paiement MTN &amp; Orange Money</div>
+        <div class="cta-trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Résiliable à tout moment</div>
+        <div class="cta-trust-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Installation en 30 secondes</div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <div class="container">
-        <div class="footer-grid">
-            <div>
-                <a href="#" class="footer-logo" aria-label="afrivis.">
-                    <img src="./public/logo/Logo secondaire.svg" alt="afrivis." class="logo-img logo-img-white">
-                </a>
-                <p class="footer-desc">La solution n°1 pour les entrepreneurs qui veulent gagner du temps sur leur facturation et impressionner leurs clients.</p>
-                <div class="footer-badge">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    Données sécurisées & hébergées en Europe
-                </div>
-            </div>
-            <div class="footer-col">
-                <h4>Produit</h4>
-                <a href="#features" class="footer-link">Fonctionnalités</a>
-                <a href="#pricing" class="footer-link">Tarifs</a>
-                <a href="#how" class="footer-link">Comment ça marche</a>
-                <a href="#" class="footer-link">Nouveautés</a>
-            </div>
-            <div class="footer-col">
-                <h4>Ressources</h4>
-                <a href="#faq" class="footer-link">FAQ</a>
-                <a href="#" class="footer-link">Blog</a>
-                <a href="#" class="footer-link">Support</a>
-                <a href="#" class="footer-link">Tutoriels</a>
-            </div>
-            <div class="footer-col">
-                <h4>Légal</h4>
-                <a href="#" class="footer-link">Confidentialité</a>
-                <a href="#" class="footer-link">CGU</a>
-                <a href="#" class="footer-link">Mentions légales</a>
-                <a href="#" class="footer-link">Cookies</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2026 afrivis. Développé avec passion pour les entrepreneurs africains. 🌍</p>
-            <div class="footer-socials">
-                <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
-                <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-                <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></a>
-            </div>
-        </div>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="footer-logo-wrap" aria-label="afrivis."><img src="./public/logo/Logo secondaire.svg" alt="afrivis." class="logo-img-white"></a>
+        <p class="footer-desc">La solution de facturation conçue pour les entrepreneurs africains — professionnelle, simple, accessible.</p>
+        <div class="footer-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Données sécurisées &amp; hébergées en Europe</div>
+      </div>
+      <div class="footer-col"><h4>Produit</h4><a href="#features" class="footer-link">Fonctionnalités</a><a href="#pricing" class="footer-link">Tarifs</a><a href="#how" class="footer-link">Comment ça marche</a><a href="#" class="footer-link">Nouveautés</a></div>
+      <div class="footer-col"><h4>Ressources</h4><a href="#faq" class="footer-link">FAQ</a><a href="#" class="footer-link">Blog</a><a href="#" class="footer-link">Support</a><a href="#" class="footer-link">Tutoriels</a></div>
+      <div class="footer-col"><h4>Légal</h4><a href="#" class="footer-link">Confidentialité</a><a href="#" class="footer-link">CGU</a><a href="#" class="footer-link">Mentions légales</a><a href="#" class="footer-link">Cookies</a></div>
     </div>
+    <div class="footer-bottom">
+      <p>© 2026 afrivis. — Développé avec passion pour les entrepreneurs africains 🌍</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+        <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" class="social-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></a>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <script>
-// Marquee
 (function(){
-    const items = ['Devis illimités','Export PDF professionnel','Envoi WhatsApp & Email','Calculs automatiques','Personnalisation complète','Cloud sécurisé','Support 24/7','Paiement MTN MoMo & Orange Money','Gestion clients','Tableau de bord'];
-    const track = document.getElementById('marqueeTrack');
-    const doubled = [...items,...items,...items,...items];
-    track.innerHTML = doubled.map(t => `<span class="marquee-item"><span class="marquee-sep"></span>${t}</span>`).join('');
+  const items=['Devis illimités','Export PDF professionnel','Envoi WhatsApp & Email','Calculs automatiques','Personnalisation complète','Cloud sécurisé','Support 24/7','Paiement MTN MoMo & Orange Money','Gestion clients','Tableau de bord'];
+  const track=document.getElementById('marqueeTrack');
+  track.innerHTML=[...items,...items,...items,...items].map(t=>`<span class="marquee-item"><span class="m-sep"></span>${t}</span>`).join('');
 })();
 
-// Pricing toggle
-function switchPricing(p) {
-    const bM = document.getElementById('btnMonthly'), bA = document.getElementById('btnAnnual');
-    const pM = document.getElementById('priceMonthly'), pA = document.getElementById('priceAnnual');
-    if (p === 'monthly') { bM.classList.add('active'); bA.classList.remove('active'); pM.style.display = ''; pA.style.display = 'none'; }
-    else { bA.classList.add('active'); bM.classList.remove('active'); pA.style.display = ''; pM.style.display = 'none'; }
+function switchPricing(p){
+  const bM=document.getElementById('btnMonthly'),bA=document.getElementById('btnAnnual');
+  const pM=document.getElementById('priceMonthly'),pA=document.getElementById('priceAnnual');
+  if(p==='monthly'){bM.classList.add('active');bA.classList.remove('active');pM.style.display='';pA.style.display='none';}
+  else{bA.classList.add('active');bM.classList.remove('active');pA.style.display='';pM.style.display='none';}
 }
 
-// Navbar scroll
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 36); }, { passive: true });
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{navbar.classList.toggle('scrolled',window.scrollY>36);},{passive:true});
 
-// Mobile menu
-const menuToggle = document.getElementById('menuToggle'), mobileMenu = document.getElementById('mobileMenu');
-let menuOpen = false;
-menuToggle.addEventListener('click', () => {
-    menuOpen = !menuOpen;
-    mobileMenu.classList.toggle('open', menuOpen);
-    menuToggle.setAttribute('aria-expanded', menuOpen);
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    menuToggle.innerHTML = menuOpen
-        ? `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
-        : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+const menuToggle=document.getElementById('menuToggle'),mobileMenu=document.getElementById('mobileMenu');
+let menuOpen=false;
+menuToggle.addEventListener('click',()=>{
+  menuOpen=!menuOpen;
+  mobileMenu.classList.toggle('open',menuOpen);
+  menuToggle.setAttribute('aria-expanded',menuOpen);
+  document.body.style.overflow=menuOpen?'hidden':'';
+  menuToggle.innerHTML=menuOpen
+    ?'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    :'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
 });
-mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => { menuOpen = false; mobileMenu.classList.remove('open'); document.body.style.overflow = ''; }));
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) { menuOpen = false; mobileMenu.classList.remove('open'); document.body.style.overflow = ''; }});
+mobileMenu.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>{menuOpen=false;mobileMenu.classList.remove('open');document.body.style.overflow='';}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuOpen){menuOpen=false;mobileMenu.classList.remove('open');document.body.style.overflow='';}});
 
-// Reveal on scroll
-const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-}, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.07,rootMargin:'0px 0px -28px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// FAQ accordion
-document.querySelectorAll('.faq-q').forEach(q => {
-    q.addEventListener('click', () => {
-        const item = q.parentElement, was = item.classList.contains('open');
-        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-        if (!was) item.classList.add('open');
-    });
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement,was=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!was)item.classList.add('open');
+  });
 });
 
-// Subtle card tilt on hover
-document.querySelectorAll('.feat-card,.testi-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const cx = (e.clientX - r.left - r.width / 2) / (r.width / 2);
-        const cy = (e.clientY - r.top - r.height / 2) / (r.height / 2);
-        card.style.transform = `translateY(-4px) rotateX(${-cy * 2}deg) rotateY(${cx * 2}deg)`;
-        card.style.transition = 'transform 0.1s ease';
-    });
-    card.addEventListener('mouseleave', () => { card.style.transform = ''; card.style.transition = 'all 0.24s cubic-bezier(0.16,1,0.3,1)'; });
+document.querySelectorAll('.feat-card,.testi-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const cx=(e.clientX-r.left-r.width/2)/(r.width/2);
+    const cy=(e.clientY-r.top-r.height/2)/(r.height/2);
+    card.style.transform=`translateY(-5px) rotateX(${-cy*1.8}deg) rotateY(${cx*1.8}deg)`;
+    card.style.transition='transform 0.08s ease';
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform='';card.style.transition='all 0.26s cubic-bezier(0.16,1,0.3,1)';});
 });
 
-// Service Worker
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-        try { await navigator.serviceWorker.register('/sw.js', { scope: '/' }); } catch(e) { console.warn('[SW]', e); }
-    });
+if('serviceWorker' in navigator){
+  window.addEventListener('load',async()=>{
+    try{await navigator.serviceWorker.register('/sw.js',{scope:'/'});}catch(e){console.warn('[SW]',e);}
+  });
 }
 </script>
 </body>
