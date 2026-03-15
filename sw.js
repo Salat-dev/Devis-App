@@ -122,7 +122,7 @@ function offlinePage() {
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:#111827;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
     .wrap{text-align:center;max-width:340px}
-    .icon{width:72px;height:72px;background:rgba(249,115,22,.15);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+    .icon{width:72px;height:72px;background:rgba(1,43,42,0.06);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
     h1{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:white;margin-bottom:12px}
     p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:28px}
     .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;background:#F97316;color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-decoration:none;border:none;cursor:pointer}
@@ -131,7 +131,7 @@ function offlinePage() {
 <body>
   <div class="wrap">
     <div class="icon">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#CCAA01" stroke-width="2">
         <line x1="1" y1="1" x2="23" y2="23"/>
         <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
         <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>

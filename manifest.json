@@ -11,8 +11,8 @@
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
 
-  "background_color": "#111827",
-  "theme_color": "#F97316",
+  "background_color": "#FFFFFF",
+  "theme_color": "#012B2A",
   "orientation": "portrait-primary",
 
   "categories": ["business", "finance", "productivity"],
@@ -38,10 +38,10 @@
     { "src": "/icons/icon-144x144.png",           "sizes": "144x144", "type": "image/png", "purpose": "any" },
     { "src": "/icons/icon-152x152.png",           "sizes": "152x152", "type": "image/png", "purpose": "any" },
     { "src": "/icons/icon-192x192.png",           "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/icon-192x192-any.png",  "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-192x192.png",  "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
     { "src": "/icons/icon-384x384.png",           "sizes": "384x384", "type": "image/png", "purpose": "any" },
     { "src": "/icons/icon-512x512.png",           "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/icon-512x512-maskable.png",  "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512x512-maskable.png",  "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
     { "src": "/icons/favicon.svg",  "sizes": "512x512", "type": "image/svg+xml", "purpose": "any" }
 
   ],
@@ -142,11 +142,11 @@
         {
           "src": "/icons/screenshot-mobile.png",
           "sizes": "390x844",
-          "label": "Widget Devis App"
+          "label": "Widget Afrivis sur mobile"
         }
       ],
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }],
-      "backgrounds": [{ "src": "/icons/icon-512x512-any.png", "sizes": "512x512" }],
+      "backgrounds": [{ "src": "/icons/icon-512x512-maskable.png", "sizes": "512x512" }],
       "auth": true,
       "update": 86400
     }
