@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "app.vercel.afrivis.twa",
-        "sha256_cert_fingerprints": ["FD:97:F6:C3:3D:AB:07:F5:1F:F4:18:DF:80:D0:4E:55:AA:41:3B:B5:93:E1:0B:7A:A4:84:4D:74:B8:F6:5E:00"]
+        "sha256_cert_fingerprints": ["BE:13:2E:D0:D3:A9:BF:9F:C1:EE:7D:F9:CD:9B:EC:B2:35:68:86:32:14:AE:7C:A8:6A:78:12:32:7E:D4:3B:65"]
       }
     }]
