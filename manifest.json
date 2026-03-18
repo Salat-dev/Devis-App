@@ -9,7 +9,17 @@
   "dir": "ltr",
 
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+  "display_override": ["tabbed", "window-controls-overlay", "standalone", "minimal-ui", "browser"],
+
+  "tab_strip": {
+    "home_tab": {
+      "url": "/app/dashboard.html",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    "new_tab_button": {
+      "url": "/app/create-quote.html"
+    }
+  },
 
   "background_color": "#012B2A",
   "theme_color": "#012B2A",
@@ -125,6 +135,18 @@
 
   "note_taking": {
     "new_note_url": "/app/create-quote.html"
+  },
+
+  "periodic_sync": {
+    "minimum_interval": 86400
+  },
+
+  "background_sync": {
+    "periodic_sync_quota": 10
+  },
+
+  "push_notifications": {
+    "vapid_public_key": "REMPLACER_PAR_VOTRE_VAPID_PUBLIC_KEY"
   },
 
   "widgets": [
