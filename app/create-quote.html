@@ -1428,77 +1428,156 @@ total:      (parseFloat(row.querySelector('.quantity').value)  || 0) * (parseFlo
 }))
 }
 
-async function saveQuote() {
-const clientId = document.getElementById('clientSelect').value
-if (!clientId) { showToast('Veuillez sélectionner un client.', 'error'); return }
-const items = collectItems()
-if (!items.length)                   { showToast('Ajoutez au moins une ligne au devis.', 'error'); return }
-if (items.some(i => !i.description)) { showToast('Chaque ligne doit avoir une description.', 'error'); return }
-const saveBtn  = document.getElementById('saveBtn')
-const saveBtnM = document.getElementById('saveBtnMobile')
-const loading  = `<span class="spinner"></span> Enregistrement...`
-saveBtn.disabled  = true; saveBtn.innerHTML  = loading
-saveBtnM.disabled = true; saveBtnM.innerHTML = loading
-const { data: quoteNumber, error: rpcError } = await supabase
-.rpc('generate_quote_number', { p_user_id: currentUserId })
-const taxRate  = parseFloat(document.getElementById('taxRate').value)    || 0
-const labor    = parseFloat(document.getElementById('laborCost').value)  || 0
-const travel   = parseFloat(document.getElementById('travelCost').value) || 0
-const subtotal = items.reduce((s, i) => s + i.total, 0)
-const totalHT  = subtotal + labor + travel
-const taxAmt   = totalHT * (taxRate / 100)
-const totalTTC = totalHT + taxAmt
-const vDays    = parseInt(document.getElementById('validityDays').value) || 30
-const baseDate = document.getElementById('quoteDate').value
-const expiryDate = baseDate
-? (() => { const d = new Date(baseDate); d.setDate(d.getDate() + vDays); return d.toISOString().split('T')[0] })()
-: null
-const { data: quote, error: qErr } = await supabase.from('quotes').insert({
-user_id:        currentUserId,
-client_id:      clientId,
-quote_number:   rpcError ? null : quoteNumber,
-quote_date:     baseDate || null,
-start_date:     document.getElementById('startDate').value   || null,
-duration:       document.getElementById('duration').value.trim() || null,
-expiry_date:    expiryDate,
-validity_days:  vDays,
-currency:       document.getElementById('currency').value,
-subtotal,
-labor_cost:     labor,
-travel_cost:    travel,
-total_ht:       totalHT,
-tax_rate:       taxRate,
-tax_amount:     taxAmt,
-total_amount:   totalTTC,
-payment_terms:  document.getElementById('paymentTerms').value,
-delivery_terms: document.getElementById('deliveryTerms').value,
-sav_terms:      document.getElementById('savTerms').value.trim() || null,
-notes:          document.getElementById('notes').value.trim()    || null,
-gros_oeuvre:    document.getElementById('checkGrosOeuvre').checked,
-signer_name:    document.getElementById('signerName').value.trim() || null,
-signature_data: signatureData,
-company_logo:   logoData,
-pro_name:       document.getElementById('proName').value.trim(),
-pro_company:    document.getElementById('proCompany').value.trim(),
-pro_address:    document.getElementById('proAddress').value.trim(),
-pro_legal_form: document.getElementById('proLegalForm').value,
-pro_rccm:       document.getElementById('proRccm').value.trim(),
-pro_niu:        document.getElementById('proNiu').value.trim()   || null,
-pro_phone:      document.getElementById('proPhone').value.trim() || null,
-client_address: document.getElementById('clientAddress').value.trim() || null,
-status: 'draft'
-}).select().single()
-if (qErr) {
-showToast('Erreur : ' + qErr.message, 'error')
-const dot = `<div class="btn-dot"></div>`
-saveBtn.disabled  = false; saveBtn.innerHTML  = `${dot} Enregistrer le devis`
-saveBtnM.disabled = false; saveBtnM.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg> Enregistrer le devis`
-return
+/**
+ * ════════════════════════════════════════════════════════
+ * FIX — Erreur : duplicate key value violates unique constraint
+ *        "quotes_company_quote_number_unique"
+ *
+ * INSTRUCTION : Dans create-quote.html, dans le <script type="module">,
+ * REMPLACEZ la fonction saveQuote() existante par le code ci-dessous.
+ * ════════════════════════════════════════════════════════
+ */
+
+/* ── Génération d'un numéro de devis unique (avec protection doublons) ── */
+async function generateUniqueQuoteNumber() {
+  try {
+    const { data: quoteNumber, error: rpcError } = await supabase
+      .rpc('generate_quote_number', { p_user_id: currentUserId })
+
+    if (rpcError || !quoteNumber) {
+      // Fallback timestamp si la RPC échoue
+      const year = new Date().getFullYear()
+      const rand = String(Math.floor(Math.random() * 9000) + 1000)
+      return `DEV-${year}-${rand}`
+    }
+
+    // Vérifier si ce numéro existe déjà pour cet utilisateur
+    const { data: existing } = await supabase
+      .from('quotes')
+      .select('id')
+      .eq('user_id', currentUserId)
+      .eq('quote_number', quoteNumber)
+      .maybeSingle()
+
+    if (existing) {
+      // Suffixe aléatoire pour éviter le doublon
+      const suffix = String(Math.floor(Math.random() * 90) + 10)
+      return `${quoteNumber}-${suffix}`
+    }
+
+    return quoteNumber
+  } catch {
+    const year = new Date().getFullYear()
+    const rand = String(Date.now()).slice(-4)
+    return `DEV-${year}-${rand}`
+  }
 }
-await supabase.from('quote_items').insert(items.map(i => ({ ...i, quote_id: quote.id })))
-await supabase.rpc('increment_quote_count', { p_user_id: currentUserId })
-showToast('Devis enregistré avec succès !')
-setTimeout(() => window.location.href = `view-quote.html?id=${quote.id}`, 1500)
+
+/* ── saveQuote corrigée ── */
+async function saveQuote() {
+  const clientId = document.getElementById('clientSelect').value
+  if (!clientId) { showToast('Veuillez sélectionner un client.', 'error'); return }
+  const items = collectItems()
+  if (!items.length)                   { showToast('Ajoutez au moins une ligne au devis.', 'error'); return }
+  if (items.some(i => !i.description)) { showToast('Chaque ligne doit avoir une description.', 'error'); return }
+
+  const saveBtn  = document.getElementById('saveBtn')
+  const saveBtnM = document.getElementById('saveBtnMobile')
+  const loading  = `<span class="spinner"></span> Enregistrement...`
+  saveBtn.disabled  = true; saveBtn.innerHTML  = loading
+  saveBtnM.disabled = true; saveBtnM.innerHTML = loading
+
+  // ✅ Utiliser la nouvelle fonction qui gère les doublons
+  const quoteNumber = await generateUniqueQuoteNumber()
+
+  const taxRate  = parseFloat(document.getElementById('taxRate').value)    || 0
+  const labor    = parseFloat(document.getElementById('laborCost').value)  || 0
+  const travel   = parseFloat(document.getElementById('travelCost').value) || 0
+  const subtotal = items.reduce((s, i) => s + i.total, 0)
+  const totalHT  = subtotal + labor + travel
+  const taxAmt   = totalHT * (taxRate / 100)
+  const totalTTC = totalHT + taxAmt
+  const vDays    = parseInt(document.getElementById('validityDays').value) || 30
+  const baseDate = document.getElementById('quoteDate').value
+  const expiryDate = baseDate
+    ? (() => { const d = new Date(baseDate); d.setDate(d.getDate() + vDays); return d.toISOString().split('T')[0] })()
+    : null
+
+  let insertSuccess = false
+  let insertedQuote = null
+  let lastError = null
+
+  // ✅ Tentative avec retry automatique en cas de conflit 409
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const currentNumber = attempt === 0
+      ? quoteNumber
+      : `${quoteNumber}-${String(Math.floor(Math.random() * 90) + 10)}`
+
+    const { data: quote, error: qErr } = await supabase.from('quotes').insert({
+      user_id:        currentUserId,
+      client_id:      clientId,
+      quote_number:   currentNumber,
+      quote_date:     baseDate || null,
+      start_date:     document.getElementById('startDate').value   || null,
+      duration:       document.getElementById('duration').value.trim() || null,
+      expiry_date:    expiryDate,
+      validity_days:  vDays,
+      currency:       document.getElementById('currency').value,
+      subtotal,
+      labor_cost:     labor,
+      travel_cost:    travel,
+      total_ht:       totalHT,
+      tax_rate:       taxRate,
+      tax_amount:     taxAmt,
+      total_amount:   totalTTC,
+      payment_terms:  document.getElementById('paymentTerms').value,
+      delivery_terms: document.getElementById('deliveryTerms').value,
+      sav_terms:      document.getElementById('savTerms').value.trim() || null,
+      notes:          document.getElementById('notes').value.trim()    || null,
+      gros_oeuvre:    document.getElementById('checkGrosOeuvre').checked,
+      signer_name:    document.getElementById('signerName').value.trim() || null,
+      signature_data: signatureData,
+      company_logo:   logoData,
+      pro_name:       document.getElementById('proName').value.trim(),
+      pro_company:    document.getElementById('proCompany').value.trim(),
+      pro_address:    document.getElementById('proAddress').value.trim(),
+      pro_legal_form: document.getElementById('proLegalForm').value,
+      pro_rccm:       document.getElementById('proRccm').value.trim(),
+      pro_niu:        document.getElementById('proNiu').value.trim()   || null,
+      pro_phone:      document.getElementById('proPhone').value.trim() || null,
+      client_address: document.getElementById('clientAddress').value.trim() || null,
+      status: 'draft'
+    }).select().single()
+
+    if (!qErr) {
+      insertSuccess = true
+      insertedQuote = quote
+      break
+    }
+
+    // Si ce n'est pas une erreur de doublon, sortir immédiatement
+    if (qErr.code !== '23505') {
+      lastError = qErr
+      break
+    }
+
+    lastError = qErr
+    // Sinon retry avec un nouveau suffixe (boucle suivante)
+  }
+
+  if (!insertSuccess) {
+    showToast('Erreur : ' + (lastError?.message || 'Impossible de créer le devis'), 'error')
+    const ic = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>`
+    saveBtn.disabled  = false; saveBtn.innerHTML  = `${ic} Enregistrer le devis`
+    saveBtnM.disabled = false; saveBtnM.innerHTML = `${ic} Enregistrer le devis`
+    return
+  }
+
+  await supabase.from('quote_items').insert(items.map(i => ({ ...i, quote_id: insertedQuote.id })))
+  await supabase.rpc('increment_quote_count', { p_user_id: currentUserId })
+
+  showToast('Devis enregistré avec succès !')
+  setTimeout(() => window.location.href = `view-quote.html?id=${insertedQuote.id}`, 1500)
 }
 
 document.getElementById('addRowBtn').addEventListener('click', addRow)

@@ -111,43 +111,89 @@ async function cacheFirst(request) {
 }
 
 function offlinePage() {
-  const html = `<!DOCTYPE html>
+  const html = ` <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hors ligne - Devis App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#012B2A">
+  <title>Afrivis — Hors ligne</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'DM Sans',sans-serif;background:#111827;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .wrap{text-align:center;max-width:340px}
-    .icon{width:72px;height:72px;background:rgba(204,170,1,0.12);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
-    h1{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:white;margin-bottom:12px}
-    p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:28px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;background:#F97316;color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-decoration:none;border:none;cursor:pointer}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #012B2A;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 36px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      color: #7aaee8;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 300px;
+      margin: 0 auto 2rem;
+    }
+
+    button {
+      background: #1a5c58;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover { background: #226b66; }
+
+    .cached-note {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.3);
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="icon">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#CCAA01" stroke-width="2">
-        <line x1="1" y1="1" x2="23" y2="23"/>
-        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
-        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
-        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
-        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
-        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
-        <line x1="12" y1="20" x2="12.01" y2="20"/>
-      </svg>
-    </div>
-    <h1>Pas de connexion</h1>
-    <p>Vous êtes hors ligne. Reconnectez-vous pour accéder à vos données.</p>
-    <button class="btn" onclick="location.reload()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-      Réessayer
-    </button>
-  </div>
+
+  <div class="icon">📡</div>
+
+  <h1>Vous êtes hors ligne</h1>
+  <p>Vérifiez votre connexion internet et réessayez. Vos données locales restent disponibles.</p>
+
+  <button onclick="location.reload()">
+    Réessayer la connexion
+  </button>
+
+  <p class="cached-note">Afrivis — Les pages déjà visitées restent accessibles hors ligne</p>
+
 </body>
 </html>`
   return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
