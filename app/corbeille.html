@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#012B2A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Afrivis">
+<link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+<link rel="icon" href="../icons/favicon.svg">
+
+<title>Corbeille — Afrivis</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   AFRIVIS — Design System Tokens
+   #012B2A primary | #CCAA01 accent | #FFF bg
+   Manrope: headings | Inter: body/labels
+══════════════════════════════════════════ */
+:root {
+  --primary:        #012B2A;
+  --primary-hover:  #013534;
+  --primary-12:     rgba(1,43,42,0.12);
+  --primary-08:     rgba(1,43,42,0.08);
+  --primary-06:     rgba(1,43,42,0.06);
+  --primary-04:     rgba(1,43,42,0.04);
+  --accent:         #CCAA01;
+  --accent-d:       #B09600;
+  --accent-light:   rgba(204,170,1,0.10);
+  --accent-12:      rgba(204,170,1,0.12);
+  --accent-22:      rgba(204,170,1,0.22);
+  --accent-pale:    #FAF5D7;
+
+  --white:          #FFFFFF;
+  --bg:             #F6F7F5;
+  --surface:        #F0F2EF;
+  --border:         rgba(1,43,42,0.10);
+  --border-md:      rgba(1,43,42,0.16);
+
+  --t1:             #012B2A;
+  --t2:             rgba(1,43,42,0.62);
+  --t3:             rgba(1,43,42,0.40);
+  --t4:             rgba(1,43,42,0.26);
+
+  --green:          #0D7A5F;
+  --green-light:    #E6F5F1;
+  --red:            #C53030;
+  --red-light:      #FEF2F2;
+  --red-12:         rgba(197,48,48,0.12);
+  --yellow:         #92710C;
+  --yellow-light:   #FEF9E7;
+  --blue:           #1E4B8F;
+  --blue-light:     #EBF2FD;
+
+  --sidebar-w:      252px;
+  --radius-sm:      8px;
+  --radius-md:      12px;
+  --radius-lg:      16px;
+  --radius-xl:      20px;
+  --shadow-xs:      0 1px 2px rgba(1,43,42,0.04);
+  --shadow-sm:      0 2px 8px rgba(1,43,42,0.06);
+  --shadow-focus:   0 0 0 3px rgba(204,170,1,0.22);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  display: flex; min-height: 100vh;
+  color: var(--t1);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════════════════
+   SIDEBAR
+══════════════════════ */
+.sidebar {
+  width: var(--sidebar-w); min-width: var(--sidebar-w);
+  background: var(--primary);
+  display: flex; flex-direction: column;
+  height: 100vh; position: sticky; top: 0;
+  overflow: hidden;
+}
+.sidebar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 10%, rgba(204,170,1,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 20% 90%, rgba(204,170,1,0.04) 0%, transparent 40%);
+  pointer-events: none;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center;
+  position: relative; flex-shrink: 0;
+}
+.sidebar-logo img {
+  height: 48px; width: auto;
+  max-width: 160px;
+  object-fit: contain; object-position: left center;
+  display: block;
+}
+.sidebar-nav {
+  flex: 1; padding: 12px 10px;
+  display: flex; flex-direction: column; gap: 2px;
+  position: relative; overflow-y: auto;
+}
+.nav-section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  padding: 14px 10px 6px;
+}
+.nav-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  color: rgba(255,255,255,0.52);
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 500;
+  transition: all 0.18s;
+  border: none; background: none; width: 100%; text-align: left; cursor: pointer;
+  position: relative;
+}
+.nav-link svg { flex-shrink: 0; opacity: 0.8; }
+.nav-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.88); }
+.nav-link:hover svg { opacity: 1; }
+.nav-link.active {
+  background: var(--accent-12); color: var(--accent); font-weight: 600;
+  border: 1px solid var(--accent-22);
+}
+.nav-link.active svg { opacity: 1; }
+.nav-link.active::before {
+  content: ''; position: absolute;
+  left: -1px; top: 6px; bottom: 6px;
+  width: 3px; background: var(--accent); border-radius: 0 3px 3px 0;
+}
+.sidebar-footer {
+  padding: 12px 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  position: relative; flex-shrink: 0;
+}
+.user-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.05); margin-bottom: 8px;
+}
+.user-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.user-name { font-size: 13px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 1px; }
+.btn-logout {
+  width: 100%; display: flex; align-items: center;
+  justify-content: center; gap: 7px; padding: 9px;
+  border-radius: var(--radius-sm);
+  background: rgba(197,48,48,0.08); color: rgba(248,113,113,0.85);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  border: 1px solid rgba(197,48,48,0.18); cursor: pointer; transition: all 0.18s;
+}
+.btn-logout:hover { background: rgba(197,48,48,0.15); color: #FCA5A5; }
+
+/* ══════════════════════
+   MOBILE NAV
+══════════════════════ */
+.mobile-nav {
+  display: none; position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--primary);
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+  z-index: 50; border-top: 1px solid rgba(255,255,255,0.07);
+}
+.mobile-nav-inner { display: flex; justify-content: space-around; }
+.mobile-nav-link {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: rgba(255,255,255,0.42); text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600;
+  padding: 4px 14px; border-radius: var(--radius-sm); transition: all 0.18s;
+}
+.mobile-nav-link.active { color: var(--accent); }
+.mobile-nav-link svg { flex-shrink: 0; }
+
+/* ══════════════════════
+   MAIN
+══════════════════════ */
+.main { flex: 1; overflow-y: auto; padding: 36px 40px 60px; min-width: 0; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500;
+  color: var(--t3); text-decoration: none;
+  transition: color 0.18s; margin-bottom: 20px; width: fit-content;
+}
+.back-link:hover { color: var(--primary); }
+.back-link:hover svg { transform: translateX(-2px); }
+.back-link svg { transition: transform 0.18s; }
+
+/* ── Page header ── */
+.page-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px; flex-wrap: wrap; gap: 14px;
+}
+.page-header-left { display: flex; flex-direction: column; gap: 4px; }
+
+/* H1 Manrope Bold 28px */
+.page-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--t1); letter-spacing: -0.5px;
+  display: flex; align-items: center; gap: 10px;
+}
+.page-title-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--red-light);
+  border: 1px solid rgba(197,48,48,0.16);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.page-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; color: var(--t3); margin-top: 2px;
+}
+
+/* Warning banner */
+.warning-banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--yellow-light);
+  border: 1px solid rgba(146,113,12,0.20);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px; margin-bottom: 22px;
+  animation: fadeUp 0.28s ease both;
+}
+.warning-banner svg { flex-shrink: 0; color: var(--yellow); margin-top: 1px; }
+.warning-text {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--yellow);
+  line-height: 1.5;
+}
+.warning-text strong { font-weight: 600; }
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.search-wrap { flex: 1; min-width: 200px; position: relative; }
+.search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--t4); pointer-events: none; }
+.search-input {
+  width: 100%; border: 1.5px solid rgba(1,43,42,0.12);
+  border-radius: var(--radius-md); padding: 10px 14px 10px 38px;
+  font-family: 'Inter', sans-serif; font-size: 14px; color: var(--t1);
+  background: var(--white); outline: none; transition: all 0.18s;
+}
+.search-input:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
+.search-input::placeholder { color: var(--t4); }
+
+.filter-select {
+  border: 1.5px solid rgba(1,43,42,0.12); border-radius: var(--radius-md);
+  padding: 10px 32px 10px 12px;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--t2);
+  background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23738a88' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;
+  outline: none; cursor: pointer; appearance: none; transition: all 0.18s;
+}
+.filter-select:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
+
+.btn-empty-all {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 18px; border-radius: var(--radius-md);
+  border: 1.5px solid rgba(197,48,48,0.22);
+  background: var(--red-light); color: var(--red);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+}
+.btn-empty-all:hover { background: var(--red); color: white; border-color: var(--red); }
+
+/* ══════════════════════
+   CARDS GRID
+══════════════════════ */
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  animation: fadeUp 0.32s cubic-bezier(.4,0,.2,1) .1s both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── Quote card ── */
+.quote-card {
+  background: var(--white);
+  border: 1px solid rgba(1,43,42,0.10);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column;
+  overflow: hidden; position: relative;
+  transition: all 0.18s;
+  opacity: 0.92;
+}
+.quote-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(1,43,42,0.10); opacity: 1; }
+
+/* deleted stripe on left */
+.quote-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--red); border-radius: 3px 0 0 3px;
+}
+
+.card-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(1,43,42,0.06);
+  background: #FAFAF9;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.card-number {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--t1);
+  display: block; margin-bottom: 3px;
+}
+.card-client {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; color: var(--t3); font-weight: 400;
+}
+
+/* Status badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+  border: 1px solid transparent;
+}
+.b-draft    { background: var(--surface); color: var(--t3); border-color: rgba(1,43,42,0.10); }
+.b-sent     { background: var(--blue-light); color: var(--blue); border-color: rgba(30,75,143,0.15); }
+.b-accepted { background: var(--green-light); color: var(--green); border-color: rgba(13,122,95,0.15); }
+.b-refused  { background: var(--red-light); color: var(--red); border-color: rgba(197,48,48,0.15); }
+.b-expired  { background: var(--yellow-light); color: var(--yellow); border-color: rgba(146,113,12,0.15); }
+.b-deleted  { background: var(--red-light); color: var(--red); border-color: rgba(197,48,48,0.15); }
+
+.card-body {
+  padding: 16px 20px; flex: 1;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.card-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.card-label {
+  font-family: 'Inter', sans-serif; font-size: 12px; color: var(--t3); font-weight: 400;
+}
+.card-value {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--t2); font-weight: 500; text-align: right;
+}
+.card-amount {
+  font-family: 'Manrope', sans-serif;
+  font-size: 19px; font-weight: 700; color: var(--t1);
+  margin-top: 4px; display: block; text-align: right;
+}
+
+/* Deleted info row */
+.card-deleted-row {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--red-light);
+  border: 1px solid rgba(197,48,48,0.12);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  font-family: 'Inter', sans-serif; font-size: 11px; color: var(--red); font-weight: 500;
+}
+.card-deleted-row svg { flex-shrink: 0; }
+
+.card-footer {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(1,43,42,0.06);
+  display: flex; justify-content: flex-end; gap: 8px;
+  background: var(--white);
+}
+
+.btn-restore {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  background: var(--green-light); color: var(--green);
+  border: 1px solid rgba(13,122,95,0.16);
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all 0.18s;
+}
+.btn-restore:hover { background: var(--green); color: white; border-color: var(--green); }
+
+.btn-delete-perm {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  background: var(--red-light); color: var(--red);
+  border: 1px solid rgba(197,48,48,0.16);
+  cursor: pointer; transition: all 0.18s;
+}
+.btn-delete-perm:hover { background: var(--red); color: white; border-color: var(--red); }
+
+/* ══════════════════════
+   EMPTY STATE
+══════════════════════ */
+.empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  padding: 80px 24px; grid-column: 1 / -1;
+  animation: fadeUp 0.32s ease both;
+}
+.empty-icon-wrap {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--bg); border: 1px solid rgba(1,43,42,0.08);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; flex-shrink: 0;
+}
+/* H2 Manrope 700 20px */
+.empty-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--t2); margin-bottom: 8px;
+}
+.empty-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; color: var(--t3); max-width: 300px; line-height: 1.6;
+}
+
+/* ══════════════════════
+   STATS ROW
+══════════════════════ */
+.stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-bottom: 22px;
+  animation: fadeUp 0.28s ease both;
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid rgba(1,43,42,0.10);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-xs);
+  display: flex; align-items: center; gap: 14px;
+}
+.stat-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.stat-icon.red-ic    { background: var(--red-light); }
+.stat-icon.yellow-ic { background: var(--yellow-light); }
+.stat-icon.primary-ic{ background: var(--primary-06); }
+.stat-val {
+  font-family: 'Manrope', sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--t1); line-height: 1;
+}
+.stat-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; color: var(--t3); margin-top: 3px;
+}
+
+/* ══════════════════════
+   SKELETON
+══════════════════════ */
+.skeleton {
+  background: linear-gradient(90deg, #eef0ed 25%, #e4e7e3 50%, #eef0ed 75%);
+  background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: var(--radius-sm);
+}
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.skel-card {
+  background: var(--white); border: 1px solid rgba(1,43,42,0.08);
+  border-radius: var(--radius-xl); padding: 20px; min-height: 220px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* ══════════════════════
+   MODAL
+══════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(1,43,42,0.48); backdrop-filter: blur(4px);
+  z-index: 200; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--white);
+  border: 1px solid rgba(1,43,42,0.10);
+  border-radius: var(--radius-xl);
+  padding: 30px; max-width: 420px; width: 100%;
+  box-shadow: 0 24px 60px rgba(1,43,42,0.18);
+  animation: fadeUp 0.22s ease;
+}
+.modal-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+}
+.modal-icon.danger  { background: var(--red-light); }
+.modal-icon.success { background: var(--green-light); }
+
+/* H2 Manrope 700 20px */
+.modal-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--t1); margin-bottom: 8px;
+}
+.modal-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; color: var(--t2); margin-bottom: 24px; line-height: 1.6;
+}
+.modal-body strong { color: var(--t1); font-weight: 600; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+.btn-modal-cancel {
+  padding: 10px 20px; border-radius: var(--radius-md);
+  border: 1.5px solid rgba(1,43,42,0.14); background: var(--white);
+  color: var(--t2); font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.18s;
+}
+.btn-modal-cancel:hover { background: var(--bg); }
+
+.btn-modal-danger {
+  padding: 10px 20px; border-radius: var(--radius-md); border: none;
+  background: var(--red); color: white;
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.18s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-modal-danger:hover { background: #A82828; }
+
+.btn-modal-success {
+  padding: 10px 20px; border-radius: var(--radius-md); border: none;
+  background: var(--primary); color: white;
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.18s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-modal-success:hover { background: var(--primary-hover); }
+
+/* ══════════════════════
+   TOAST
+══════════════════════ */
+.toast {
+  position: fixed; bottom: 28px; right: 28px;
+  padding: 13px 18px; border-radius: var(--radius-md);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 28px rgba(1,43,42,0.14);
+  animation: toastIn 0.28s cubic-bezier(.4,0,.2,1);
+  z-index: 999; max-width: 360px;
+}
+.toast.success {
+  background: var(--primary); color: white;
+  border: 1px solid rgba(204,170,1,0.30);
+}
+.toast.success .toast-accent {
+  width: 3px; height: 26px; background: var(--accent);
+  border-radius: 2px; flex-shrink: 0;
+}
+.toast.error { background: #1a0505; color: #fca5a5; border: 1px solid rgba(197,48,48,0.30); }
+@keyframes toastIn {
+  from { opacity:0; transform:translateY(10px) scale(.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 15px; height: 15px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.65s linear infinite; flex-shrink: 0;
+}
+
+/* ══════════════════════
+   RESPONSIVE
+══════════════════════ */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .mobile-nav { display: block; }
+  .main { padding: 16px 14px 100px; }
+  .page-title { font-size: 22px; }
+  .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stats-row .stat-card:last-child { grid-column: 1 / -1; }
+  .quotes-grid { grid-template-columns: 1fr; gap: 12px; }
+  .toolbar { flex-wrap: wrap; }
+  .search-wrap { min-width: 100%; }
+  .toast { bottom: 90px; right: 12px; left: 12px; max-width: none; }
+  .modal { padding: 22px 18px; }
+  .warning-banner { flex-direction: column; gap: 8px; }
+  .page-header { flex-direction: column; gap: 12px; }
+  .btn-empty-all { width: 100%; justify-content: center; }
+}
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .stats-row .stat-card:last-child { grid-column: span 1; }
+  .card-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .page-title { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../public/logo/Logo secondaire.svg" alt="afrivis.">
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Menu</span>
+    <a href="dashboard.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="quotes.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Devis
+    </a>
+    <a href="liste-clients.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Clients
+    </a>
+    <a href="corbeille.html" class="nav-link active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+      Corbeille
+    </a>
+    <span class="nav-section-label" style="margin-top:8px;">Compte</span>
+    <a href="settings.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Paramètres
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div style="min-width:0;">
+        <div class="user-name" id="sidebarName">Chargement…</div>
+        <div class="user-role" id="sidebarCompany">—</div>
+      </div>
+    </div>
+    <button class="btn-logout" id="logoutBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Déconnexion
+    </button>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <a href="quotes.html" class="back-link">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour aux devis
+  </a>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1 class="page-title">
+        <div class="page-title-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        </div>
+        Corbeille
+      </h1>
+      <p class="page-subtitle">Devis supprimés — restaurez-les ou videz définitivement</p>
+    </div>
+    <button class="btn-empty-all" id="emptyAllBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+      Vider la corbeille
+    </button>
+  </div>
+
+  <!-- Warning banner -->
+  <div class="warning-banner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div class="warning-text">
+      <strong>Conservation 30 jours.</strong> Les devis dans la corbeille sont supprimés automatiquement après 30 jours. Restaurez-les avant expiration pour les conserver.
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card">
+      <div class="stat-icon red-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+      </div>
+      <div>
+        <div class="stat-val" id="statTotal">—</div>
+        <div class="stat-lbl">Devis supprimés</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon yellow-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#92710C" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <div class="stat-val" id="statExpire">—</div>
+        <div class="stat-lbl">Expirent dans 7 jours</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon primary-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#012B2A" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div>
+        <div class="stat-val" id="statAmount">—</div>
+        <div class="stat-lbl">Montant total (XAF)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un devis, un client…">
+    </div>
+    <select class="filter-select" id="sortSelect">
+      <option value="date_desc">Supprimés récemment</option>
+      <option value="date_asc">Supprimés anciennement</option>
+      <option value="amount_desc">Montant ↓</option>
+      <option value="amount_asc">Montant ↑</option>
+      <option value="expire_asc">Expirent bientôt</option>
+    </select>
+  </div>
+
+  <!-- Cards grid -->
+  <div class="quotes-grid" id="quotesGrid">
+    <!-- Skeletons -->
+    <div class="skel-card">
+      <div class="skeleton" style="height:16px;width:55%"></div>
+      <div class="skeleton" style="height:12px;width:40%"></div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+        <div class="skeleton" style="height:11px;width:80%"></div>
+        <div class="skeleton" style="height:11px;width:65%"></div>
+        <div class="skeleton" style="height:11px;width:70%"></div>
+      </div>
+      <div class="skeleton" style="height:20px;width:45%;margin-top:8px;align-self:flex-end;"></div>
+    </div>
+    <div class="skel-card">
+      <div class="skeleton" style="height:16px;width:55%"></div>
+      <div class="skeleton" style="height:12px;width:40%"></div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+        <div class="skeleton" style="height:11px;width:80%"></div>
+        <div class="skeleton" style="height:11px;width:65%"></div>
+        <div class="skeleton" style="height:11px;width:70%"></div>
+      </div>
+      <div class="skeleton" style="height:20px;width:45%;margin-top:8px;align-self:flex-end;"></div>
+    </div>
+    <div class="skel-card">
+      <div class="skeleton" style="height:16px;width:55%"></div>
+      <div class="skeleton" style="height:12px;width:40%"></div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+        <div class="skeleton" style="height:11px;width:80%"></div>
+        <div class="skeleton" style="height:11px;width:65%"></div>
+      </div>
+      <div class="skeleton" style="height:20px;width:45%;margin-top:8px;align-self:flex-end;"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══ Mobile nav ══ -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <a href="dashboard.html" class="mobile-nav-link">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="quotes.html" class="mobile-nav-link">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Devis
+    </a>
+    <a href="liste-clients.html" class="mobile-nav-link">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Clients
+    </a>
+    <a href="corbeille.html" class="mobile-nav-link active">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+      Corbeille
+    </a>
+  </div>
+</nav>
+
+<!-- Modal suppression définitive -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <div class="modal-icon danger">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+    </div>
+    <div class="modal-title">Supprimer définitivement ?</div>
+    <div class="modal-body" id="deleteModalBody">Ce devis sera supprimé <strong>définitivement</strong> et ne pourra plus être récupéré.</div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" id="cancelDelete">Annuler</button>
+      <button class="btn-modal-danger" id="confirmDelete">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        Supprimer définitivement
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal vider tout -->
+<div class="modal-overlay" id="emptyAllModal">
+  <div class="modal">
+    <div class="modal-icon danger">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+    </div>
+    <div class="modal-title">Vider la corbeille ?</div>
+    <div class="modal-body">Tous les devis supprimés seront <strong>définitivement perdus</strong>. Cette action est irréversible.</div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" id="cancelEmptyAll">Annuler</button>
+      <button class="btn-modal-danger" id="confirmEmptyAll">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        Vider définitivement
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal restauration -->
+<div class="modal-overlay" id="restoreModal">
+  <div class="modal">
+    <div class="modal-icon success">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D7A5F" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </div>
+    <div class="modal-title">Restaurer ce devis ?</div>
+    <div class="modal-body" id="restoreModalBody">Le devis sera <strong>restauré</strong> et repassera au statut brouillon.</div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" id="cancelRestore">Annuler</button>
+      <button class="btn-modal-success" id="confirmRestore">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Restaurer
+      </button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+const supabase = createClient(
+  'https://xeezdzbotsblzclnmnxg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
+)
+
+/* ── État ── */
+let currentUserId = null
+let allDeleted    = []
+let filtered      = []
+let searchVal     = ''
+let sortVal       = 'date_desc'
+let targetId      = null
+
+/* ── Format ── */
+const fmt = (n, cur = 'XAF') =>
+  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur }).format(n || 0)
+const fmtDate = d =>
+  d ? new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+const daysLeft = d => {
+  if (!d) return null
+  return Math.ceil((new Date(d) - Date.now()) / 86400000)
+}
+
+/* ── Status badges ── */
+const STATUS = {
+  draft:    { label: 'Brouillon', cls: 'b-draft' },
+  sent:     { label: 'Envoyé',    cls: 'b-sent' },
+  accepted: { label: 'Accepté',  cls: 'b-accepted' },
+  refused:  { label: 'Refusé',   cls: 'b-refused' },
+  expired:  { label: 'Expiré',   cls: 'b-expired' },
+  deleted:  { label: 'Supprimé', cls: 'b-deleted' },
+}
+
+/* ── Toast ── */
+function showToast(msg, type = 'success') {
+  document.querySelector('.toast')?.remove()
+  const t = document.createElement('div')
+  t.className = `toast ${type}`
+  if (type === 'success') {
+    t.innerHTML = `<span class="toast-accent"></span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      ${msg}`
+  } else {
+    t.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${msg}`
+  }
+  document.body.appendChild(t)
+  setTimeout(() => t.remove(), 3500)
+}
+
+/* ── Init ── */
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) { location.href = 'login.html'; return }
+  currentUserId = session.user.id
+
+  const { data: p } = await supabase.from('profiles')
+    .select('first_name,last_name,company').eq('id', currentUserId).single()
+  if (p) {
+    const ini = [p.first_name?.[0], p.last_name?.[0]].filter(Boolean).join('').toUpperCase() || 'U'
+    document.getElementById('userAvatar').textContent     = ini
+    document.getElementById('sidebarName').textContent    = [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Utilisateur'
+    document.getElementById('sidebarCompany').textContent = p.company || 'Mon entreprise'
+  }
+  await loadDeleted()
+}
+
+/* ── Charger les devis supprimés ── */
+async function loadDeleted() {
+  const { data, error } = await supabase
+    .from('quotes')
+    .select('id,quote_number,quote_date,deleted_at,total_amount,currency,status,clients(full_name)')
+    .eq('user_id', currentUserId)
+    .eq('status', 'deleted')
+    .order('deleted_at', { ascending: false })
+
+  if (error) {
+    // Si la colonne deleted_at ou le statut 'deleted' n'existe pas encore,
+    // on affiche l'état vide proprement
+    allDeleted = []
+    renderStats([])
+    renderCards([])
+    return
+  }
+  allDeleted = data || []
+  renderStats(allDeleted)
+  applyFilters()
+}
+
+/* ── Stats ── */
+function renderStats(list) {
+  const total  = list.length
+  const expire = list.filter(q => {
+    const d = daysLeft(q.deleted_at ? new Date(new Date(q.deleted_at).getTime() + 30 * 86400000) : null)
+    return d !== null && d <= 7
+  }).length
+  const amount = list.reduce((s, q) => s + (+q.total_amount || 0), 0)
+
+  document.getElementById('statTotal').textContent  = total
+  document.getElementById('statExpire').textContent = expire
+  document.getElementById('statAmount').textContent =
+    new Intl.NumberFormat('fr-FR').format(amount)
+}
+
+/* ── Filtres & tri ── */
+function applyFilters() {
+  let list = [...allDeleted]
+  if (searchVal.trim()) {
+    const s = searchVal.toLowerCase()
+    list = list.filter(q =>
+      (q.quote_number || '').toLowerCase().includes(s) ||
+      (q.clients?.full_name || '').toLowerCase().includes(s)
+    )
+  }
+  list.sort((a, b) => {
+    if (sortVal === 'date_desc')   return new Date(b.deleted_at || 0) - new Date(a.deleted_at || 0)
+    if (sortVal === 'date_asc')    return new Date(a.deleted_at || 0) - new Date(b.deleted_at || 0)
+    if (sortVal === 'amount_desc') return (b.total_amount || 0) - (a.total_amount || 0)
+    if (sortVal === 'amount_asc')  return (a.total_amount || 0) - (b.total_amount || 0)
+    if (sortVal === 'expire_asc') {
+      const expA = a.deleted_at ? new Date(new Date(a.deleted_at).getTime() + 30 * 86400000) : new Date(9999, 0)
+      const expB = b.deleted_at ? new Date(new Date(b.deleted_at).getTime() + 30 * 86400000) : new Date(9999, 0)
+      return expA - expB
+    }
+    return 0
+  })
+  filtered = list
+  renderCards(list)
+}
+
+/* ── Render cards ── */
+function renderCards(list) {
+  const grid = document.getElementById('quotesGrid')
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon-wrap">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="1.5">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            <path d="M10 11v6"/><path d="M14 11v6"/>
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+          </svg>
+        </div>
+        <div class="empty-title">La corbeille est vide</div>
+        <div class="empty-sub">Les devis supprimés apparaîtront ici. Vous pouvez les restaurer ou les supprimer définitivement.</div>
+      </div>`
+    return
+  }
+
+  grid.innerHTML = list.map(q => {
+    const st       = STATUS[q.status] || STATUS.deleted
+    const client   = q.clients?.full_name || 'Client inconnu'
+    const currency = q.currency || 'XAF'
+
+    /* Calcul expiration (30 jours après suppression) */
+    let expiryLabel = ''
+    let expiryClass = ''
+    if (q.deleted_at) {
+      const expDate = new Date(new Date(q.deleted_at).getTime() + 30 * 86400000)
+      const days    = daysLeft(expDate)
+      if (days !== null) {
+        if (days <= 0)      { expiryLabel = 'Expire aujourd\'hui';   expiryClass = 'color:var(--red)' }
+        else if (days <= 7) { expiryLabel = `Expire dans ${days} j`; expiryClass = 'color:var(--yellow)' }
+        else                { expiryLabel = `Expire le ${fmtDate(expDate)}` }
+      }
+    }
+
+    return `
+    <div class="quote-card">
+      <div class="card-header">
+        <div>
+          <span class="card-number">${q.quote_number || '—'}</span>
+          <span class="card-client">${client}</span>
+        </div>
+        <span class="badge ${st.cls}">${st.label}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <span class="card-label">Date du devis</span>
+          <span class="card-value">${fmtDate(q.quote_date)}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Supprimé le</span>
+          <span class="card-value">${fmtDate(q.deleted_at)}</span>
+        </div>
+        ${expiryLabel ? `
+        <div class="card-deleted-row">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="${expiryClass}">${expiryLabel}</span>
+        </div>` : ''}
+        <span class="card-amount">${fmt(q.total_amount, currency)}</span>
+      </div>
+      <div class="card-footer">
+        <button class="btn-restore" onclick="openRestoreModal('${q.id}','${escAttr(q.quote_number || '—')}')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Restaurer
+        </button>
+        <button class="btn-delete-perm" onclick="openDeleteModal('${q.id}','${escAttr(q.quote_number || '—')}')" title="Supprimer définitivement">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function escAttr(s) {
+  return String(s).replace(/'/g, '&#39;').replace(/"/g, '&quot;')
+}
+
+/* ── Modals ── */
+window.openDeleteModal = function(id, num) {
+  targetId = id
+  document.getElementById('deleteModalBody').innerHTML =
+    `Le devis <strong>${num}</strong> sera supprimé <strong>définitivement</strong> et ne pourra plus être récupéré.`
+  document.getElementById('deleteModal').classList.add('open')
+}
+
+window.openRestoreModal = function(id, num) {
+  targetId = id
+  document.getElementById('restoreModalBody').innerHTML =
+    `Le devis <strong>${num}</strong> sera <strong>restauré</strong> et repassera au statut brouillon.`
+  document.getElementById('restoreModal').classList.add('open')
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'))
+  targetId = null
+}
+
+/* ── Supprimer définitivement ── */
+document.getElementById('confirmDelete').addEventListener('click', async () => {
+  if (!targetId) return
+  closeAllModals()
+  const { error } = await supabase.from('quotes').delete().eq('id', targetId)
+  if (error) { showToast('Erreur lors de la suppression.', 'error'); return }
+  allDeleted = allDeleted.filter(q => q.id !== targetId)
+  renderStats(allDeleted)
+  applyFilters()
+  showToast('Devis supprimé définitivement')
+})
+
+/* ── Restaurer ── */
+document.getElementById('confirmRestore').addEventListener('click', async () => {
+  if (!targetId) return
+  closeAllModals()
+  const { error } = await supabase.from('quotes')
+    .update({ status: 'draft', deleted_at: null }).eq('id', targetId)
+  if (error) { showToast('Erreur lors de la restauration.', 'error'); return }
+  allDeleted = allDeleted.filter(q => q.id !== targetId)
+  renderStats(allDeleted)
+  applyFilters()
+  showToast('Devis restauré avec succès !')
+})
+
+/* ── Vider tout ── */
+document.getElementById('emptyAllBtn').addEventListener('click', () => {
+  if (!allDeleted.length) { showToast('La corbeille est déjà vide.'); return }
+  document.getElementById('emptyAllModal').classList.add('open')
+})
+
+document.getElementById('confirmEmptyAll').addEventListener('click', async () => {
+  closeAllModals()
+  const ids = allDeleted.map(q => q.id)
+  if (!ids.length) return
+  const { error } = await supabase.from('quotes').delete().in('id', ids)
+  if (error) { showToast('Erreur lors du vidage.', 'error'); return }
+  allDeleted = []
+  renderStats([])
+  renderCards([])
+  showToast('Corbeille vidée définitivement')
+})
+
+/* ── Annuler modals ── */
+document.getElementById('cancelDelete').addEventListener('click', closeAllModals)
+document.getElementById('cancelRestore').addEventListener('click', closeAllModals)
+document.getElementById('cancelEmptyAll').addEventListener('click', closeAllModals)
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeAllModals() })
+})
+
+/* ── Recherche & tri ── */
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchVal = e.target.value; applyFilters()
+})
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortVal = e.target.value; applyFilters()
+})
+
+/* ── Déconnexion ── */
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await supabase.auth.signOut(); location.href = 'login.html'
+})
+
+init()
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) showPWAUpdate()
+        })
+      })
+    } catch(e) { console.warn('[SW]', e) }
+  })
+}
+function showPWAUpdate() {
+  const b = document.createElement('div')
+  b.innerHTML = `<div style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#012B2A;color:white;border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(1,43,42,.25);z-index:9999;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid rgba(204,170,1,0.25);">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#CCAA01" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Mise à jour disponible
+    <button onclick="navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage('SKIP_WAITING');location.reload()" style="background:#CCAA01;color:#012B2A;border:none;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Actualiser</button>
+    <button onclick="this.closest('div').parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;line-height:1;">×</button>
+  </div>`
+  document.body.appendChild(b)
+}
+</script>
+</body>
+</html>
