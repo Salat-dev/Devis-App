@@ -394,7 +394,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
             Votre avis <span class="fw-gold">compte</span>
           </div>
-          <div class="fw-panel-subtitle">Aidez-nous à améliorer notre application </div>
+          <div class="fw-panel-subtitle">Aidez-nous à améliorer Afrivis </div>
         </div>
         <button class="fw-close-btn" id="fw-close">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
