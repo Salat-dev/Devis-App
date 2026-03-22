@@ -216,11 +216,10 @@ body {
 .page-header {
   display: flex; align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 28px; flex-wrap: wrap; gap: 14px;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 14px;
 }
 .page-header-left { display: flex; flex-direction: column; gap: 4px; }
 
-/* H1 Manrope Bold 28px */
 .page-title {
   font-family: 'Manrope', sans-serif;
   font-size: 28px; font-weight: 700;
@@ -244,7 +243,7 @@ body {
   background: var(--yellow-light);
   border: 1px solid rgba(146,113,12,0.20);
   border-radius: var(--radius-lg);
-  padding: 14px 18px; margin-bottom: 22px;
+  padding: 14px 18px; margin-bottom: 24px;
   animation: fadeUp 0.28s ease both;
 }
 .warning-banner svg { flex-shrink: 0; color: var(--yellow); margin-top: 1px; }
@@ -253,6 +252,75 @@ body {
   line-height: 1.5;
 }
 .warning-text strong { font-weight: 600; }
+
+/* ══════════════════════
+   TABS
+══════════════════════ */
+.tabs-bar {
+  display: flex; align-items: center; gap: 4px;
+  margin-bottom: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 5px;
+  width: fit-content;
+}
+.tab-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 18px; border-radius: var(--radius-md);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--t3); border: none; background: transparent;
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+}
+.tab-btn svg { flex-shrink: 0; }
+.tab-btn.active {
+  background: var(--white); color: var(--t1); font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.tab-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 20px;
+  font-size: 10px; font-weight: 700; line-height: 1;
+  background: var(--red-light); color: var(--red);
+  transition: all 0.18s;
+}
+.tab-btn.active .tab-badge {
+  background: var(--red); color: white;
+}
+
+/* ── Stats row ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 20px;
+  animation: fadeUp 0.28s ease .05s both;
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: var(--shadow-xs);
+}
+.stat-icon {
+  width: 42px; height: 42px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.stat-icon.red-ic    { background: var(--red-light); }
+.stat-icon.yellow-ic { background: var(--yellow-light); }
+.stat-icon.primary-ic{ background: var(--primary-06); }
+.stat-icon.blue-ic   { background: var(--blue-light); }
+.stat-val {
+  font-family: 'Manrope', sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--t1); line-height: 1;
+}
+.stat-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; color: var(--t3); margin-top: 3px;
+}
 
 /* ── Toolbar ── */
 .toolbar {
@@ -292,7 +360,7 @@ body {
 /* ══════════════════════
    CARDS GRID
 ══════════════════════ */
-.quotes-grid {
+.cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
@@ -301,7 +369,7 @@ body {
 @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
 /* ── Quote card ── */
-.quote-card {
+.item-card {
   background: var(--white);
   border: 1px solid rgba(1,43,42,0.10);
   border-radius: var(--radius-xl);
@@ -311,14 +379,16 @@ body {
   transition: all 0.18s;
   opacity: 0.92;
 }
-.quote-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(1,43,42,0.10); opacity: 1; }
+.item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(1,43,42,0.10); opacity: 1; }
 
-/* deleted stripe on left */
-.quote-card::before {
+/* red stripe */
+.item-card::before {
   content: ''; position: absolute;
   left: 0; top: 0; bottom: 0; width: 3px;
   background: var(--red); border-radius: 3px 0 0 3px;
 }
+/* blue stripe for clients */
+.item-card.client-card::before { background: var(--blue); }
 
 .card-header {
   padding: 18px 20px 14px;
@@ -331,9 +401,20 @@ body {
   font-size: 15px; font-weight: 700; color: var(--t1);
   display: block; margin-bottom: 3px;
 }
-.card-client {
+.card-sub {
   font-family: 'Inter', sans-serif;
   font-size: 12px; color: var(--t3); font-weight: 400;
+}
+
+/* Client avatar in card */
+.card-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--blue-light);
+  border: 2px solid rgba(30,75,143,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px; font-weight: 700; color: var(--blue);
+  flex-shrink: 0;
 }
 
 /* Status badge */
@@ -351,6 +432,7 @@ body {
 .b-refused  { background: var(--red-light); color: var(--red); border-color: rgba(197,48,48,0.15); }
 .b-expired  { background: var(--yellow-light); color: var(--yellow); border-color: rgba(146,113,12,0.15); }
 .b-deleted  { background: var(--red-light); color: var(--red); border-color: rgba(197,48,48,0.15); }
+.b-client   { background: var(--blue-light); color: var(--blue); border-color: rgba(30,75,143,0.15); }
 
 .card-body {
   padding: 16px 20px; flex: 1;
@@ -364,6 +446,7 @@ body {
 }
 .card-value {
   font-family: 'Inter', sans-serif; font-size: 13px; color: var(--t2); font-weight: 500; text-align: right;
+  max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .card-amount {
   font-family: 'Manrope', sans-serif;
@@ -371,16 +454,17 @@ body {
   margin-top: 4px; display: block; text-align: right;
 }
 
-/* Deleted info row */
-.card-deleted-row {
+/* Expiry row */
+.card-expiry-row {
   display: flex; align-items: center; gap: 6px;
-  background: var(--red-light);
-  border: 1px solid rgba(197,48,48,0.12);
   border-radius: var(--radius-sm);
   padding: 7px 10px;
-  font-family: 'Inter', sans-serif; font-size: 11px; color: var(--red); font-weight: 500;
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500;
 }
-.card-deleted-row svg { flex-shrink: 0; }
+.card-expiry-row.urgent   { background: var(--red-light); color: var(--red); border: 1px solid rgba(197,48,48,0.12); }
+.card-expiry-row.warning  { background: var(--yellow-light); color: var(--yellow); border: 1px solid rgba(146,113,12,0.12); }
+.card-expiry-row.ok       { background: var(--green-light); color: var(--green); border: 1px solid rgba(13,122,95,0.12); }
+.card-expiry-row svg { flex-shrink: 0; }
 
 .card-footer {
   padding: 12px 16px;
@@ -404,65 +488,32 @@ body {
   width: 34px; height: 34px; border-radius: var(--radius-sm);
   background: var(--red-light); color: var(--red);
   border: 1px solid rgba(197,48,48,0.16);
-  cursor: pointer; transition: all 0.18s;
+  cursor: pointer; transition: all 0.18s; flex-shrink: 0;
 }
 .btn-delete-perm:hover { background: var(--red); color: white; border-color: var(--red); }
 
-/* ══════════════════════
-   EMPTY STATE
-══════════════════════ */
+/* ── Empty state ── */
 .empty-state {
-  display: flex; flex-direction: column;
-  align-items: center; text-align: center;
-  padding: 80px 24px; grid-column: 1 / -1;
-  animation: fadeUp 0.32s ease both;
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 60px 24px; text-align: center;
+  background: var(--white);
+  border: 1px dashed var(--border-md);
+  border-radius: var(--radius-xl);
 }
 .empty-icon-wrap {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: var(--bg); border: 1px solid rgba(1,43,42,0.08);
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--surface);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 20px; flex-shrink: 0;
+  margin-bottom: 16px;
 }
-/* H2 Manrope 700 20px */
 .empty-title {
   font-family: 'Manrope', sans-serif;
-  font-size: 20px; font-weight: 700; color: var(--t2); margin-bottom: 8px;
+  font-size: 17px; font-weight: 700; color: var(--t2); margin-bottom: 6px;
 }
 .empty-sub {
   font-family: 'Inter', sans-serif;
-  font-size: 13px; color: var(--t3); max-width: 300px; line-height: 1.6;
-}
-
-/* ══════════════════════
-   STATS ROW
-══════════════════════ */
-.stats-row {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 14px; margin-bottom: 22px;
-  animation: fadeUp 0.28s ease both;
-}
-.stat-card {
-  background: var(--white);
-  border: 1px solid rgba(1,43,42,0.10);
-  border-radius: var(--radius-lg);
-  padding: 18px 20px;
-  box-shadow: var(--shadow-xs);
-  display: flex; align-items: center; gap: 14px;
-}
-.stat-icon {
-  width: 40px; height: 40px; border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.stat-icon.red-ic    { background: var(--red-light); }
-.stat-icon.yellow-ic { background: var(--yellow-light); }
-.stat-icon.primary-ic{ background: var(--primary-06); }
-.stat-val {
-  font-family: 'Manrope', sans-serif;
-  font-size: 24px; font-weight: 700; color: var(--t1); line-height: 1;
-}
-.stat-lbl {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px; color: var(--t3); margin-top: 3px;
+  font-size: 13px; color: var(--t3); max-width: 360px; line-height: 1.6;
 }
 
 /* ══════════════════════
@@ -475,7 +526,7 @@ body {
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 .skel-card {
   background: var(--white); border: 1px solid rgba(1,43,42,0.08);
-  border-radius: var(--radius-xl); padding: 20px; min-height: 220px;
+  border-radius: var(--radius-xl); padding: 20px; min-height: 200px;
   display: flex; flex-direction: column; gap: 12px;
 }
 
@@ -503,7 +554,6 @@ body {
 .modal-icon.danger  { background: var(--red-light); }
 .modal-icon.success { background: var(--green-light); }
 
-/* H2 Manrope 700 20px */
 .modal-title {
   font-family: 'Manrope', sans-serif;
   font-size: 20px; font-weight: 700; color: var(--t1); margin-bottom: 8px;
@@ -584,7 +634,7 @@ body {
   .page-title { font-size: 22px; }
   .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
   .stats-row .stat-card:last-child { grid-column: 1 / -1; }
-  .quotes-grid { grid-template-columns: 1fr; gap: 12px; }
+  .cards-grid { grid-template-columns: 1fr; gap: 12px; }
   .toolbar { flex-wrap: wrap; }
   .search-wrap { min-width: 100%; }
   .toast { bottom: 90px; right: 12px; left: 12px; max-width: none; }
@@ -592,6 +642,8 @@ body {
   .warning-banner { flex-direction: column; gap: 8px; }
   .page-header { flex-direction: column; gap: 12px; }
   .btn-empty-all { width: 100%; justify-content: center; }
+  .tabs-bar { width: 100%; justify-content: center; }
+  .tab-btn { flex: 1; justify-content: center; }
 }
 @media (max-width: 480px) {
   .stats-row { grid-template-columns: 1fr; }
@@ -599,6 +651,66 @@ body {
   .card-header { flex-direction: column; gap: 8px; align-items: flex-start; }
   .page-title { font-size: 20px; }
 }
+
+/* ══════════════════════════════════════
+   SIDEBAR COLLAPSE — Design System patch
+   Collapsed width : 64px
+══════════════════════════════════════ */
+:root { --sidebar-w-collapsed: 64px; }
+.sidebar-toggle-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.55); cursor: pointer; flex-shrink: 0;
+  transition: background 0.18s, color 0.18s, transform 0.28s cubic-bezier(0.16,1,0.3,1);
+  margin-left: auto;
+}
+.sidebar-toggle-btn:hover { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.90); }
+.sidebar-collapsed .sidebar-toggle-btn { transform: rotate(180deg); margin-left: 0; }
+@media (max-width: 768px) { .sidebar-toggle-btn { display: none; } }
+.sidebar-app-icon {
+  display: none; width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(204,170,1,0.15); border: 1px solid rgba(204,170,1,0.25);
+  align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
+}
+.sidebar-app-icon img { width: 22px; height: 22px; object-fit: contain; }
+.nav-link { position: relative; }
+.nav-tooltip {
+  position: absolute; left: calc(100% + 10px); top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  background: #1a2e2d; color: #fff; font-family: 'Inter',sans-serif;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+  padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.10);
+  pointer-events: none; opacity: 0; transition: opacity 0.15s, transform 0.15s;
+  z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.nav-tooltip::before {
+  content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+  border: 5px solid transparent; border-right-color: #1a2e2d;
+}
+.sidebar { transition: width 0.28s cubic-bezier(0.16,1,0.3,1), min-width 0.28s cubic-bezier(0.16,1,0.3,1); }
+body.sidebar-collapsed .sidebar { width: var(--sidebar-w-collapsed); min-width: var(--sidebar-w-collapsed); }
+body.sidebar-collapsed .sidebar-logo img:not(.sidebar-app-icon img) { display: none; }
+body.sidebar-collapsed .sidebar-app-icon { display: flex; }
+body.sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+body.sidebar-collapsed .nav-section-label { opacity: 0; height: 0; padding-top: 0; padding-bottom: 0; margin: 0; overflow: hidden; pointer-events: none; }
+body.sidebar-collapsed .sidebar-nav { padding: 12px 8px; }
+body.sidebar-collapsed .nav-link { justify-content: center; padding: 10px; gap: 0; }
+body.sidebar-collapsed .nav-link .nav-label { display: none; }
+body.sidebar-collapsed .nav-link:hover .nav-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+body.sidebar-collapsed .sidebar-plan { margin: 0 8px 8px; padding: 10px; display: flex; align-items: center; justify-content: center; }
+body.sidebar-collapsed .sidebar-plan .sp-row,
+body.sidebar-collapsed .sidebar-plan .sp-quota,
+body.sidebar-collapsed .sidebar-plan .sp-bar { display: none; }
+body.sidebar-collapsed .sidebar-footer { padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+body.sidebar-collapsed .user-card { justify-content: center; padding: 8px; margin-bottom: 0; gap: 0; }
+body.sidebar-collapsed .user-card .user-info,
+body.sidebar-collapsed .user-card .user-name,
+body.sidebar-collapsed .user-card .user-role { display: none; }
+body.sidebar-collapsed .btn-logout span,
+body.sidebar-collapsed .btn-logout .logout-label { display: none; }
+body.sidebar-collapsed .btn-logout { width: 40px; height: 40px; padding: 0; border-radius: 10px; justify-content: center; }
+
 </style>
 </head>
 <body>
@@ -607,6 +719,11 @@ body {
 <aside class="sidebar">
   <div class="sidebar-logo">
     <img src="../public/logo/Logo secondaire.svg" alt="afrivis.">
+    <!-- Icône app collapsée -->
+    <div class="sidebar-app-icon"><img src="../icons/favicon.svg" alt="A"></div>
+    <!-- Bouton toggle collapse/expand -->
+    <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Réduire le menu" aria-label="Réduire le menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+
   </div>
   <nav class="sidebar-nav">
     <span class="nav-section-label">Menu</span>
@@ -650,9 +767,9 @@ body {
 <!-- ══ MAIN ══ -->
 <main class="main">
 
-  <a href="quotes.html" class="back-link">
+  <a href="dashboard.html" class="back-link">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-    Retour aux devis
+    Retour au dashboard
   </a>
 
   <!-- Header -->
@@ -664,7 +781,7 @@ body {
         </div>
         Corbeille
       </h1>
-      <p class="page-subtitle">Devis supprimés — restaurez-les ou videz définitivement</p>
+      <p class="page-subtitle">Éléments supprimés — restaurez ou purgez définitivement</p>
     </div>
     <button class="btn-empty-all" id="emptyAllBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
@@ -676,19 +793,34 @@ body {
   <div class="warning-banner">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
     <div class="warning-text">
-      <strong>Conservation 30 jours.</strong> Les devis dans la corbeille sont supprimés automatiquement après 30 jours. Restaurez-les avant expiration pour les conserver.
+      <strong>Conservation 30 jours.</strong> Les éléments dans la corbeille sont supprimés automatiquement après 30 jours. Restaurez-les avant expiration pour les conserver.
     </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" id="tabQuotes" onclick="switchTab('quotes')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Devis
+      <span class="tab-badge" id="badgeQuotes">0</span>
+    </button>
+    <button class="tab-btn" id="tabClients" onclick="switchTab('clients')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Clients
+      <span class="tab-badge" id="badgeClients">0</span>
+    </button>
   </div>
 
   <!-- Stats -->
   <div class="stats-row" id="statsRow">
-    <div class="stat-card">
+    <!-- Devis stats -->
+    <div class="stat-card" id="statCardTotal">
       <div class="stat-icon red-ic">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
       </div>
       <div>
         <div class="stat-val" id="statTotal">—</div>
-        <div class="stat-lbl">Devis supprimés</div>
+        <div class="stat-lbl" id="statTotalLbl">Devis supprimés</div>
       </div>
     </div>
     <div class="stat-card">
@@ -700,13 +832,13 @@ body {
         <div class="stat-lbl">Expirent dans 7 jours</div>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon primary-ic">
+    <div class="stat-card" id="statCardExtra">
+      <div class="stat-icon primary-ic" id="statExtraIcon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#012B2A" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       </div>
       <div>
-        <div class="stat-val" id="statAmount">—</div>
-        <div class="stat-lbl">Montant total (XAF)</div>
+        <div class="stat-val" id="statExtra">—</div>
+        <div class="stat-lbl" id="statExtraLbl">Montant total (XAF)</div>
       </div>
     </div>
   </div>
@@ -715,20 +847,18 @@ body {
   <div class="toolbar">
     <div class="search-wrap">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un devis, un client…">
+      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher…">
     </div>
     <select class="filter-select" id="sortSelect">
       <option value="date_desc">Supprimés récemment</option>
       <option value="date_asc">Supprimés anciennement</option>
-      <option value="amount_desc">Montant ↓</option>
-      <option value="amount_asc">Montant ↑</option>
       <option value="expire_asc">Expirent bientôt</option>
+      <option value="az">A → Z</option>
     </select>
   </div>
 
   <!-- Cards grid -->
-  <div class="quotes-grid" id="quotesGrid">
-    <!-- Skeletons -->
+  <div class="cards-grid" id="cardsGrid">
     <div class="skel-card">
       <div class="skeleton" style="height:16px;width:55%"></div>
       <div class="skeleton" style="height:12px;width:40%"></div>
@@ -784,6 +914,8 @@ body {
   </div>
 </nav>
 
+<!-- ══ MODALS ══ -->
+
 <!-- Modal suppression définitive -->
 <div class="modal-overlay" id="deleteModal">
   <div class="modal">
@@ -791,30 +923,12 @@ body {
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
     </div>
     <div class="modal-title">Supprimer définitivement ?</div>
-    <div class="modal-body" id="deleteModalBody">Ce devis sera supprimé <strong>définitivement</strong> et ne pourra plus être récupéré.</div>
+    <div class="modal-body" id="deleteModalBody">Cet élément sera supprimé <strong>définitivement</strong> et ne pourra plus être récupéré.</div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" id="cancelDelete">Annuler</button>
       <button class="btn-modal-danger" id="confirmDelete">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
         Supprimer définitivement
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal vider tout -->
-<div class="modal-overlay" id="emptyAllModal">
-  <div class="modal">
-    <div class="modal-icon danger">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-    </div>
-    <div class="modal-title">Vider la corbeille ?</div>
-    <div class="modal-body">Tous les devis supprimés seront <strong>définitivement perdus</strong>. Cette action est irréversible.</div>
-    <div class="modal-actions">
-      <button class="btn-modal-cancel" id="cancelEmptyAll">Annuler</button>
-      <button class="btn-modal-danger" id="confirmEmptyAll">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-        Vider définitivement
       </button>
     </div>
   </div>
@@ -826,13 +940,31 @@ body {
     <div class="modal-icon success">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D7A5F" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
     </div>
-    <div class="modal-title">Restaurer ce devis ?</div>
-    <div class="modal-body" id="restoreModalBody">Le devis sera <strong>restauré</strong> et repassera au statut brouillon.</div>
+    <div class="modal-title">Restaurer cet élément ?</div>
+    <div class="modal-body" id="restoreModalBody">L'élément sera <strong>restauré</strong> et redeviendra accessible.</div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" id="cancelRestore">Annuler</button>
       <button class="btn-modal-success" id="confirmRestore">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Restaurer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal vider tout -->
+<div class="modal-overlay" id="emptyAllModal">
+  <div class="modal">
+    <div class="modal-icon danger">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C53030" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+    </div>
+    <div class="modal-title" id="emptyAllTitle">Vider la corbeille ?</div>
+    <div class="modal-body" id="emptyAllBody">Tous les éléments supprimés seront <strong>définitivement perdus</strong>. Cette action est irréversible.</div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" id="cancelEmptyAll">Annuler</button>
+      <button class="btn-modal-danger" id="confirmEmptyAll">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        Vider définitivement
       </button>
     </div>
   </div>
@@ -846,25 +978,42 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlZXpkemJvdHNibHpjbG5tbnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDk3NTQsImV4cCI6MjA4NjAyNTc1NH0.RHIGavm6M9WCR6nve1Iz_JKFeQRlpRCU2FNAr9E02PM'
 )
 
-/* ── État ── */
-let currentUserId = null
-let allDeleted    = []
-let filtered      = []
-let searchVal     = ''
-let sortVal       = 'date_desc'
-let targetId      = null
+/* ════════════════════════════
+   ÉTAT GLOBAL
+════════════════════════════ */
+let currentUserId  = null
+let allQuotes      = []   // devis supprimés
+let allClients     = []   // clients supprimés
+let activeTab      = 'quotes'
+let searchVal      = ''
+let sortVal        = 'date_desc'
+let targetId       = null
+let targetType     = null  // 'quote' | 'client'
 
-/* ── Format ── */
+/* ════════════════════════════
+   HELPERS FORMAT
+════════════════════════════ */
 const fmt = (n, cur = 'XAF') =>
-  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur }).format(n || 0)
+  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n || 0)
+
 const fmtDate = d =>
   d ? new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+
 const daysLeft = d => {
   if (!d) return null
   return Math.ceil((new Date(d) - Date.now()) / 86400000)
 }
 
-/* ── Status badges ── */
+const initials = name => {
+  if (!name) return '?'
+  return name.trim().split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
+}
+
+const escAttr = s => String(s).replace(/'/g, '&#39;').replace(/"/g, '&quot;')
+
+/* ════════════════════════════
+   STATUS MAP
+════════════════════════════ */
 const STATUS = {
   draft:    { label: 'Brouillon', cls: 'b-draft' },
   sent:     { label: 'Envoyé',    cls: 'b-sent' },
@@ -874,7 +1023,9 @@ const STATUS = {
   deleted:  { label: 'Supprimé', cls: 'b-deleted' },
 }
 
-/* ── Toast ── */
+/* ════════════════════════════
+   TOAST
+════════════════════════════ */
 function showToast(msg, type = 'success') {
   document.querySelector('.toast')?.remove()
   const t = document.createElement('div')
@@ -890,7 +1041,9 @@ function showToast(msg, type = 'success') {
   setTimeout(() => t.remove(), 3500)
 }
 
-/* ── Init ── */
+/* ════════════════════════════
+   INIT
+════════════════════════════ */
 async function init() {
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) { location.href = 'login.html'; return }
@@ -904,11 +1057,15 @@ async function init() {
     document.getElementById('sidebarName').textContent    = [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Utilisateur'
     document.getElementById('sidebarCompany').textContent = p.company || 'Mon entreprise'
   }
-  await loadDeleted()
+
+  await Promise.all([loadDeletedQuotes(), loadDeletedClients()])
+  renderAll()
 }
 
-/* ── Charger les devis supprimés ── */
-async function loadDeleted() {
+/* ════════════════════════════
+   CHARGEMENT DONNÉES
+════════════════════════════ */
+async function loadDeletedQuotes() {
   const { data, error } = await supabase
     .from('quotes')
     .select('id,quote_number,quote_date,deleted_at,total_amount,currency,status,clients(full_name)')
@@ -916,63 +1073,146 @@ async function loadDeleted() {
     .eq('status', 'deleted')
     .order('deleted_at', { ascending: false })
 
-  if (error) {
-    // Si la colonne deleted_at ou le statut 'deleted' n'existe pas encore,
-    // on affiche l'état vide proprement
-    allDeleted = []
-    renderStats([])
-    renderCards([])
-    return
-  }
-  allDeleted = data || []
-  renderStats(allDeleted)
-  applyFilters()
+  allQuotes = error ? [] : (data || [])
+  document.getElementById('badgeQuotes').textContent = allQuotes.length
 }
 
-/* ── Stats ── */
-function renderStats(list) {
-  const total  = list.length
+async function loadDeletedClients() {
+  // Requiert la colonne deleted_at sur la table clients
+  // SQL: ALTER TABLE public.clients ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+  const { data, error } = await supabase
+    .from('clients')
+    .select('id,full_name,company_name,email,phone,city,country,deleted_at')
+    .eq('user_id', currentUserId)
+    .not('deleted_at', 'is', null)
+    .order('deleted_at', { ascending: false })
+
+  allClients = error ? [] : (data || [])
+  document.getElementById('badgeClients').textContent = allClients.length
+}
+
+/* ════════════════════════════
+   TABS
+════════════════════════════ */
+window.switchTab = function(tab) {
+  activeTab = tab
+  searchVal = ''
+  sortVal   = 'date_desc'
+  document.getElementById('searchInput').value = ''
+  document.getElementById('sortSelect').value  = 'date_desc'
+
+  document.getElementById('tabQuotes').classList.toggle('active', tab === 'quotes')
+  document.getElementById('tabClients').classList.toggle('active', tab === 'clients')
+
+  renderAll()
+}
+
+/* ════════════════════════════
+   RENDER STATS + CARDS
+════════════════════════════ */
+function renderAll() {
+  if (activeTab === 'quotes') {
+    renderQuoteStats(allQuotes)
+    renderQuoteCards(applySort(filterQuotes(allQuotes)))
+    document.getElementById('searchInput').placeholder = 'Rechercher un devis, un client…'
+    // Adapter sort options
+    document.getElementById('sortSelect').innerHTML = `
+      <option value="date_desc">Supprimés récemment</option>
+      <option value="date_asc">Supprimés anciennement</option>
+      <option value="amount_desc">Montant ↓</option>
+      <option value="amount_asc">Montant ↑</option>
+      <option value="expire_asc">Expirent bientôt</option>
+    `
+  } else {
+    renderClientStats(allClients)
+    renderClientCards(applySort(filterClients(allClients)))
+    document.getElementById('searchInput').placeholder = 'Rechercher un client, une entreprise…'
+    document.getElementById('sortSelect').innerHTML = `
+      <option value="date_desc">Supprimés récemment</option>
+      <option value="date_asc">Supprimés anciennement</option>
+      <option value="expire_asc">Expirent bientôt</option>
+      <option value="az">A → Z</option>
+    `
+  }
+}
+
+/* ── Stats Devis ── */
+function renderQuoteStats(list) {
   const expire = list.filter(q => {
-    const d = daysLeft(q.deleted_at ? new Date(new Date(q.deleted_at).getTime() + 30 * 86400000) : null)
-    return d !== null && d <= 7
+    const exp = q.deleted_at ? new Date(new Date(q.deleted_at).getTime() + 30 * 86400000) : null
+    const d = daysLeft(exp)
+    return d !== null && d <= 7 && d >= 0
   }).length
   const amount = list.reduce((s, q) => s + (+q.total_amount || 0), 0)
 
-  document.getElementById('statTotal').textContent  = total
-  document.getElementById('statExpire').textContent = expire
-  document.getElementById('statAmount').textContent =
-    new Intl.NumberFormat('fr-FR').format(amount)
+  document.getElementById('statTotal').textContent     = list.length
+  document.getElementById('statTotalLbl').textContent  = 'Devis supprimés'
+  document.getElementById('statExpire').textContent    = expire
+  document.getElementById('statExtra').textContent     = new Intl.NumberFormat('fr-FR').format(amount)
+  document.getElementById('statExtraLbl').textContent  = 'Montant total (XAF)'
+  document.getElementById('statExtraIcon').innerHTML   = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#012B2A" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`
+  document.getElementById('statExtraIcon').className   = 'stat-icon primary-ic'
 }
 
-/* ── Filtres & tri ── */
-function applyFilters() {
-  let list = [...allDeleted]
-  if (searchVal.trim()) {
-    const s = searchVal.toLowerCase()
-    list = list.filter(q =>
-      (q.quote_number || '').toLowerCase().includes(s) ||
-      (q.clients?.full_name || '').toLowerCase().includes(s)
-    )
-  }
-  list.sort((a, b) => {
-    if (sortVal === 'date_desc')   return new Date(b.deleted_at || 0) - new Date(a.deleted_at || 0)
-    if (sortVal === 'date_asc')    return new Date(a.deleted_at || 0) - new Date(b.deleted_at || 0)
-    if (sortVal === 'amount_desc') return (b.total_amount || 0) - (a.total_amount || 0)
-    if (sortVal === 'amount_asc')  return (a.total_amount || 0) - (b.total_amount || 0)
-    if (sortVal === 'expire_asc') {
-      const expA = a.deleted_at ? new Date(new Date(a.deleted_at).getTime() + 30 * 86400000) : new Date(9999, 0)
-      const expB = b.deleted_at ? new Date(new Date(b.deleted_at).getTime() + 30 * 86400000) : new Date(9999, 0)
-      return expA - expB
-    }
-    return 0
+/* ── Stats Clients ── */
+function renderClientStats(list) {
+  const expire = list.filter(c => {
+    const exp = c.deleted_at ? new Date(new Date(c.deleted_at).getTime() + 30 * 86400000) : null
+    const d = daysLeft(exp)
+    return d !== null && d <= 7 && d >= 0
+  }).length
+  const withEmail = list.filter(c => c.email).length
+
+  document.getElementById('statTotal').textContent     = list.length
+  document.getElementById('statTotalLbl').textContent  = 'Clients supprimés'
+  document.getElementById('statExpire').textContent    = expire
+  document.getElementById('statExtra').textContent     = withEmail
+  document.getElementById('statExtraLbl').textContent  = 'Avec adresse e-mail'
+  document.getElementById('statExtraIcon').innerHTML   = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E4B8F" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`
+  document.getElementById('statExtraIcon').className   = 'stat-icon blue-ic'
+}
+
+/* ── Filtres ── */
+function filterQuotes(list) {
+  if (!searchVal.trim()) return list
+  const s = searchVal.toLowerCase()
+  return list.filter(q =>
+    (q.quote_number || '').toLowerCase().includes(s) ||
+    (q.clients?.full_name || '').toLowerCase().includes(s)
+  )
+}
+
+function filterClients(list) {
+  if (!searchVal.trim()) return list
+  const s = searchVal.toLowerCase()
+  return list.filter(c =>
+    (c.full_name || '').toLowerCase().includes(s) ||
+    (c.company_name || '').toLowerCase().includes(s) ||
+    (c.email || '').toLowerCase().includes(s)
+  )
+}
+
+/* ── Tri ── */
+function applySort(list) {
+  const arr = [...list]
+  if (sortVal === 'date_desc')   return arr.sort((a, b) => new Date(b.deleted_at || 0) - new Date(a.deleted_at || 0))
+  if (sortVal === 'date_asc')    return arr.sort((a, b) => new Date(a.deleted_at || 0) - new Date(b.deleted_at || 0))
+  if (sortVal === 'amount_desc') return arr.sort((a, b) => (b.total_amount || 0) - (a.total_amount || 0))
+  if (sortVal === 'amount_asc')  return arr.sort((a, b) => (a.total_amount || 0) - (b.total_amount || 0))
+  if (sortVal === 'expire_asc')  return arr.sort((a, b) => {
+    const ea = a.deleted_at ? new Date(new Date(a.deleted_at).getTime() + 30*86400000) : new Date(9999,0)
+    const eb = b.deleted_at ? new Date(new Date(b.deleted_at).getTime() + 30*86400000) : new Date(9999,0)
+    return ea - eb
   })
-  filtered = list
-  renderCards(list)
+  if (sortVal === 'az') return arr.sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''))
+  return arr
 }
 
-/* ── Render cards ── */
-function renderCards(list) {
-  const grid = document.getElementById('quotesGrid')
+/* ════════════════════════════
+   RENDER QUOTE CARDS
+════════════════════════════ */
+function renderQuoteCards(list) {
+  const grid = document.getElementById('cardsGrid')
   if (!list.length) {
     grid.innerHTML = `
       <div class="empty-state">
@@ -984,36 +1224,24 @@ function renderCards(list) {
             <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
           </svg>
         </div>
-        <div class="empty-title">La corbeille est vide</div>
+        <div class="empty-title">Aucun devis dans la corbeille</div>
         <div class="empty-sub">Les devis supprimés apparaîtront ici. Vous pouvez les restaurer ou les supprimer définitivement.</div>
       </div>`
     return
   }
 
   grid.innerHTML = list.map(q => {
-    const st       = STATUS[q.status] || STATUS.deleted
-    const client   = q.clients?.full_name || 'Client inconnu'
+    const st      = STATUS[q.status] || STATUS.deleted
+    const client  = q.clients?.full_name || 'Client inconnu'
     const currency = q.currency || 'XAF'
-
-    /* Calcul expiration (30 jours après suppression) */
-    let expiryLabel = ''
-    let expiryClass = ''
-    if (q.deleted_at) {
-      const expDate = new Date(new Date(q.deleted_at).getTime() + 30 * 86400000)
-      const days    = daysLeft(expDate)
-      if (days !== null) {
-        if (days <= 0)      { expiryLabel = 'Expire aujourd\'hui';   expiryClass = 'color:var(--red)' }
-        else if (days <= 7) { expiryLabel = `Expire dans ${days} j`; expiryClass = 'color:var(--yellow)' }
-        else                { expiryLabel = `Expire le ${fmtDate(expDate)}` }
-      }
-    }
+    const expiryHtml = buildExpiryHtml(q.deleted_at)
 
     return `
-    <div class="quote-card">
+    <div class="item-card">
       <div class="card-header">
         <div>
           <span class="card-number">${q.quote_number || '—'}</span>
-          <span class="card-client">${client}</span>
+          <span class="card-sub">${client}</span>
         </div>
         <span class="badge ${st.cls}">${st.label}</span>
       </div>
@@ -1026,19 +1254,15 @@ function renderCards(list) {
           <span class="card-label">Supprimé le</span>
           <span class="card-value">${fmtDate(q.deleted_at)}</span>
         </div>
-        ${expiryLabel ? `
-        <div class="card-deleted-row">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span style="${expiryClass}">${expiryLabel}</span>
-        </div>` : ''}
+        ${expiryHtml}
         <span class="card-amount">${fmt(q.total_amount, currency)}</span>
       </div>
       <div class="card-footer">
-        <button class="btn-restore" onclick="openRestoreModal('${q.id}','${escAttr(q.quote_number || '—')}')">
+        <button class="btn-restore" onclick="openRestoreModal('${q.id}','quote','${escAttr(q.quote_number || '—')}','devis')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
           Restaurer
         </button>
-        <button class="btn-delete-perm" onclick="openDeleteModal('${q.id}','${escAttr(q.quote_number || '—')}')" title="Supprimer définitivement">
+        <button class="btn-delete-perm" onclick="openDeleteModal('${q.id}','quote','${escAttr(q.quote_number || '—')}','devis')" title="Supprimer définitivement">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
         </button>
       </div>
@@ -1046,71 +1270,207 @@ function renderCards(list) {
   }).join('')
 }
 
-function escAttr(s) {
-  return String(s).replace(/'/g, '&#39;').replace(/"/g, '&quot;')
+/* ════════════════════════════
+   RENDER CLIENT CARDS
+════════════════════════════ */
+function renderClientCards(list) {
+  const grid = document.getElementById('cardsGrid')
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon-wrap">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="1.5">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+            <path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="empty-title">Aucun client dans la corbeille</div>
+        <div class="empty-sub">Les clients supprimés apparaîtront ici. Vous pouvez les restaurer ou les supprimer définitivement.</div>
+      </div>`
+    return
+  }
+
+  grid.innerHTML = list.map(c => {
+    const name        = c.full_name || 'Client sans nom'
+    const company     = c.company_name || ''
+    const location    = [c.city, c.country].filter(Boolean).join(', ') || '—'
+    const expiryHtml  = buildExpiryHtml(c.deleted_at)
+
+    return `
+    <div class="item-card client-card">
+      <div class="card-header">
+        <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+          <div class="card-avatar">${initials(name)}</div>
+          <div style="min-width:0;">
+            <span class="card-number" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:block;">${name}</span>
+            <span class="card-sub">${company || 'Particulier'}</span>
+          </div>
+        </div>
+        <span class="badge b-client">Client</span>
+      </div>
+      <div class="card-body">
+        ${c.email ? `
+        <div class="card-row">
+          <span class="card-label">E-mail</span>
+          <span class="card-value">${c.email}</span>
+        </div>` : ''}
+        ${c.phone ? `
+        <div class="card-row">
+          <span class="card-label">Téléphone</span>
+          <span class="card-value">${c.phone}</span>
+        </div>` : ''}
+        <div class="card-row">
+          <span class="card-label">Localisation</span>
+          <span class="card-value">${location}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">Supprimé le</span>
+          <span class="card-value">${fmtDate(c.deleted_at)}</span>
+        </div>
+        ${expiryHtml}
+      </div>
+      <div class="card-footer">
+        <button class="btn-restore" onclick="openRestoreModal('${c.id}','client','${escAttr(name)}','client')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Restaurer
+        </button>
+        <button class="btn-delete-perm" onclick="openDeleteModal('${c.id}','client','${escAttr(name)}','client')" title="Supprimer définitivement">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>
+      </div>
+    </div>`
+  }).join('')
 }
 
-/* ── Modals ── */
-window.openDeleteModal = function(id, num) {
-  targetId = id
+/* ── Expiry HTML helper ── */
+function buildExpiryHtml(deletedAt) {
+  if (!deletedAt) return ''
+  const expDate = new Date(new Date(deletedAt).getTime() + 30 * 86400000)
+  const days    = daysLeft(expDate)
+  if (days === null) return ''
+
+  let cls, icon, label
+  if (days <= 0) {
+    cls   = 'urgent'
+    label = 'Expire aujourd\'hui — suppression imminente'
+    icon  = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+  } else if (days <= 7) {
+    cls   = 'warning'
+    label = `Expire dans ${days} jour${days > 1 ? 's' : ''}`
+    icon  = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+  } else {
+    cls   = 'ok'
+    label = `Conservé jusqu'au ${fmtDate(expDate)}`
+    icon  = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+  }
+  return `<div class="card-expiry-row ${cls}">${icon}<span>${label}</span></div>`
+}
+
+/* ════════════════════════════
+   MODALS
+════════════════════════════ */
+window.openDeleteModal = function(id, type, label, typeFr) {
+  targetId   = id
+  targetType = type
   document.getElementById('deleteModalBody').innerHTML =
-    `Le devis <strong>${num}</strong> sera supprimé <strong>définitivement</strong> et ne pourra plus être récupéré.`
+    `Le ${typeFr} <strong>${label}</strong> sera supprimé <strong>définitivement</strong> et ne pourra plus être récupéré.`
   document.getElementById('deleteModal').classList.add('open')
 }
 
-window.openRestoreModal = function(id, num) {
-  targetId = id
+window.openRestoreModal = function(id, type, label, typeFr) {
+  targetId   = id
+  targetType = type
   document.getElementById('restoreModalBody').innerHTML =
-    `Le devis <strong>${num}</strong> sera <strong>restauré</strong> et repassera au statut brouillon.`
+    `Le ${typeFr} <strong>${label}</strong> sera <strong>restauré</strong> et redeviendra accessible.`
   document.getElementById('restoreModal').classList.add('open')
 }
 
 function closeAllModals() {
   document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'))
-  targetId = null
+  targetId = null; targetType = null
 }
 
-/* ── Supprimer définitivement ── */
+/* ── Confirmer suppression ── */
 document.getElementById('confirmDelete').addEventListener('click', async () => {
   if (!targetId) return
+  const id   = targetId   // capturer AVANT closeAllModals qui remet à null
+  const type = targetType
   closeAllModals()
-  const { error } = await supabase.from('quotes').delete().eq('id', targetId)
-  if (error) { showToast('Erreur lors de la suppression.', 'error'); return }
-  allDeleted = allDeleted.filter(q => q.id !== targetId)
-  renderStats(allDeleted)
-  applyFilters()
-  showToast('Devis supprimé définitivement')
+
+  if (type === 'quote') {
+    const { error } = await supabase.from('quotes').delete().eq('id', id)
+    if (error) { showToast('Erreur lors de la suppression.', 'error'); return }
+    allQuotes = allQuotes.filter(q => q.id !== id)
+    document.getElementById('badgeQuotes').textContent = allQuotes.length
+    showToast('Devis supprimé définitivement.')
+  } else {
+    const { error } = await supabase.from('clients').delete().eq('id', id)
+    if (error) { showToast('Erreur lors de la suppression.', 'error'); return }
+    allClients = allClients.filter(c => c.id !== id)
+    document.getElementById('badgeClients').textContent = allClients.length
+    showToast('Client supprimé définitivement.')
+  }
+  renderAll()
 })
 
-/* ── Restaurer ── */
+/* ── Confirmer restauration ── */
 document.getElementById('confirmRestore').addEventListener('click', async () => {
   if (!targetId) return
+  const id   = targetId   // capturer AVANT closeAllModals qui remet à null
+  const type = targetType
   closeAllModals()
-  const { error } = await supabase.from('quotes')
-    .update({ status: 'draft', deleted_at: null }).eq('id', targetId)
-  if (error) { showToast('Erreur lors de la restauration.', 'error'); return }
-  allDeleted = allDeleted.filter(q => q.id !== targetId)
-  renderStats(allDeleted)
-  applyFilters()
-  showToast('Devis restauré avec succès !')
+
+  if (type === 'quote') {
+    const { error } = await supabase.from('quotes')
+      .update({ status: 'draft', deleted_at: null }).eq('id', id)
+    if (error) { showToast('Erreur lors de la restauration.', 'error'); return }
+    allQuotes = allQuotes.filter(q => q.id !== id)
+    document.getElementById('badgeQuotes').textContent = allQuotes.length
+    showToast('Devis restauré avec succès !')
+  } else {
+    const { error } = await supabase.from('clients')
+      .update({ deleted_at: null }).eq('id', id)
+    if (error) { showToast('Erreur lors de la restauration.', 'error'); return }
+    allClients = allClients.filter(c => c.id !== id)
+    document.getElementById('badgeClients').textContent = allClients.length
+    showToast('Client restauré avec succès !')
+  }
+  renderAll()
 })
 
 /* ── Vider tout ── */
 document.getElementById('emptyAllBtn').addEventListener('click', () => {
-  if (!allDeleted.length) { showToast('La corbeille est déjà vide.'); return }
+  const list = activeTab === 'quotes' ? allQuotes : allClients
+  if (!list.length) { showToast('La corbeille est déjà vide.'); return }
+  const typeFr = activeTab === 'quotes' ? 'devis' : 'clients'
+  document.getElementById('emptyAllTitle').textContent = `Vider les ${typeFr} de la corbeille ?`
+  document.getElementById('emptyAllBody').innerHTML =
+    `Tous les <strong>${typeFr}</strong> supprimés seront <strong>définitivement perdus</strong>. Cette action est irréversible.`
   document.getElementById('emptyAllModal').classList.add('open')
 })
 
 document.getElementById('confirmEmptyAll').addEventListener('click', async () => {
   closeAllModals()
-  const ids = allDeleted.map(q => q.id)
-  if (!ids.length) return
-  const { error } = await supabase.from('quotes').delete().in('id', ids)
-  if (error) { showToast('Erreur lors du vidage.', 'error'); return }
-  allDeleted = []
-  renderStats([])
-  renderCards([])
-  showToast('Corbeille vidée définitivement')
+  if (activeTab === 'quotes') {
+    const ids = allQuotes.map(q => q.id)
+    if (!ids.length) return
+    const { error } = await supabase.from('quotes').delete().in('id', ids)
+    if (error) { showToast('Erreur lors du vidage.', 'error'); return }
+    allQuotes = []
+    document.getElementById('badgeQuotes').textContent = 0
+    showToast('Devis vidés définitivement.')
+  } else {
+    const ids = allClients.map(c => c.id)
+    if (!ids.length) return
+    const { error } = await supabase.from('clients').delete().in('id', ids)
+    if (error) { showToast('Erreur lors du vidage.', 'error'); return }
+    allClients = []
+    document.getElementById('badgeClients').textContent = 0
+    showToast('Clients vidés définitivement.')
+  }
+  renderAll()
 })
 
 /* ── Annuler modals ── */
@@ -1123,10 +1483,10 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 
 /* ── Recherche & tri ── */
 document.getElementById('searchInput').addEventListener('input', e => {
-  searchVal = e.target.value; applyFilters()
+  searchVal = e.target.value; renderAll()
 })
 document.getElementById('sortSelect').addEventListener('change', e => {
-  sortVal = e.target.value; applyFilters()
+  sortVal = e.target.value; renderAll()
 })
 
 /* ── Déconnexion ── */
@@ -1162,5 +1522,9 @@ function showPWAUpdate() {
   document.body.appendChild(b)
 }
 </script>
+<script>
+(function(){var K='afrivis_sidebar_collapsed';function wrapNav(){document.querySelectorAll('.nav-link').forEach(function(l){l.childNodes.forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var s=document.createElement('span');s.className='nav-label';s.textContent=n.textContent;l.replaceChild(s,n)}})});}function addTips(){document.querySelectorAll('.nav-link').forEach(function(l){if(l.querySelector('.nav-tooltip'))return;var lb=l.querySelector('.nav-label');if(!lb)return;var t=document.createElement('span');t.className='nav-tooltip';t.textContent=lb.textContent.trim();l.appendChild(t);});}function wrapLogout(){var b=document.querySelector('.btn-logout');if(!b)return;b.childNodes.forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var s=document.createElement('span');s.className='logout-label';s.textContent=n.textContent;b.replaceChild(s,n);}});}function apply(c,anim){var sb=document.getElementById('sidebar');if(sb&&!anim)sb.style.transition='none';document.body.classList.toggle('sidebar-collapsed',c);if(sb&&!anim)setTimeout(function(){sb.style.transition='';},50);var btn=document.getElementById('sidebarToggleBtn');if(btn){btn.title=c?'Développer le menu':'Réduire le menu';btn.setAttribute('aria-label',c?'Développer le menu':'Réduire le menu');}}function toggle(){var c=document.body.classList.contains('sidebar-collapsed');apply(!c,true);try{localStorage.setItem(K,c?'0':'1');}catch(e){}}function init(){wrapNav();addTips();wrapLogout();var s=null;try{s=localStorage.getItem(K);}catch(e){}apply(s==='1',false);var btn=document.getElementById('sidebarToggleBtn');if(btn)btn.addEventListener('click',toggle);}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
+</script>
+
 </body>
 </html>

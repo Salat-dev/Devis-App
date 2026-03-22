@@ -552,6 +552,66 @@ tbody input[type="number"] { text-align: right; }
   .mobile-save-bar { display: none; }
   .toast { bottom: 28px; right: 28px; }
 }
+
+/* ══════════════════════════════════════
+   SIDEBAR COLLAPSE — Design System patch
+   Collapsed width : 64px
+══════════════════════════════════════ */
+:root { --sidebar-w-collapsed: 64px; }
+.sidebar-toggle-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.55); cursor: pointer; flex-shrink: 0;
+  transition: background 0.18s, color 0.18s, transform 0.28s cubic-bezier(0.16,1,0.3,1);
+  margin-left: auto;
+}
+.sidebar-toggle-btn:hover { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.90); }
+.sidebar-collapsed .sidebar-toggle-btn { transform: rotate(180deg); margin-left: 0; }
+@media (max-width: 768px) { .sidebar-toggle-btn { display: none; } }
+.sidebar-app-icon {
+  display: none; width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(204,170,1,0.15); border: 1px solid rgba(204,170,1,0.25);
+  align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
+}
+.sidebar-app-icon img { width: 22px; height: 22px; object-fit: contain; }
+.nav-link { position: relative; }
+.nav-tooltip {
+  position: absolute; left: calc(100% + 10px); top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  background: #1a2e2d; color: #fff; font-family: 'Inter',sans-serif;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+  padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.10);
+  pointer-events: none; opacity: 0; transition: opacity 0.15s, transform 0.15s;
+  z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.nav-tooltip::before {
+  content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+  border: 5px solid transparent; border-right-color: #1a2e2d;
+}
+.sidebar { transition: width 0.28s cubic-bezier(0.16,1,0.3,1), min-width 0.28s cubic-bezier(0.16,1,0.3,1); }
+body.sidebar-collapsed .sidebar { width: var(--sidebar-w-collapsed); min-width: var(--sidebar-w-collapsed); }
+body.sidebar-collapsed .sidebar-logo img:not(.sidebar-app-icon img) { display: none; }
+body.sidebar-collapsed .sidebar-app-icon { display: flex; }
+body.sidebar-collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+body.sidebar-collapsed .nav-section-label { opacity: 0; height: 0; padding-top: 0; padding-bottom: 0; margin: 0; overflow: hidden; pointer-events: none; }
+body.sidebar-collapsed .sidebar-nav { padding: 12px 8px; }
+body.sidebar-collapsed .nav-link { justify-content: center; padding: 10px; gap: 0; }
+body.sidebar-collapsed .nav-link .nav-label { display: none; }
+body.sidebar-collapsed .nav-link:hover .nav-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+body.sidebar-collapsed .sidebar-plan { margin: 0 8px 8px; padding: 10px; display: flex; align-items: center; justify-content: center; }
+body.sidebar-collapsed .sidebar-plan .sp-row,
+body.sidebar-collapsed .sidebar-plan .sp-quota,
+body.sidebar-collapsed .sidebar-plan .sp-bar { display: none; }
+body.sidebar-collapsed .sidebar-footer { padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+body.sidebar-collapsed .user-card { justify-content: center; padding: 8px; margin-bottom: 0; gap: 0; }
+body.sidebar-collapsed .user-card .user-info,
+body.sidebar-collapsed .user-card .user-name,
+body.sidebar-collapsed .user-card .user-role { display: none; }
+body.sidebar-collapsed .btn-logout span,
+body.sidebar-collapsed .btn-logout .logout-label { display: none; }
+body.sidebar-collapsed .btn-logout { width: 40px; height: 40px; padding: 0; border-radius: 10px; justify-content: center; }
+
 </style>
 </head>
 <body>
@@ -560,6 +620,11 @@ tbody input[type="number"] { text-align: right; }
 <aside class="sidebar">
   <div class="sidebar-logo">
     <img src="../public/logo/Logo secondaire.svg" alt="afrivis.">
+    <!-- Icône app collapsée -->
+    <div class="sidebar-app-icon"><img src="../icons/favicon.svg" alt="A"></div>
+    <!-- Bouton toggle collapse/expand -->
+    <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Réduire le menu" aria-label="Réduire le menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+
   </div>
   <nav class="sidebar-nav">
     <span class="nav-section-label">Menu</span>
@@ -574,6 +639,11 @@ tbody input[type="number"] { text-align: right; }
     <a href="liste-clients.html" class="nav-link">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
       Clients
+    </a>
+    <a href="corbeille.html" class="nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            </svg>Corbeille
     </a>
     <span class="nav-section-label" style="margin-top:8px;">Compte</span>
     <a href="settings.html" class="nav-link">
@@ -820,7 +890,13 @@ tbody input[type="number"] { text-align: right; }
   <div class="mobile-nav-inner">
     <a href="dashboard.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
     <a href="quotes.html" class="mobile-nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Devis</a>
+    
     <a href="liste-clients.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
+   <a href="corbeille.html" class="nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            </svg>Corbeille
+    </a>
     <a href="settings.html" class="mobile-nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Réglages</a>
   </div>
 </nav>
@@ -1096,5 +1172,9 @@ await supabase.auth.signOut(); window.location.href = 'login.html'
 
 init()
 </script>
+<script>
+(function(){var K='afrivis_sidebar_collapsed';function wrapNav(){document.querySelectorAll('.nav-link').forEach(function(l){l.childNodes.forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var s=document.createElement('span');s.className='nav-label';s.textContent=n.textContent;l.replaceChild(s,n)}})});}function addTips(){document.querySelectorAll('.nav-link').forEach(function(l){if(l.querySelector('.nav-tooltip'))return;var lb=l.querySelector('.nav-label');if(!lb)return;var t=document.createElement('span');t.className='nav-tooltip';t.textContent=lb.textContent.trim();l.appendChild(t);});}function wrapLogout(){var b=document.querySelector('.btn-logout');if(!b)return;b.childNodes.forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var s=document.createElement('span');s.className='logout-label';s.textContent=n.textContent;b.replaceChild(s,n);}});}function apply(c,anim){var sb=document.getElementById('sidebar');if(sb&&!anim)sb.style.transition='none';document.body.classList.toggle('sidebar-collapsed',c);if(sb&&!anim)setTimeout(function(){sb.style.transition='';},50);var btn=document.getElementById('sidebarToggleBtn');if(btn){btn.title=c?'Développer le menu':'Réduire le menu';btn.setAttribute('aria-label',c?'Développer le menu':'Réduire le menu');}}function toggle(){var c=document.body.classList.contains('sidebar-collapsed');apply(!c,true);try{localStorage.setItem(K,c?'0':'1');}catch(e){}}function init(){wrapNav();addTips();wrapLogout();var s=null;try{s=localStorage.getItem(K);}catch(e){}apply(s==='1',false);var btn=document.getElementById('sidebarToggleBtn');if(btn)btn.addEventListener('click',toggle);}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}})();
+</script>
+
 </body>
 </html>

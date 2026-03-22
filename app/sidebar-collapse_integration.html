@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Sidebar Collapse — À intégrer dans toutes les pages</title>
+</head>
+<body>
+<!--
+  ════════════════════════════════════════════════════════════════
+  SIDEBAR COLLAPSE — INSTRUCTIONS D'INTÉGRATION
+  ════════════════════════════════════════════════════════════════
+
+  À intégrer dans : dashboard.html, quotes.html, liste-clients.html,
+                    clients.html, corbeille.html, settings.html,
+                    create-quote.html, edit-quote.html, view-quote.html
+
+  3 étapes par fichier :
+    1. Coller le CSS (SECTION A) à la fin du bloc <style>
+    2. Coller le BOUTON TOGGLE (SECTION B) dans .sidebar-logo (après l'<img>)
+    3. Coller le JS (SECTION C) avant </body>
+
+  Le script est autonome : il s'auto-initialise, lit/écrit localStorage,
+  et fonctionne sans modifier le HTML existant des nav-link.
+  ════════════════════════════════════════════════════════════════
+-->
+
+
+<!-- ═══════════════════════════════════════════════════════
+  SECTION A — CSS
+  Coller à la fin du <style>, juste avant </style>
+═══════════════════════════════════════════════════════ -->
+<style id="section-A">
+
+/* ══════════════════════════════════════
+   SIDEBAR COLLAPSE — Design System patch
+   Collapsed width : 64px
+   Transition      : 0.28s ease (matches --ease)
+══════════════════════════════════════ */
+
+/* ── Variable ── */
+:root { --sidebar-w-collapsed: 64px; }
+
+/* ── Bouton toggle (toujours présent, visible desktop seulement) ── */
+.sidebar-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s, color 0.18s, transform 0.28s cubic-bezier(0.16,1,0.3,1);
+  margin-left: auto;
+}
+.sidebar-toggle-btn:hover {
+  background: rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.90);
+}
+
+/* Icone rotée quand collapsé */
+.sidebar-collapsed .sidebar-toggle-btn {
+  transform: rotate(180deg);
+  margin-left: 0;
+}
+
+/* Masquer sur mobile (hamburger gère ça) */
+@media (max-width: 768px) {
+  .sidebar-toggle-btn { display: none; }
+}
+
+/* ── Icône app (visible uniquement collapsé) ── */
+.sidebar-app-icon {
+  display: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(204,170,1,0.15);
+  border: 1px solid rgba(204,170,1,0.25);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-app-icon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+/* ── Tooltip sur les nav-link (mode collapsé) ── */
+.nav-link { position: relative; }
+
+.nav-tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1a2e2d;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.10);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s;
+  transform: translateY(-50%) translateX(-4px);
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+/* Flèche du tooltip */
+.nav-tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #1a2e2d;
+}
+
+/* ═══════════════════════════════════════
+   ÉTAT COLLAPSÉ — body.sidebar-collapsed
+═══════════════════════════════════════ */
+
+/* Sidebar elle-même */
+body.sidebar-collapsed .sidebar {
+  width: var(--sidebar-w-collapsed);
+  min-width: var(--sidebar-w-collapsed);
+  transition: width 0.28s cubic-bezier(0.16,1,0.3,1),
+              min-width 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Logo : masquer l'image, afficher l'icône app */
+body.sidebar-collapsed .sidebar-logo img:not(.sidebar-app-icon img) {
+  display: none;
+}
+body.sidebar-collapsed .sidebar-app-icon {
+  display: flex;
+}
+
+/* Zone logo : centrer quand collapsé */
+body.sidebar-collapsed .sidebar-logo {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+}
+
+/* Masquer labels de section */
+body.sidebar-collapsed .nav-section-label {
+  opacity: 0;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: opacity 0.18s, height 0.18s;
+  pointer-events: none;
+}
+
+/* Nav links : centrer l'icône, masquer le texte */
+body.sidebar-collapsed .sidebar-nav {
+  padding: 12px 8px;
+}
+body.sidebar-collapsed .nav-link {
+  justify-content: center;
+  padding: 10px;
+  gap: 0;
+}
+body.sidebar-collapsed .nav-link .nav-label {
+  display: none;
+}
+
+/* Afficher le tooltip au hover */
+body.sidebar-collapsed .nav-link:hover .nav-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Plan widget : masquer tout sauf l'icône */
+body.sidebar-collapsed .sidebar-plan {
+  margin: 0 8px 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body.sidebar-collapsed .sidebar-plan .sp-row,
+body.sidebar-collapsed .sidebar-plan .sp-quota,
+body.sidebar-collapsed .sidebar-plan .sp-bar {
+  display: none;
+}
+body.sidebar-collapsed .sidebar-plan::after {
+  /* Mini icône éclair à la place */
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23CCAA01' stroke-width='2.5'%3E%3Cpolygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Footer : centrer l'avatar, masquer le texte et le logout */
+body.sidebar-collapsed .sidebar-footer {
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+body.sidebar-collapsed .user-card {
+  justify-content: center;
+  padding: 8px;
+  margin-bottom: 0;
+  gap: 0;
+}
+body.sidebar-collapsed .user-card .user-info,
+body.sidebar-collapsed .user-card .user-name,
+body.sidebar-collapsed .user-card .user-role {
+  display: none;
+}
+body.sidebar-collapsed .btn-logout span,
+body.sidebar-collapsed .btn-logout .logout-label {
+  display: none;
+}
+body.sidebar-collapsed .btn-logout {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+/* Transition smooth sur la sidebar en mode normal aussi */
+.sidebar {
+  transition: width 0.28s cubic-bezier(0.16,1,0.3,1),
+              min-width 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+</style>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  SECTION B — HTML
+  Coller à l'intérieur de .sidebar-logo,
+  APRÈS l'<img> du logo et AVANT la fermeture </div>
+
+  Exemple de résultat final dans .sidebar-logo :
+
+  <div class="sidebar-logo">
+    <img src="../public/logo/Logo secondaire.svg" alt="afrivis.">
+
+    ← COLLER ICI →
+
+    <button class="sidebar-close-btn" id="sidebarCloseBtn">...</button>
+  </div>
+═══════════════════════════════════════════════════════ -->
+
+<!-- Icône app (visible en mode collapsé à la place du logo) -->
+<div class="sidebar-app-icon">
+  <img src="../icons/favicon.svg" alt="A">
+</div>
+
+<!-- Bouton toggle collapse/expand -->
+<button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Réduire le menu" aria-label="Réduire le menu">
+  <!-- Chevron gauche -->
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+</button>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  SECTION C — JAVASCRIPT
+  Coller juste avant </body>, dans un <script> ordinaire
+  (PAS besoin de type="module")
+═══════════════════════════════════════════════════════ -->
+<script id="section-C">
+(function() {
+  /* ── Clé localStorage ── */
+  var LS_KEY = 'afrivis_sidebar_collapsed'
+
+  /* ── Wrapper les textes des nav-link dans des <span class="nav-label">
+        pour que le CSS puisse les masquer sans casser le SVG ── */
+  function wrapNavLabels() {
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+      // Chercher les noeuds texte directs
+      link.childNodes.forEach(function(node) {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+          var span = document.createElement('span')
+          span.className = 'nav-label'
+          span.textContent = node.textContent
+          link.replaceChild(span, node)
+        }
+      })
+    })
+  }
+
+  /* ── Ajouter les tooltips (texte du lien) ── */
+  function addTooltips() {
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+      // Éviter les doublons
+      if (link.querySelector('.nav-tooltip')) return
+      var label = link.querySelector('.nav-label')
+      if (!label) return
+      var tip = document.createElement('span')
+      tip.className = 'nav-tooltip'
+      tip.textContent = label.textContent.trim()
+      link.appendChild(tip)
+    })
+  }
+
+  /* ── Wrapper le texte du btn-logout ── */
+  function wrapLogoutLabel() {
+    var btn = document.querySelector('.btn-logout')
+    if (!btn) return
+    btn.childNodes.forEach(function(node) {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+        var span = document.createElement('span')
+        span.className = 'logout-label'
+        span.textContent = node.textContent
+        btn.replaceChild(span, node)
+      }
+    })
+  }
+
+  /* ── Appliquer / retirer l'état ── */
+  function applyState(collapsed, animate) {
+    var body = document.body
+    if (!animate) {
+      // Désactiver temporairement la transition pour l'état initial
+      body.style.setProperty('--no-transition', '1')
+      var sidebar = document.getElementById('sidebar')
+      if (sidebar) {
+        sidebar.style.transition = 'none'
+        setTimeout(function() { sidebar.style.transition = '' }, 50)
+      }
+    }
+    if (collapsed) {
+      body.classList.add('sidebar-collapsed')
+      updateToggleBtn(true)
+    } else {
+      body.classList.remove('sidebar-collapsed')
+      updateToggleBtn(false)
+    }
+  }
+
+  function updateToggleBtn(collapsed) {
+    var btn = document.getElementById('sidebarToggleBtn')
+    if (!btn) return
+    if (collapsed) {
+      btn.title = 'Développer le menu'
+      btn.setAttribute('aria-label', 'Développer le menu')
+    } else {
+      btn.title = 'Réduire le menu'
+      btn.setAttribute('aria-label', 'Réduire le menu')
+    }
+  }
+
+  /* ── Toggle ── */
+  function toggle() {
+    var isCollapsed = document.body.classList.contains('sidebar-collapsed')
+    var next = !isCollapsed
+    applyState(next, true)
+    try { localStorage.setItem(LS_KEY, next ? '1' : '0') } catch(e) {}
+  }
+
+  /* ── Init ── */
+  function init() {
+    wrapNavLabels()
+    addTooltips()
+    wrapLogoutLabel()
+
+    // Lire l'état persisté
+    var saved = null
+    try { saved = localStorage.getItem(LS_KEY) } catch(e) {}
+    var collapsed = saved === '1'
+    applyState(collapsed, false)
+
+    // Brancher le bouton toggle
+    var btn = document.getElementById('sidebarToggleBtn')
+    if (btn) btn.addEventListener('click', toggle)
+
+    // Réouvrir la sidebar sur mobile au clic du bouton toggle
+    // (ne pas interférer avec le comportement hamburger existant)
+  }
+
+  // Lancer après le DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init)
+  } else {
+    init()
+  }
+})()
+</script>
+
+</body>
+</html>
