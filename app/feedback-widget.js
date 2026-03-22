@@ -472,7 +472,7 @@
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
         </div>
-        <div class="fw-success-title">Merci beaucoup ! 🙏</div>
+        <div class="fw-success-title">Merci beaucoup ! </div>
         <div class="fw-success-sub">Votre feedback a bien été reçu. Il nous aidera à améliorer Devis App pour vous et les milliers d'entrepreneurs qui nous font confiance.</div>
         <button class="fw-submit" id="fw-success-close" style="background:rgba(1,43,42,0.08);color:#012B2A;box-shadow:none;">
           Fermer
@@ -487,7 +487,7 @@
   let rating = 0;
   let priority = '';
   let activeTab = 'general';
-  const ratingLabels = ['', 'Décevant', 'Passable', 'Correct', 'Très bien', 'Excellent ! 🎉'];
+  const ratingLabels = ['', 'Décevant', 'Passable', 'Correct', 'Très bien', 'Excellent ! '];
 
   /* ── DOM refs ── */
   const fab     = document.getElementById('fw-fab');

@@ -542,5 +542,7 @@ let _dp=null
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_dp=e})
 window.installPWA=async()=>{if(!_dp)return;_dp.prompt();await _dp.userChoice;_dp=null}
 </script>
+<script src="/app/feedback-widget.js"></script>
+
 </body>
 </html>
